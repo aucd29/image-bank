@@ -1,8 +1,12 @@
 package com.example.imagebank.di
 
+import brigitte.AuthorizationInterceptor
 import brigitte.di.dagger.module.OkhttpModule
 import dagger.Module
 import dagger.Provides
+import okhttp3.Authenticator
+import okhttp3.Interceptor
+import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -16,6 +20,10 @@ import javax.inject.Singleton
 class NetworkModule {
     companion object {
         val LOG_CLASS = NetworkModule::class.java
+
+        const val KAKAO_AK        = "KakaoAK"
+        const val AUTHORIZATION   = "Authorization"
+        const val KAKAO_REST_AUTH = "e302331ef568c1a4af2053c77eef1b89"
     }
 
     @Provides
@@ -28,4 +36,16 @@ class NetworkModule {
     fun provideLogLevel() =
         HttpLoggingInterceptor.Level.BODY
 
+
+    @Provides
+    @Singleton
+    fun provideAuthorizationInterceptor() =
+        object : AuthorizationInterceptor {
+            override fun intercept(chain: Interceptor.Chain): Response {
+                return chain.proceed(chain.request().newBuilder()
+                        .addHeader(AUTHORIZATION, "$KAKAO_AK $KAKAO_REST_AUTH")
+                        .build()
+                )
+            }
+        }
 }

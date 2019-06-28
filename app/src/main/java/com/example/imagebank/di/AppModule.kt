@@ -2,8 +2,10 @@ package com.example.imagebank.di
 
 import brigitte.di.dagger.module.RxModule
 import brigitte.di.dagger.module.ViewModelFactoryModule
+import com.example.imagebank.model.remote.KakaoRestSearchService
 import dagger.Module
 import dagger.Provides
+import okhttp3.Interceptor
 import retrofit2.Retrofit
 import javax.inject.Singleton
 
@@ -19,29 +21,17 @@ import javax.inject.Singleton
 ])
 class AppModule {
     companion object {
-        const val GITHUB_BASE_URL       = "https://raw.githubusercontent.com/"
-        const val DAUM_BASE_URL         = "https://m.daum.net/"
-        const val DAUM_SUGGEST_BASE_URL = "https://msuggest.search.daum.net/"
+        const val KAKAO_REST_URL  = "https://dapi.kakao.com/"
     }
 
     // 다수개의 retrofit 을 이용해야 하므로 Retrofit.Builder 를 전달 받은 후
     // 이곳에서 baseurl 을 설정하는 방식을 이용한다.
-//
-//    @Singleton
-//    @Provides
-//    fun provideGithubService(retrofitBuilder: Retrofit.Builder): GithubService =
-//        retrofitBuilder.baseUrl(GITHUB_BASE_URL).build()
-//            .create(GithubService::class.java)
-//
-//    @Singleton
-//    @Provides
-//    fun provideDaumService(retrofitBuilder: Retrofit.Builder): DaumService =
-//        retrofitBuilder.baseUrl(DAUM_BASE_URL).build()
-//            .create(DaumService::class.java)
-//
-//    @Singleton
-//    @Provides
-//    fun provideDaumSuggestService(retrofitBuilder: Retrofit.Builder): DaumSuggestService =
-//        retrofitBuilder.baseUrl(DAUM_SUGGEST_BASE_URL).build()
-//            .create(DaumSuggestService::class.java)
+
+    @Singleton
+    @Provides
+    fun privodeKakaoRestSearchService(retrofitBuilder: Retrofit.Builder): KakaoRestSearchService =
+        retrofitBuilder
+            .baseUrl(KAKAO_REST_URL)
+            .build()
+            .create(KakaoRestSearchService::class.java)
 }
