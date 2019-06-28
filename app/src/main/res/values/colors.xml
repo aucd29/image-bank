@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 앱에서 색상 추출 -->
+    <color name="colorPrimary">#2A384E</color>
+    <color name="colorPrimaryDark">#252A3D</color>
+    <color name="colorAccent">#F8C206</color>
+</resources>
