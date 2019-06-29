@@ -23,7 +23,7 @@ class SplashViewModel @Inject constructor(
     companion object {
         private val mLog = LoggerFactory.getLogger(SplashViewModel::class.java)
 
-        private const val SPLASH_TIMEOUT = 3L
+        private const val SPLASH_TIMEOUT = 200L
     }
 
     private val mDisposable = CompositeDisposable()
@@ -37,7 +37,7 @@ class SplashViewModel @Inject constructor(
         // 여지껏 커스텀 뷰를 만들어서 재활용한 적이 별로 없다.. -_ -;
 
         // 로딩 완료가 안뜨는 경우가 존재할 수 있으니 이를 보안하기 위한 타이머 추가
-        mDisposable.add(Observable.timer(SPLASH_TIMEOUT, TimeUnit.SECONDS)
+        mDisposable.add(Observable.timer(SPLASH_TIMEOUT, TimeUnit.MILLISECONDS)
             .take(1)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {

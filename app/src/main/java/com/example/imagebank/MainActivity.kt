@@ -9,10 +9,13 @@ import com.google.android.material.tabs.TabLayout
 import androidx.viewpager.widget.ViewPager
 import brigitte.BaseDaggerActivity
 import brigitte.exceptionCatcher
+import brigitte.hideKeyboard
 import com.example.imagebank.databinding.MainActivityBinding
 import com.example.imagebank.model.remote.KakaoRestSearchService
 import com.example.imagebank.ui.main.SectionsPagerAdapter
 import com.example.imagebank.ui.main.SplashViewModel
+import com.example.imagebank.ui.main.dibs.DibsFragment
+import com.example.imagebank.ui.main.seach.SearchFragment
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -20,20 +23,12 @@ import org.slf4j.LoggerFactory
 import javax.inject.Inject
 
 class MainActivity : BaseDaggerActivity<MainActivityBinding, SplashViewModel>() {
-    @Inject
-    lateinit var rest: KakaoRestSearchService
-
     override fun onCreate(savedInstanceState: Bundle?) {
         exceptionCatcher { mLog.error("ERROR: $it") }
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
 
-        mDisposable.add(rest.image("설현")
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
-
-            })
+        hideKeyboard(mBinding.root)
     }
 
     override fun attachBaseContext(newBase: Context) {
@@ -41,18 +36,13 @@ class MainActivity : BaseDaggerActivity<MainActivityBinding, SplashViewModel>() 
         super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase))
     }
 
-    override fun initViewBinding() {
-        val sectionsPagerAdapter = SectionsPagerAdapter(this, supportFragmentManager)
-        val viewPager: ViewPager = findViewById(R.id.view_pager)
-        viewPager.adapter = sectionsPagerAdapter
-        val tabs: TabLayout = findViewById(R.id.tabs)
-        tabs.setupWithViewPager(viewPager)
-        val fab: FloatingActionButton = findViewById(R.id.fab)
-
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+    override fun initViewBinding() = mBinding.run {
+        with (viewPager) {
+            adapter = SectionsPagerAdapter(this@MainActivity, supportFragmentManager)
+            tabs.setupWithViewPager(this)
         }
+
+        mViewModel.closeSplash()
     }
 
     override fun initViewModelEvents() = mViewModel.run {

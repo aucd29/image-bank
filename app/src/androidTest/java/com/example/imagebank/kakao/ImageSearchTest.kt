@@ -8,6 +8,7 @@ import com.example.imagebank.model.remote.KakaoRestSearchService
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import junit.framework.TestCase.assertNotNull
+import org.junit.Before
 import org.junit.FixMethodOrder
 import org.junit.Rule
 import org.junit.runner.RunWith
@@ -72,7 +73,6 @@ class ImageSearchTest {
 //                assertNotNull(it)
 //            }
     }
-
 
     @Rule
     @JvmField

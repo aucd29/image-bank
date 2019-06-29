@@ -1,5 +1,18 @@
 <resources>
     <string name="app_name">Image Bank</string>
-    <string name="tab_text_1">Tab 1</string>
-    <string name="tab_text_2">Tab 2</string>
+
+    <!--TAB -->
+    <string name="tab_search">검색</string>
+    <string name="tab_dibs">찜</string>
+
+
+    <!--SEARCH-->
+    <string name="search_search">검색</string>
+    <string name="search_pls_insert_keyword">검색어를 입력하세요</string>
+    <string name="search_add_dibs">찜 항목에 추가 되었습니다.</string>
+    <string name="search_remove_dibs">찜 항목에 해제 되었습니다.</string>
+
+    <!--DIBS-->
+
+
 </resources>
