@@ -44,31 +44,9 @@ class SearchFragment : BaseDaggerFragment<SearchFragmentBinding, SearchViewModel
     override fun onCommandEvent(cmd: String, data: Any) {
         SearchViewModel.apply {
             when (cmd) {
-                CMD_DIBS            -> if (data is KakaoMergeResult) toggleDibs(data)
+                CMD_DIBS            -> mDibsViewModel.toggleDibs(mViewModel.dibsList)
                 CMD_HIDE_KEYBOARD   -> hideKeyboard(mBinding.root)
             }
-        }
-    }
-
-    private fun toggleDibs(item: KakaoMergeResult) {
-        if (mLog.isDebugEnabled) {
-            mLog.debug("TOGGLE DIBS")
-        }
-
-        mViewModel.dibsList.apply {
-            val f = find { f -> f.thumbnail == item.thumbnail }
-            val strid = if (f != null) {
-                remove(f)
-                R.string.search_remove_dibs
-            } else {
-                add(item)
-                R.string.search_add_dibs
-            }
-
-            item.dibs.toggle()
-            toast(strid)
-
-            mDibsViewModel.toggleDibs(this)
         }
     }
 

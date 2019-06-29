@@ -9,6 +9,7 @@ import com.example.imagebank.R
 import com.example.imagebank.model.remote.KakaoRestSearchService
 import com.example.imagebank.model.remote.entity.*
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import org.slf4j.LoggerFactory
@@ -25,6 +26,15 @@ import java.util.*
 class SearchViewModel @Inject constructor(application: Application,
     private val api: KakaoRestSearchService
 ) : RecyclerViewModel<KakaoMergeResult>(application) {
+
+    companion object {
+        private val mLog = LoggerFactory.getLogger(SearchViewModel::class.java)
+
+        const val DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
+
+        const val CMD_DIBS = "cmd-dibs"
+        const val CMD_HIDE_KEYBOARD = "cmd-hide-keyboard"
+    }
 
     val keyword         = ObservableField<String>("설현")
     val gridCount       = ObservableInt(2)
@@ -125,12 +135,31 @@ class SearchViewModel @Inject constructor(application: Application,
         } ?: toast(R.string.search_pls_insert_keyword)
     }
 
-    companion object {
-        private val mLog = LoggerFactory.getLogger(SearchViewModel::class.java)
+    private fun checkDibsList(item: KakaoMergeResult) {
+        dp.add(Single.just(dibsList)
+            .subscribeOn(Schedulers.io())
+            .map {
+                val f = it.find { f -> f.thumbnail == item.thumbnail }
+                if (f != null) {
+                    it.remove(f)
+                    R.string.search_remove_dibs
+                } else {
+                    it.add(item)
+                    R.string.search_add_dibs
+                }
+            }
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { resid ->
+                item.dibs.toggle()
+                toast(resid)
+            })
+    }
 
-        const val DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
+    override fun command(cmd: String, data: Any) {
+        when (cmd) {
+            CMD_DIBS -> checkDibsList(data as KakaoMergeResult)
+        }
 
-        const val CMD_DIBS = "cmd-dibs"
-        const val CMD_HIDE_KEYBOARD = "cmd-hide-keyboard"
+        super.command(cmd, data)
     }
 }

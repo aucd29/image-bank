@@ -36,5 +36,4 @@ class DibsFragment : BaseDaggerFragment<DibsFragmentBinding, DibsViewModel>() {
         @ContributesAndroidInjector
         abstract fun contributeDibsFragmentInjector(): DibsFragment
     }
-
 }
