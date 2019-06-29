@@ -4,6 +4,7 @@ import brigitte.BaseDaggerFragment
 import brigitte.di.dagger.module.injectOfActivity
 import brigitte.hideKeyboard
 import brigitte.toast
+import brigitte.toggle
 import com.example.imagebank.R
 import com.example.imagebank.databinding.SearchFragmentBinding
 import com.example.imagebank.model.remote.entity.KakaoMergeResult
@@ -54,7 +55,20 @@ class SearchFragment : BaseDaggerFragment<SearchFragmentBinding, SearchViewModel
             mLog.debug("TOGGLE DIBS")
         }
 
-        mDibsViewModel.toggleDibs(item)
+        mViewModel.dibsList.apply {
+            val strid = if (item.dibs.get()) {
+                remove(item)
+                R.string.search_remove_dibs
+            } else {
+                add(item)
+                R.string.search_add_dibs
+            }
+
+            item.dibs.toggle()
+            toast(strid)
+
+            mDibsViewModel.toggleDibs(this)
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////

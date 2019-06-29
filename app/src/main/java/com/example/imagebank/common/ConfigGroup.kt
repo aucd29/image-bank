@@ -16,9 +16,7 @@ import android.view.*
 @Singleton
 class Config @Inject constructor(val context: Context) {
     val SCREEN = Point()
-
     init {
-
         //
         // W / H
         //

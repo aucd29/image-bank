@@ -24,12 +24,6 @@
             tools:ignore="GoogleAppIndexingWarning"
             android:theme="@style/SplashTheme"
     >
-
-        <!--
-        android:targetSandboxVersion="1" 와 android:usesCleartextTraffic="true" 을 넣는다면
-        android:networkSecurityConfig="@xml/network_security_config" 를 넣지 않아도 된다.
-        -->
-
         <activity
                 android:name=".MainActivity"
                 android:label="@string/app_name"

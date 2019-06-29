@@ -21,8 +21,8 @@ class NetworkModule {
     companion object {
         val LOG_CLASS = NetworkModule::class.java
 
-        const val KAKAO_AK        = "KakaoAK"
-        const val AUTHORIZATION   = "Authorization"
+        const val KAKAO_AK = "KakaoAK"
+        const val AUTHORIZATION = "Authorization"
         const val KAKAO_REST_AUTH = "e302331ef568c1a4af2053c77eef1b89"
     }
 
@@ -36,16 +36,15 @@ class NetworkModule {
     fun provideLogLevel() =
         HttpLoggingInterceptor.Level.BODY
 
-
     @Provides
     @Singleton
-    fun provideAuthorizationInterceptor() =
-        object : AuthorizationInterceptor {
-            override fun intercept(chain: Interceptor.Chain): Response {
-                return chain.proceed(chain.request().newBuilder()
-                        .addHeader(AUTHORIZATION, "$KAKAO_AK $KAKAO_REST_AUTH")
-                        .build()
-                )
-            }
+    fun provideAuthorizationInterceptor() = object : AuthorizationInterceptor {
+        override fun intercept(chain: Interceptor.Chain): Response {
+            return chain.proceed(
+                chain.request().newBuilder()
+                    .addHeader(AUTHORIZATION, "$KAKAO_AK $KAKAO_REST_AUTH")
+                    .build()
+            )
         }
+    }
 }

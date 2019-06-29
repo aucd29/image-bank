@@ -125,7 +125,6 @@ dependencies {
 
     // local lib
     implementation project(path: ':brigitte')
-    implementation project(path: ':dingbat')
 }
 
 //apply plugin: 'com.google.gms.google-services'

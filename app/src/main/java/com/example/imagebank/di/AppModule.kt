@@ -13,11 +13,11 @@ import javax.inject.Singleton
  * Created by <a href="mailto:aucd29@hanwha.com">Burke Choi</a> on 2019-06-28 <p/>
  */
 
-@Module(includes = [ViewModelFactoryModule::class
-    , ViewModelModule::class
-    , NetworkModule::class
-    , RxModule::class
-    , CalligraphyModule::class
+@Module(includes = [
+    ViewModelFactoryModule::class,
+    ViewModelModule::class,
+    NetworkModule::class,
+    RxModule::class
 ])
 class AppModule {
     companion object {

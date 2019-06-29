@@ -32,6 +32,7 @@ class SearchViewModel @Inject constructor(application: Application,
     val visibleProgress = ObservableInt(View.GONE)
 
     val dp              = CompositeDisposable()
+    val dibsList        = arrayListOf<KakaoMergeResult>()
 
     init {
         initAdapter("search_item")
@@ -97,6 +98,12 @@ class SearchViewModel @Inject constructor(application: Application,
                         }
                     })
 
+                    dibsList.forEach { dibs ->
+                        it.find { f -> dibs.thumbnail == f.thumbnail }?.let {
+                            it.dibs.toggle()
+                        }
+                    }
+
                     visibleProgress.visibleToggle()
 
                     it
@@ -118,12 +125,6 @@ class SearchViewModel @Inject constructor(application: Application,
                 }))
         } ?: toast(R.string.search_pls_insert_keyword)
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////
-    //
-    // ITextChanged
-    //
-    ////////////////////////////////////////////////////////////////////////////////////
 
     companion object {
         private val mLog = LoggerFactory.getLogger(SearchViewModel::class.java)

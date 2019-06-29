@@ -29,30 +29,8 @@ class DibsViewModel @Inject constructor(application: Application
         adapter.get()?.isNotifySetChanged = true
     }
 
-    fun toggleDibs(item: KakaoMergeResult) {
-        items.get()?.let {
-            if (it is ArrayList) {
-                if (item.dibs.get()) {
-                    if (mLog.isDebugEnabled) {
-                        mLog.debug("REMOVE DIBS")
-                    }
-                    it.remove(item)
-                } else {
-                    if (mLog.isDebugEnabled) {
-                        mLog.debug("ADD DIBS")
-                    }
-                    it.add(item)
-                }
-            }
-        }
-
-        item.dibs.set(!item.dibs.get())
+    fun toggleDibs(item: List<KakaoMergeResult>) {
+        items.set(item)
         items.notifyChange()
-
-        toast(if (item.dibs.get()) {
-            R.string.search_add_dibs
-        } else {
-            R.string.search_remove_dibs
-        })
     }
 }

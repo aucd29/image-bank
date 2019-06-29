@@ -24,8 +24,4 @@
         <item name="android:background">@drawable/splash_background</item>
     </style>
 
-    <style name="dingbat">
-        <item name="android:textAppearance">@style/solid</item>
-    </style>
-
 </resources>
