@@ -1,5 +1,6 @@
 package com.example.imagebank.model.remote.entity
 
+import androidx.databinding.ObservableBoolean
 import brigitte.IRecyclerDiff
 import brigitte.IRecyclerItem
 import com.example.imagebank.model.IKakaoSearchData
@@ -52,7 +53,7 @@ data class KakaoMergeResult(
     val thumbnail: String,
     val datetime: String,
     val unixtime: Long,
-    var dibs: Boolean = false
+    var dibs: ObservableBoolean = ObservableBoolean(false)
 ): IRecyclerDiff {
     override fun compare(item: IRecyclerDiff): Boolean {
         val newItem = item as KakaoMergeResult

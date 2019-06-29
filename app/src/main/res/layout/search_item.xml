@@ -31,7 +31,7 @@
                 android:layout_width="wrap_content" android:layout_height="wrap_content"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:src="@drawable/ic_star_yellow_24dp"
+                android:src="@{item.dibs ? @drawable/ic_star_yellow_24dp : @drawable/ic_star_border_yellow_24dp}"
                 android:padding="10dp"
                 android:background="?selectableItemBackground"
                 android:onClick="@{() -> model.command(model.CMD_DIBS, item)}"

@@ -32,7 +32,7 @@ class DibsViewModel @Inject constructor(application: Application
     fun toggleDibs(item: KakaoMergeResult) {
         items.get()?.let {
             if (it is ArrayList) {
-                if (item.dibs) {
+                if (item.dibs.get()) {
                     if (mLog.isDebugEnabled) {
                         mLog.debug("REMOVE DIBS")
                     }
@@ -46,10 +46,10 @@ class DibsViewModel @Inject constructor(application: Application
             }
         }
 
-        item.dibs = !item.dibs
+        item.dibs.set(!item.dibs.get())
         items.notifyChange()
 
-        toast(if (item.dibs) {
+        toast(if (item.dibs.get()) {
             R.string.search_add_dibs
         } else {
             R.string.search_remove_dibs
