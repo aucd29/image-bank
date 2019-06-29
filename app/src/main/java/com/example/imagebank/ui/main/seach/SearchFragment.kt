@@ -54,7 +54,16 @@ class SearchFragment : BaseDaggerFragment<SearchFragmentBinding, SearchViewModel
             when (cmd) {
                 CMD_DIBS            -> mDibsViewModel.toggleDibs(mViewModel.dibsList)
                 CMD_HIDE_KEYBOARD   -> hideKeyboard(mBinding.root)
-                CMD_TOP_SCROLL      -> mBinding.scrollview.scrollTo(0, 0)
+                CMD_TOP_SCROLL      -> scrollToTop()
+            }
+        }
+    }
+
+    private fun scrollToTop() {
+        mBinding.apply {
+            recycler.scrollToPosition(0)
+            scrollview.apply {
+                postDelayed({ scrollY = 0 }, 200)
             }
         }
     }
