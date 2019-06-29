@@ -17,15 +17,6 @@ class MainActivity : BaseDaggerActivity<MainActivityBinding, MainViewModel>() {
         private val mLog = LoggerFactory.getLogger(MainActivity::class.java)
     }
 
-    private val mTabChanged = TabSelectedCallback {
-        it?.let {
-            if (mLog.isDebugEnabled) {
-                mLog.debug("TAB CHANGED : ${it.position}")
-            }
-            changeTopLayoutColor(it)
-        }
-    }
-
     @Inject lateinit var mSplashModel: SplashViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,12 +25,6 @@ class MainActivity : BaseDaggerActivity<MainActivityBinding, MainViewModel>() {
         super.onCreate(savedInstanceState)
 
         hideKeyboard(mBinding.root)
-    }
-
-    override fun onDestroy() {
-        mBinding.tabs.removeOnTabSelectedListener(mTabChanged)
-
-        super.onDestroy()
     }
 
     override fun bindViewModel() {
@@ -54,10 +39,8 @@ class MainActivity : BaseDaggerActivity<MainActivityBinding, MainViewModel>() {
             tabs.setupWithViewPager(this)
         }
 
-        tabs.addOnTabSelectedListener(mTabChanged)
 
         mSplashModel.closeSplash()
-
     }
 
     override fun initViewModelEvents() = mSplashModel.run {
@@ -68,18 +51,9 @@ class MainActivity : BaseDaggerActivity<MainActivityBinding, MainViewModel>() {
         }
     }
 
-    private fun changeTopLayoutColor(tab: TabLayout.Tab) {
-        tab.apply {
-            val res = when (position) {
-                0 -> R.color.colorPrimaryDark to R.color.colorPrimary
-                else -> R.color.colorDarkGreen to R.color.colorGreen
-            }
-
-            changeStatusBarColor(res.first)
-            mBinding.apply {
-                appbar.setBackgroundResource(res.second)
-                tabs.setBackgroundResource(res.second)
-            }
+    override fun onCommandEvent(cmd: String, data: Any) {
+        when(cmd) {
+            MainViewModel.CMD_STATUS_BAR_COLOR -> changeStatusBarColor(data as Int)
         }
     }
 }

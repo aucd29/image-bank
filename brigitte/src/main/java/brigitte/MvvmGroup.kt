@@ -11,10 +11,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.ArrayRes
+import androidx.annotation.ColorRes
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDialogFragment
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
@@ -54,6 +56,9 @@ inline fun AndroidViewModel.requireContext(): Context =
     } else {
         app.applicationContext
     }
+
+inline fun AndroidViewModel.color(@ColorRes resid: Int) =
+    ContextCompat.getColor(app, resid)
 
 /**
  * android view model 에서 쉽게 문자열을 가져올 수 있도록 wrapping 함

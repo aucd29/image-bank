@@ -2,6 +2,7 @@ package brigitte.bindingadapter
 
 import androidx.databinding.BindingAdapter
 import androidx.viewpager.widget.ViewPager
+import brigitte.TabSelectedCallback
 import brigitte.arch.SingleLiveEvent
 import com.google.android.material.tabs.TabLayout
 import org.slf4j.LoggerFactory
@@ -40,5 +41,14 @@ object TabLayoutBindingAdapter {
         }
 
         tab.getTabAt(index)?.select()
+    }
+
+    @JvmStatic
+    @BindingAdapter("bindTabChanged")
+    fun bindTabChanged(tab: TabLayout, tabSelectedCallback: TabSelectedCallback) {
+        if (mLog.isDebugEnabled) {
+            mLog.debug("ADD TAB SELECTED LISTENER")
+        }
+        tab.addOnTabSelectedListener(tabSelectedCallback)
     }
 }
