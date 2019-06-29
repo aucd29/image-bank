@@ -74,14 +74,11 @@
                         app:bindStaggeredVerticalGridLayoutManager="@{model.gridCount}"
                         app:bindAdapter="@{model.adapter}"
                         app:bindItems="@{model.items}"
-                        android:layout_marginTop="15dp"
+                        android:layout_marginTop="10dp"
                 />
 
-
             </androidx.constraintlayout.widget.ConstraintLayout>
-
         </androidx.core.widget.NestedScrollView>
-
 
         <ProgressBar
                 android:id="@+id/progress"

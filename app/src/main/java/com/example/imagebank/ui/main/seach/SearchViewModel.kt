@@ -98,10 +98,9 @@ class SearchViewModel @Inject constructor(application: Application,
                         }
                     })
 
+                    // 찜에 넣어둔 경우 이를 검사해서 활성화 시켜준다.
                     dibsList.forEach { dibs ->
-                        it.find { f -> dibs.thumbnail == f.thumbnail }?.let {
-                            it.dibs.toggle()
-                        }
+                        it.find { f -> dibs.thumbnail == f.thumbnail }?.dibs?.toggle()
                     }
 
                     visibleProgress.visibleToggle()

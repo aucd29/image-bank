@@ -2,11 +2,9 @@ package com.example.imagebank
 
 import android.os.Bundle
 import android.view.View
-import brigitte.BaseDaggerActivity
+import brigitte.*
 import brigitte.di.dagger.module.injectOf
 import brigitte.di.dagger.module.injectOfActivity
-import brigitte.exceptionCatcher
-import brigitte.hideKeyboard
 import com.example.imagebank.databinding.MainActivityBinding
 import com.example.imagebank.ui.main.SectionsPagerAdapter
 import com.example.imagebank.ui.main.SplashViewModel
@@ -15,10 +13,16 @@ import org.slf4j.LoggerFactory
 import javax.inject.Inject
 
 class MainActivity : BaseDaggerActivity<MainActivityBinding, MainViewModel>() {
-    private val mTabChanged = object: TabLayout.OnTabSelectedListener {
-        override fun onTabReselected(p0: TabLayout.Tab?) { }
-        override fun onTabUnselected(p0: TabLayout.Tab?) { }
-        override fun onTabSelected(tab: TabLayout.Tab?) {
+    companion object {
+        private val mLog = LoggerFactory.getLogger(MainActivity::class.java)
+    }
+
+    private val mTabChanged = TabSelectedCallback {
+        it?.let {
+            if (mLog.isDebugEnabled) {
+                mLog.debug("TAB CHANGED : ${it.position}")
+            }
+            changeTopLayoutColor(it)
         }
     }
 
@@ -30,6 +34,12 @@ class MainActivity : BaseDaggerActivity<MainActivityBinding, MainViewModel>() {
         super.onCreate(savedInstanceState)
 
         hideKeyboard(mBinding.root)
+    }
+
+    override fun onDestroy() {
+        mBinding.tabs.removeOnTabSelectedListener(mTabChanged)
+
+        super.onDestroy()
     }
 
     override fun bindViewModel() {
@@ -44,7 +54,10 @@ class MainActivity : BaseDaggerActivity<MainActivityBinding, MainViewModel>() {
             tabs.setupWithViewPager(this)
         }
 
+        tabs.addOnTabSelectedListener(mTabChanged)
+
         mSplashModel.closeSplash()
+
     }
 
     override fun initViewModelEvents() = mSplashModel.run {
@@ -55,7 +68,18 @@ class MainActivity : BaseDaggerActivity<MainActivityBinding, MainViewModel>() {
         }
     }
 
-    companion object {
-        private val mLog = LoggerFactory.getLogger(MainActivity::class.java)
+    private fun changeTopLayoutColor(tab: TabLayout.Tab) {
+        tab.apply {
+            val res = when (position) {
+                0 -> R.color.colorPrimaryDark to R.color.colorPrimary
+                else -> R.color.colorDarkGreen to R.color.colorGreen
+            }
+
+            changeStatusBarColor(res.first)
+            mBinding.apply {
+                appbar.setBackgroundResource(res.second)
+                tabs.setBackgroundResource(res.second)
+            }
+        }
     }
 }
