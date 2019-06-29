@@ -6,6 +6,7 @@ import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
 import brigitte.*
 import com.example.imagebank.R
+import com.example.imagebank.common.Config
 import com.example.imagebank.model.remote.KakaoRestSearchService
 import com.example.imagebank.model.remote.entity.*
 import io.reactivex.Observable
@@ -24,7 +25,8 @@ import java.util.*
  */
 
 class SearchViewModel @Inject constructor(application: Application,
-    private val api: KakaoRestSearchService
+    private val api: KakaoRestSearchService,
+    private val config: Config
 ) : RecyclerViewModel<KakaoMergeResult>(application) {
 
     companion object {
@@ -34,15 +36,19 @@ class SearchViewModel @Inject constructor(application: Application,
 
         const val CMD_DIBS = "cmd-dibs"
         const val CMD_HIDE_KEYBOARD = "cmd-hide-keyboard"
+        const val CMD_TOP_SCROLL    = "cmd-top-scroll"
     }
 
-    val keyword         = ObservableField<String>("설현")
-    val gridCount       = ObservableInt(2)
-    val editorAction    = ObservableField<(String?) -> Boolean>()   // editor 에서 done 버튼 선택 시
-    val visibleProgress = ObservableInt(View.GONE)
+    val keyword             = ObservableField<String>("설현")
+    val gridCount           = ObservableInt(2)
+    val editorAction        = ObservableField<(String?) -> Boolean>()   // editor 에서 done 버튼 선택 시
+    val scrollListener      = ObservableField<ScrollChangeListener>()
 
-    val dp              = CompositeDisposable()
-    val dibsList        = arrayListOf<KakaoMergeResult>()
+    val visibleProgress     = ObservableInt(View.GONE)
+    val visibleTopScroll    = ObservableInt(View.GONE)
+
+    val dp                  = CompositeDisposable()
+    val dibsList            = arrayListOf<KakaoMergeResult>()
 
     init {
         initAdapter("search_item")
@@ -54,6 +60,21 @@ class SearchViewModel @Inject constructor(application: Application,
             search()
             true
         }
+        scrollListener.set(ScrollChangeListener { x, y ->
+            if (mLog.isTraceEnabled()) {
+                mLog.trace("SCROLL Y : $y")
+            }
+
+            if (y > config.SCREEN.y) {
+                if (!visibleTopScroll.isVisible()) {
+                    visibleTopScroll.visible()
+                }
+            } else {
+                if (visibleTopScroll.isVisible()) {
+                    visibleTopScroll.gone()
+                }
+            }
+        })
     }
 
     fun search() {

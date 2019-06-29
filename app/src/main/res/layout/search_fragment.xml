@@ -22,7 +22,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                app:bindScrollChangeListener="@{model.scrollListener}"
         >
             <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/scroll_container"
@@ -88,6 +88,20 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:visibility="@{model.visibleProgress}"
+        />
+
+        <ImageView
+                android:id="@+id/move_top_scroll"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:src="@drawable/ic_arrow_drop_up_black_24dp"
+                android:visibility="@{model.visibleTopScroll}"
+                android:onClick="@{() -> model.command(model.CMD_TOP_SCROLL)}"
+                android:elevation="2dp"
+                android:padding="5dp"
+                android:layout_margin="16dp"
+                android:background="@drawable/shape_circle_yellow_stroke_background"
         />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
