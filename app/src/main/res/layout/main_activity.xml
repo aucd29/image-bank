@@ -5,7 +5,8 @@
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable name="model" type="com.example.imagebank.ui.main.SplashViewModel"/>
+        <variable name="splashModel" type="com.example.imagebank.ui.main.SplashViewModel"/>
+        <variable name="model" type="com.example.imagebank.MainViewModel"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -71,7 +72,7 @@
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintBottom_toBottomOf="parent"
                         />
-
+                        <!--android:onTabChanged="@{model::onTabSelected}"-->
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </com.google.android.material.appbar.CollapsingToolbarLayout>
             </com.google.android.material.appbar.AppBarLayout>
@@ -93,7 +94,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:visibility="@{model.visibleSplash}"
+                android:visibility="@{splashModel.visibleSplash}"
                 android:clickable="true"
                 android:focusable="true"/>
 

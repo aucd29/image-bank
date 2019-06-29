@@ -21,9 +21,9 @@ class NetworkModule {
     companion object {
         val LOG_CLASS = NetworkModule::class.java
 
-        const val KAKAO_AK = "KakaoAK"
-        const val AUTHORIZATION = "Authorization"
-        const val KAKAO_REST_AUTH = "e302331ef568c1a4af2053c77eef1b89"
+        const val KAKAO_AK          = "KakaoAK"
+        const val AUTHORIZATION     = "Authorization"
+        const val KAKAO_REST_AUTH   = "e302331ef568c1a4af2053c77eef1b89"
     }
 
     @Provides

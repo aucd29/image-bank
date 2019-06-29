@@ -56,8 +56,9 @@ class SearchFragment : BaseDaggerFragment<SearchFragmentBinding, SearchViewModel
         }
 
         mViewModel.dibsList.apply {
-            val strid = if (item.dibs.get()) {
-                remove(item)
+            val f = find { f -> f.thumbnail == item.thumbnail }
+            val strid = if (f != null) {
+                remove(f)
                 R.string.search_remove_dibs
             } else {
                 add(item)

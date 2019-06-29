@@ -18,16 +18,7 @@ class DibsFragment : BaseDaggerFragment<DibsFragmentBinding, DibsViewModel>() {
     }
 
     override fun initViewModelEvents() {
-//        mViewModel.apply {
-//            observe(listLive) {
-//                if (mLog.isDebugEnabled) {
-//                    mLog.debug("DIBS SIZE : ${listLive.value?.size}")
-//                }
-//
-//                items.set(it)
-//                items.notifyChange()
-//            }
-//        }
+
     }
 
     companion object {
