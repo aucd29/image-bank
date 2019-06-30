@@ -53,34 +53,31 @@ class DibsFragment : BaseDaggerFragment<DibsFragmentBinding, DibsViewModel>() {
             dibsViewpager.addOnPageChangeListener(object: ViewPager.SimpleOnPageChangeListener() {
                 override fun onPageSelected(position: Int) {
                     if (mLog.isDebugEnabled) {
-                        mLog.debug("PAGE SELECTED : $position")
+                        mLog.debug("BANNER PAGE SELECTED : $position")
                     }
 
                     pageIndicatorView.setSelected(position)
-
-                    mItems?.let {
-                        val current = it[position]
-                        mMainViewModel.apply {
-                            bgStatusLastColor  = mBannerViewModel.convertColor(current.statusColor)
-                            bgTopViewLastColor = mBannerViewModel.convertColor(current.bgcolor)
-
-                            command(MainViewModel.CMD_STATUS_BAR_COLOR, bgStatusLastColor!!)
-                            bgTopViewColor.set(bgTopViewLastColor!!)
-                        }
-                    }
+                    topViewColorChange(position)
                 }
             })
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-
-        hideKeyboard(mBinding.root)
-    }
-
     override fun initViewModelEvents() {
 
+    }
+
+    private fun topViewColorChange(pos: Int) {
+        mItems?.let {
+            val current = it[pos]
+            mMainViewModel.apply {
+                bgStatusLastColor  = mBannerViewModel.convertColor(current.statusColor)
+                bgTopViewLastColor = mBannerViewModel.convertColor(current.bgcolor)
+
+                command(MainViewModel.CMD_STATUS_BAR_COLOR, bgStatusLastColor!!)
+                bgTopViewColor.set(bgTopViewLastColor!!)
+            }
+        }
     }
 
 

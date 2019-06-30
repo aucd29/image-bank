@@ -39,6 +39,7 @@
                 android:textColor="@android:color/white"
                 android:text="@{item.description}"
                 android:textAlignment="center"
+                android:gravity="center"
         />
 
         <ImageView

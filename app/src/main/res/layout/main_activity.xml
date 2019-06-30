@@ -64,6 +64,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="?actionBarSize"
                                 app:tabTextAppearance="@style/kakaoTabTextApppearance"
+                                app:tabIndicatorHeight="1dp"
                                 app:layout_constraintStart_toEndOf="@+id/menu"
                                 app:layout_constraintTop_toTopOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
