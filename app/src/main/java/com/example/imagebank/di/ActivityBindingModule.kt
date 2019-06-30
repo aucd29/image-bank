@@ -2,6 +2,7 @@ package com.example.imagebank.di
 
 import androidx.fragment.app.FragmentManager
 import com.example.imagebank.MainActivity
+import com.example.imagebank.ui.ViewController
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -20,9 +21,9 @@ abstract class ActivityBindingModule {
     ])
     abstract fun contributeMainActivity(): MainActivity
 
-//    @Singleton
-//    @Binds
-//    abstract fun bindViewController(controller: ViewController): Any
+    @Singleton
+    @Binds
+    abstract fun bindViewController(controller: ViewController): Any
 }
 
 // https://stackoverflow.com/questions/48533899/how-to-inject-members-in-baseactivity-using-dagger-android
