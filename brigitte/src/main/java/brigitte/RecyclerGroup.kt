@@ -345,11 +345,12 @@ open class RecyclerViewModel<T: IRecyclerDiff>(app: Application)
 
     override val commandEvent = SingleLiveEvent<Pair<String, Any>>()
 
+    protected var mThreshold   = 1
+    protected var mDataLoading = false
+
     val items           = ObservableField<List<T>>()
     val adapter         = ObservableField<RecyclerAdapter<T>>()
     val itemTouchHelper = ObservableField<ItemTouchHelper>()
-    val threshold       = 1
-    var dataLoading     = false
 
     /**
      * adapter 에 사용될 layout 을 설정한다.
@@ -471,7 +472,7 @@ open class RecyclerViewModel<T: IRecyclerDiff>(app: Application)
                 mLog.debug("LAST VISIBLE POS ${lastVisiblePos}\nLAST ITEM POS ${it.size}")
             }
 
-            !dataLoading && it.size - lastVisiblePos <= threshold
+            !mDataLoading && it.size - lastVisiblePos <= mThreshold
         } ?: false
     }
 }

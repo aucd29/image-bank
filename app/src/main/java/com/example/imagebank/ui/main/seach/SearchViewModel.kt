@@ -56,6 +56,7 @@ class SearchViewModel @Inject constructor(application: Application,
         StaggeredGridLayoutManager.VERTICAL)
 
     init {
+        mThreshold = 18
         initAdapter("search_item")
         adapter.get()?.isScrollToPosition = false
 
@@ -83,14 +84,15 @@ class SearchViewModel @Inject constructor(application: Application,
             // 페이지 처리를 하려고 하는데
             // 데이터가 add 시 top 으로 이동하는 문제 존재
             // 이런건 또 처음 보네 =_=
-//            // nested scroll 이라 recycler view 에 add scroll listener 에 넣는게 의미가 없어
-//            // 이곳에서 처리
-//            if (isBottom && mPage <= 50) {
-//                val pos = layoutManager.findLastVisibleItemPosition()
-//                if (isNextLoad(pos)) {
-//                    search(mPage.inc())
-//                }
-//            }
+
+            // nested scroll 이라 recycler view 에 add scroll listener 에 넣는게 의미가 없어
+            // 이곳에서 처리
+            if (isBottom && mPage <= 50) {
+                val pos = layoutManager.findLastVisibleItemPosition()
+                if (isNextLoad(pos)) {
+                    search(mPage.inc())
+                }
+            }
         })
     }
 
@@ -99,7 +101,7 @@ class SearchViewModel @Inject constructor(application: Application,
 
     fun search(p: Int) {
         mPage = p
-        dataLoading = true
+        mDataLoading = true
         command(CMD_HIDE_KEYBOARD)
 
         if (!app.isNetworkConntected()) {
@@ -202,7 +204,7 @@ class SearchViewModel @Inject constructor(application: Application,
 //                        }
 
                         mDp.add(delay {
-                            dataLoading = false
+                            mDataLoading = false
                             visibleProgress.visibleToggle()
                         })
                     }, {

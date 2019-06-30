@@ -113,7 +113,8 @@ inline fun View.spToPx(v: Int) = TypedValue.applyDimension(
 class ScrollChangeListener(val callback: (Int, Int, Boolean) -> Unit): NestedScrollView.OnScrollChangeListener {
     override fun onScrollChange(v: NestedScrollView?, scrollX: Int, scrollY: Int, oldScrollX: Int, oldScrollY: Int) {
         callback.invoke(scrollX, scrollY, v?.run {
-            scrollY == (getChildAt(0).measuredHeight - measuredHeight)
+            val res = scrollY == (getChildAt(0).measuredHeight - measuredHeight)
+            res
         } ?: false)
     }
 }

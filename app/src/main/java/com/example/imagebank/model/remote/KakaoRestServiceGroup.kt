@@ -24,5 +24,5 @@ interface KakaoRestSearchService {
     fun vclip(@Query("query") query: String,
               @Query("page") page: String = "1",
               @Query("sort") sort: String = "accuracy",
-              @Query("size") size: String = "15"): Observable<KakaoVClipSearch>
+              @Query("size") size: String = "30"): Observable<KakaoVClipSearch>
 }

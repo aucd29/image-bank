@@ -2,6 +2,7 @@
 package brigitte.bindingadapter
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.widget.ImageView
@@ -87,8 +88,9 @@ inline fun ImageView.glide(path: String) {
     val glide = GlideApp.with(context)
     if (path.startsWith("http")) {
         glide.load(path)
-            .diskCacheStrategy(DiskCacheStrategy.DATA)
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
             .placeholder(R.drawable.ic_autorenew_black_24dp)
+            .error(R.drawable.ic_error_outline_black_24dp)
             .into(this)
 
         return
