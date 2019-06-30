@@ -37,7 +37,7 @@
                         android:layout_height="wrap_content"
                         android:layout_width="match_parent"
                         android:theme="@style/AppTheme.AppBarOverlay"
-                        android:background="@{model.bgTopView}"
+                        android:background="@{model.bgTopViewColor}"
                 >
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -61,14 +61,17 @@
                         <com.google.android.material.tabs.TabLayout
                                 android:id="@+id/tabs"
                                 android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:background="@{model.bgTopView}"
+                                android:layout_height="?actionBarSize"
+                                app:tabTextAppearance="@style/kakaoTabTextApppearance"
                                 app:layout_constraintStart_toEndOf="@+id/menu"
                                 app:layout_constraintTop_toTopOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintBottom_toBottomOf="parent"
-                                app:bindTabChanged="@{model.tabChanged}"
+                                android:background="@{model.bgTopViewColor}"
+                                app:bindTabChanged="@{model.tabChangedCallback}"
+                                app:bindIndicatorColor="@{model.tabIndicatorColor}"
                         />
+
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </com.google.android.material.appbar.AppBarLayout>

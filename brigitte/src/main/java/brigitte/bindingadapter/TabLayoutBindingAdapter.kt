@@ -1,5 +1,8 @@
 package brigitte.bindingadapter
 
+import android.graphics.Color
+import androidx.annotation.ColorInt
+import androidx.annotation.ColorRes
 import androidx.databinding.BindingAdapter
 import androidx.viewpager.widget.ViewPager
 import brigitte.TabSelectedCallback
@@ -50,5 +53,15 @@ object TabLayoutBindingAdapter {
             mLog.debug("ADD TAB SELECTED LISTENER")
         }
         tab.addOnTabSelectedListener(tabSelectedCallback)
+    }
+
+    @JvmStatic
+    @BindingAdapter("bindIndicatorColor")
+    fun bindIndicatorColor(tab: TabLayout, @ColorInt color: Int) {
+        if (mLog.isDebugEnabled) {
+            mLog.debug("BIND TAB INDICATOR COLOR")
+        }
+
+        tab.setSelectedTabIndicatorColor(color)
     }
 }

@@ -24,4 +24,9 @@
         <item name="android:background">@drawable/splash_background</item>
     </style>
 
+    <style name="kakaoTabTextApppearance" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">17sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 </resources>
