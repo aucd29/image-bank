@@ -39,9 +39,6 @@ class SearchFragment : BaseDaggerFragment<SearchFragmentBinding, SearchViewModel
     override fun initViewBinding() {
         mBinding.recycler.apply {
             layoutManager = mViewModel.layoutManager
-//            (layoutManager as StaggeredGridLayoutManager).isAutoMeasureEnabled = false
-//            setHasFixedSize(false)
-//            isNestedScrollingEnabled = false
         }
     }
 

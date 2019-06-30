@@ -5,7 +5,7 @@
 
     <data>
         <variable name="model" type="com.example.imagebank.ui.main.seach.SearchViewModel" />
-        <variable name="item" type="com.example.imagebank.model.remote.entity.KakaoMergeResult"/>
+        <variable name="item" type="com.example.imagebank.model.remote.entity.KakaoSearchResult"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

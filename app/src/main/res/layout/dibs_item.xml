@@ -4,7 +4,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable name="item" type="com.example.imagebank.model.remote.entity.KakaoMergeResult"/>
+        <variable name="item" type="com.example.imagebank.model.remote.entity.KakaoSearchResult"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

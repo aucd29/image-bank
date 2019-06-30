@@ -32,8 +32,6 @@ class MainActivity : BaseDaggerActivity<MainActivityBinding, MainViewModel>() {
         exceptionCatcher { mLog.error("ERROR: $it") }
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
-
-        hideKeyboard(mBinding.root)
     }
 
     override fun onBackPressed() {

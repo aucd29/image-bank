@@ -2,7 +2,6 @@ package com.example.imagebank.model.remote.entity
 
 import androidx.databinding.ObservableBoolean
 import brigitte.IRecyclerDiff
-import brigitte.IRecyclerItem
 
 /**
  * Created by <a href="mailto:aucd29@hanwha.com">Burke Choi</a> on 2019-06-28 <p/>
@@ -50,14 +49,14 @@ data class KakaoSearch<T>(
 typealias KakaoImageSearch = KakaoSearch<KakaoImageResult>
 typealias KakaoVClipSearch = KakaoSearch<KakaoVClipResult>
 
-data class KakaoMergeResult(
+data class KakaoSearchResult(
     val thumbnail: String,
     val datetime: String,
     val unixtime: Long,
     var dibs: ObservableBoolean = ObservableBoolean(false)
 ): IRecyclerDiff {
     override fun compare(item: IRecyclerDiff): Boolean {
-        val newItem = item as KakaoMergeResult
+        val newItem = item as KakaoSearchResult
 
         return thumbnail == newItem.thumbnail &&
                 unixtime == newItem.unixtime

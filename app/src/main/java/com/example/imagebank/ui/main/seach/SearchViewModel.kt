@@ -1,5 +1,6 @@
 package com.example.imagebank.ui.main.seach
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.view.View
 import androidx.databinding.ObservableField
@@ -28,7 +29,7 @@ import java.util.*
 class SearchViewModel @Inject constructor(application: Application,
     private val api: KakaoRestSearchService,
     private val config: Config
-) : RecyclerViewModel<KakaoMergeResult>(application) {
+) : RecyclerViewModel<KakaoSearchResult>(application) {
 
     companion object {
         private val mLog = LoggerFactory.getLogger(SearchViewModel::class.java)
@@ -39,18 +40,31 @@ class SearchViewModel @Inject constructor(application: Application,
         const val CMD_DIBS          = "cmd-dibs"
         const val CMD_HIDE_KEYBOARD = "cmd-hide-keyboard"
         const val CMD_TOP_SCROLL    = "cmd-top-scroll"
+
+        const val OPT_SORT_ACCURACY = "정확도순"
+        const val OPT_SORT_RECENCY  = "최신순"
+
+        const val V_SORT_ACCURACY = "accuracy"
+        const val V_SORT_RECENCY  = "recency"
     }
 
-    val keyword             = ObservableField<String>("아이유")
+    val keyword             = ObservableField<String>()
+    val sort                = ObservableField(OPT_SORT_ACCURACY)
+    val totalCount          = ObservableField<String>()
+
     val editorAction        = ObservableField<(String?) -> Boolean>()   // editor 에서 done 버튼 선택 시
     val scrollListener      = ObservableField<ScrollChangeListener>()
 
     val visibleProgress     = ObservableInt(View.GONE)
     val visibleTopScroll    = ObservableInt(View.GONE)
 
-    val mDibsList = arrayListOf<KakaoMergeResult>()
+    val mDibsList = arrayListOf<KakaoSearchResult>()
     var mPage     = 1
     val mDp       = CompositeDisposable()
+
+    // api 에서 더 이상 데이터가 없음을 알려줄 경우 api call 을 진행 하지 않기 위한 플래그
+    var mIsImageApiEnd = false
+    var mIsVclipoApiEnd = false
 
     val layoutManager = StaggeredGridLayoutManager(V_TAB_SPANCOUNT,
         StaggeredGridLayoutManager.VERTICAL)
@@ -87,7 +101,7 @@ class SearchViewModel @Inject constructor(application: Application,
 
             // nested scroll 이라 recycler view 에 add scroll listener 에 넣는게 의미가 없어
             // 이곳에서 처리
-            if (isBottom && mPage <= 50) {
+            if (isBottom && mPage <= 50 && !(mIsVclipoApiEnd && mIsImageApiEnd)) {
                 val pos = layoutManager.findLastVisibleItemPosition()
                 if (isNextLoad(pos)) {
                     search(mPage.inc())
@@ -96,9 +110,7 @@ class SearchViewModel @Inject constructor(application: Application,
         })
     }
 
-//    var old = 0
-//    var new = 0
-
+    @SuppressLint("StringFormatMatches")
     fun search(p: Int) {
         mPage = p
         mDataLoading = true
@@ -121,53 +133,51 @@ class SearchViewModel @Inject constructor(application: Application,
                 mLog.debug("SEARCH $it")
             }
 
+            var totalSearchedCount = 0
+
             ioThread {
                 // 검색은 키워드 하나에 이미지 검색과 동영상 검색을 동시에 사용,
-                mDp.add(Observable.zip(api.image(it, mPage.toString()), api.vclip(it, mPage.toString()),
+                mDp.add(Observable.zip(api.image(it, mPage.toString(), sortOption()),
+                    api.vclip(it, mPage.toString(), sortOption()),
+
                     BiFunction { image: KakaoImageSearch, vclip: KakaoVClipSearch ->
                         // 두 검색 결과를 합친 리스트를 사용합니다.
-                        val result = arrayListOf<KakaoMergeResult>()
+                        val result = arrayListOf<KakaoSearchResult>()
 
                         // FIXME 현재 kakao api 버그로 페이징에 문제가 존재 image 의 경우 항상 같은 데이터가 들어온다.
                         // FIXME 데이터를 제외 해볼까 싶었는데 정력 낭비로 생각하고 1페이지만 데이터를 참조하고
                         // FIXME 버그가 수정되면 살리는 형태로 하도록 수정
-                        if (image.message == null && mPage <=1) {
+                        if (image.message == null && !mIsImageApiEnd) {
                             // 2018-12-16T09:40:08.000+09:00
                             image.documents?.forEach {
                                 it.thumbnail_url?.let { thumbnail ->
-                                    result.add(KakaoMergeResult(thumbnail, it.datetime,
+                                    result.add(KakaoSearchResult(thumbnail, it.datetime,
                                         it.datetime.toUnixTime(DATE_FORMAT)))
                                 }
                             }
+
+                            // API 오류로 1번만 호출하고 종료 시킨다.
+                            mIsImageApiEnd = true
+                            totalSearchedCount = image.meta?.total_count ?: 0
+
                         } else {
                             mLog.error("ERROR: ${image.message}")
                         }
 
                         if (vclip.message == null) {
                             vclip.documents?.forEach {
-                                result.add(KakaoMergeResult(it.thumbnail, it.datetime,
+                                result.add(KakaoSearchResult(it.thumbnail, it.datetime,
                                     it.datetime.toUnixTime(DATE_FORMAT)))
                             }
+
+                            mIsVclipoApiEnd = vclip.meta?.is_end ?: false
+                            totalSearchedCount += image.meta?.total_count ?: 0
                         } else {
                             mLog.error("ERROR: ${vclip.message}")
                         }
 
                         result
                     })
-//                    .map {
-//                        // 버그 문제로 중복 데이터 제거
-//                        if (mPage > 1) {
-//                            val itr = it.iterator()
-//                            while (itr.hasNext()) {
-//                                val item = itr.next()
-//                                items.get()?.find { l -> l.thumbnail == item.thumbnail }?.let { _ ->
-//                                    itr.remove()
-//                                }
-//                            }
-//                        }
-//
-//                        it
-//                    }
                     .map {
                         // 두 검색 결과를 datetime 필드를 이용해 최신순으로 나열하여 출력합니다.
                         it.sortWith(Comparator { o1, o2 ->
@@ -179,9 +189,6 @@ class SearchViewModel @Inject constructor(application: Application,
                         })
 
                         if (mPage > 1) {
-//                            old = items.get()?.size ?: 0
-//                            new = it.size
-
                             it.addAll(0, items.get()!!)
                         }
 
@@ -198,11 +205,10 @@ class SearchViewModel @Inject constructor(application: Application,
                             mLog.debug("SEARCHED DATA SET!! ${it.size}")
                         }
 
-                        items.set(it)
-//                        if (old > 0) {
-//                            adapter.get()?.notifyDataSetChanged()
-//                        }
+                        totalCount.set(app.getString(R.string.search_total_searched_count,
+                            totalSearchedCount.numberFormat()))
 
+                        items.set(it)
                         mDp.add(delay {
                             mDataLoading = false
                             visibleProgress.visibleToggle()
@@ -219,7 +225,14 @@ class SearchViewModel @Inject constructor(application: Application,
         } ?: toast(R.string.search_pls_insert_keyword)
     }
 
-    private fun checkDibsList(item: KakaoMergeResult) {
+    fun toggleSort() {
+        sort.set(if (sort.get() == OPT_SORT_ACCURACY) OPT_SORT_RECENCY else OPT_SORT_ACCURACY)
+        search(1)
+    }
+
+    private fun sortOption() = if (sort.get() == OPT_SORT_ACCURACY) V_SORT_ACCURACY else V_SORT_RECENCY
+
+    private fun checkDibsList(item: KakaoSearchResult) {
         mDp.add(Single.just(mDibsList)
             .subscribeOn(Schedulers.io())
             .map {
@@ -241,7 +254,7 @@ class SearchViewModel @Inject constructor(application: Application,
 
     override fun command(cmd: String, data: Any) {
         when (cmd) {
-            CMD_DIBS -> checkDibsList(data as KakaoMergeResult)
+            CMD_DIBS -> checkDibsList(data as KakaoSearchResult)
         }
 
         super.command(cmd, data)

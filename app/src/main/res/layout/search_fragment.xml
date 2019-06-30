@@ -4,6 +4,8 @@
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <import type="android.view.View"/>
+
         <variable name="model" type="com.example.imagebank.ui.main.seach.SearchViewModel"/>
     </data>
 
@@ -53,6 +55,7 @@
                             android:background="@drawable/shape_rectangle_gray_background"
                             android:text="@={model.keyword}"
                             app:bindEditorAction="@{model.editorAction}"
+                            android:focusableInTouchMode="true"
                     />
 
                     <ImageView
@@ -68,13 +71,34 @@
                             android:background="?selectableItemBackgroundBorderless"
                             android:onClick="@{() -> model.search(1)}"
                     />
+
+                    <TextView
+                            android:id="@+id/sort"
+                            android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/keyword"
+                            android:text="@{model.sort}"
+                            android:padding="10dp"
+                            android:onClick="@{() -> model.toggleSort()}"
+                            android:visibility="@{model.items.size > 0 ? View.VISIBLE : View.GONE}"
+                    />
+
+                    <TextView
+                            android:id="@+id/total_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintTop_toBottomOf="@+id/keyword"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            android:text="@{model.totalCount}"
+                            android:padding="10dp"
+                    />
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recycler"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/keyword"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -85,6 +109,38 @@
                 />
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/await_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:visibility="@{model.items.size > 0 ? View.GONE : View.VISIBLE}"
+                app:layout_constraintVertical_bias="0.5"
+        >
+            <ImageView
+                    android:id="@+id/await_icon"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:src="@drawable/bg_await"
+            />
+
+            <TextView
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/await_icon"
+                    android:text="@string/search_empty_list"
+                    android:layout_marginTop="5dp"
+                    android:textColor="#C2C2C2"
+            />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ProgressBar
                 android:id="@+id/progress"

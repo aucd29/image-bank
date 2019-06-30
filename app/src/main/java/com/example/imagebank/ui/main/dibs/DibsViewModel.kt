@@ -2,11 +2,8 @@ package com.example.imagebank.ui.main.dibs
 
 import android.app.Application
 import androidx.databinding.ObservableInt
-import androidx.lifecycle.MutableLiveData
 import brigitte.RecyclerViewModel
-import brigitte.toast
-import com.example.imagebank.R
-import com.example.imagebank.model.remote.entity.KakaoMergeResult
+import com.example.imagebank.model.remote.entity.KakaoSearchResult
 import org.slf4j.LoggerFactory
 import javax.inject.Inject
 
@@ -15,7 +12,7 @@ import javax.inject.Inject
  */
 
 class DibsViewModel @Inject constructor(application: Application
-) : RecyclerViewModel<KakaoMergeResult>(application) {
+) : RecyclerViewModel<KakaoSearchResult>(application) {
     companion object {
         private val mLog = LoggerFactory.getLogger(DibsViewModel::class.java)
     }
@@ -29,7 +26,7 @@ class DibsViewModel @Inject constructor(application: Application
         adapter.get()?.isNotifySetChanged = true
     }
 
-    fun toggleDibs(item: List<KakaoMergeResult>) {
+    fun toggleDibs(item: List<KakaoSearchResult>) {
         items.set(item)
         items.notifyChange()
     }
