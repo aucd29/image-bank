@@ -5,6 +5,7 @@ import brigitte.di.dagger.module.ViewModelKey
 import com.example.imagebank.MainViewModel
 import com.example.imagebank.ui.main.SplashViewModel
 import com.example.imagebank.ui.main.dibs.DibsViewModel
+import com.example.imagebank.ui.main.dibs.banner.BannerViewModel
 import com.example.imagebank.ui.main.navigation.NaviGridViewModel
 import com.example.imagebank.ui.main.navigation.NaviMenuViewModel
 import com.example.imagebank.ui.main.seach.SearchViewModel
@@ -52,4 +53,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(NaviMenuViewModel::class)
     abstract fun bindNaviMenuViewModel(vm: NaviMenuViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(BannerViewModel::class)
+    abstract fun bindBannerViewModel(vm: BannerViewModel): ViewModel
+
+
 }

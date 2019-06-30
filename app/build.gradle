@@ -119,6 +119,9 @@ dependencies {
     // https://github.com/airbnb/lottie-android
     implementation 'com.airbnb.android:lottie:2.8.0'
 
+    // page indicator
+    implementation 'com.romandanylyk:pageindicatorview:1.0.3'
+
      // firebase
 //    implementation 'com.google.firebase:firebase-core:17.0.0'
 //    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'

@@ -38,6 +38,7 @@
                         android:layout_width="match_parent"
                         android:theme="@style/AppTheme.AppBarOverlay"
                         android:background="@{model.bgTopViewColor}"
+                        app:elevation="0dp"
                 >
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -70,6 +71,14 @@
                                 android:background="@{model.bgTopViewColor}"
                                 app:bindTabChanged="@{model.tabChangedCallback}"
                                 app:bindIndicatorColor="@{model.tabIndicatorColor}"
+                        />
+
+                        <View
+                                android:id="@+id/appbar_underline"
+                                android:layout_width="match_parent" android:layout_height="1dp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/tabs"
+                                android:background="#17000000"
                         />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>

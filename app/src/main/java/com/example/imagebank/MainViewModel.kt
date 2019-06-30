@@ -1,6 +1,8 @@
 package com.example.imagebank
 
 import android.app.Application
+import android.graphics.Color
+import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
@@ -32,6 +34,9 @@ class MainViewModel @Inject constructor(application: Application
     val kakaoText = ObservableField("kakao<b>Bank</b>".html())
     val userInfo  = ObservableField<UserInfo>()
 
+    @ColorInt var bgTopViewLastColor: Int? = null
+    @ColorInt var bgStatusLastColor: Int? = null
+
     init {
         tabChangedCallback.set(TabSelectedCallback {
             if (mLog.isDebugEnabled) {
@@ -40,13 +45,19 @@ class MainViewModel @Inject constructor(application: Application
 
             when (it?.position) {
                 0 -> {
-                    command(CMD_STATUS_BAR_COLOR, R.color.colorPrimaryDark)
+                    command(CMD_STATUS_BAR_COLOR, color(R.color.colorPrimaryDark))
                     bgTopViewColor.set(color(R.color.colorPrimary))
                     tabIndicatorColor.set(color(R.color.colorAccent))
                 }
                 else -> {
-                    command(CMD_STATUS_BAR_COLOR, R.color.colorDarkGreen)
-                    bgTopViewColor.set(color(R.color.colorGreen))
+                    if (bgTopViewLastColor == null) {
+                        command(CMD_STATUS_BAR_COLOR, color(R.color.colorDarkGreen))
+                        bgTopViewColor.set(color(R.color.colorGreen))
+                    } else {
+                        command(CMD_STATUS_BAR_COLOR, bgStatusLastColor!!)
+                        bgTopViewColor.set(bgTopViewLastColor!!)
+                    }
+
                     tabIndicatorColor.set(color(android.R.color.white))
                 }
             }

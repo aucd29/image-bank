@@ -2,6 +2,7 @@ package com.example.imagebank
 
 import android.app.Activity
 import androidx.multidex.MultiDexApplication
+import com.example.imagebank.common.PreloadConfig
 import com.example.imagebank.di.DaggerAppComponent
 import com.squareup.leakcanary.LeakCanary
 import dagger.android.DispatchingAndroidInjector

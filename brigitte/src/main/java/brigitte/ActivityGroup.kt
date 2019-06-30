@@ -10,6 +10,7 @@ import android.view.View
 import android.view.WindowManager
 import android.webkit.WebView
 import android.widget.Toast
+import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 //import androidx.activity.OnBackPressedCallback
 //import androidx.activity.OnBackPressedDispatcher
@@ -38,9 +39,15 @@ import java.util.concurrent.TimeUnit
  */
 
 //https://stackoverflow.com/questions/22192291/how-to-change-the-status-bar-color-in-android
-inline fun Activity.changeStatusBarColor(@ColorRes color: Int) {
+inline fun Activity.changeStatusBarColorRes(@ColorRes color: Int) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
         window.statusBarColor = ContextCompat.getColor(this, color)
+    }
+}
+
+inline fun Activity.changeStatusBarColor(@ColorInt color: Int) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        window.statusBarColor = color
     }
 }
 

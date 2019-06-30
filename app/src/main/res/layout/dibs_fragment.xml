@@ -1,30 +1,67 @@
 <layout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
+        xmlns:attrs="http://schemas.android.com/apk/res-auto"
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
         <variable name="model" type="com.example.imagebank.ui.main.dibs.DibsViewModel"/>
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/dibs_container"
+    <androidx.core.widget.NestedScrollView
+            android:id="@+id/dibs_scrollview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-    >
+            android:fillViewport="true">
 
-        <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler"
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/dibs_container"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:bindStaggeredVerticalGridLayoutManager="@{model.gridCount}"
-                app:bindAdapter="@{model.adapter}"
-                app:bindItems="@{model.items}"
-        />
+                android:layout_height="wrap_content"
+        >
+            <com.example.imagebank.common.widget.BkViewPager
+                    android:id="@+id/dibs_viewpager"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+            />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <com.rd.PageIndicatorView
+                    android:id="@+id/pageIndicatorView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    app:piv_animationType="worm"
+                    app:piv_dynamicCount="true"
+                    app:piv_interactiveAnimation="true"
+                    app:piv_selectedColor="@color/gray_50"
+                    app:piv_unselectedColor="@color/gray_300"
+                    app:piv_viewPager="@id/dibs_viewpager"
+                    attrs:piv_padding="6dp"
+                    attrs:piv_radius="2dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+
+            />
+
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/dibs_viewpager"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:bindStaggeredVerticalGridLayoutManager="@{model.gridCount}"
+                    app:bindAdapter="@{model.adapter}"
+                    app:bindItems="@{model.items}"
+            />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
 </layout>

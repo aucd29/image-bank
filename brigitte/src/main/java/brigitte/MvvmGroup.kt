@@ -6,6 +6,7 @@ import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.content.DialogInterface
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -61,6 +62,12 @@ inline fun AndroidViewModel.requireContext(): Context =
 
 inline fun AndroidViewModel.color(@ColorRes resid: Int) =
     ContextCompat.getColor(app, resid)
+
+inline fun AndroidViewModel.drawable(str: String): Drawable? {
+    val id = app.resources.getIdentifier(str, "drawable", app.packageName)
+    return ContextCompat.getDrawable(app, id)
+}
+
 
 inline fun AndroidViewModel.delay(dealy: Long = 1000, noinline callback: () -> Unit) =
     Single.just("")
