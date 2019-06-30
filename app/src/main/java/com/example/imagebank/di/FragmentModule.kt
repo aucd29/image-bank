@@ -1,5 +1,6 @@
 package com.example.imagebank.di
 
+import com.example.imagebank.ui.detail.DetailFragment
 import com.example.imagebank.ui.main.dibs.DibsFragment
 import com.example.imagebank.ui.main.seach.SearchFragment
 import dagger.Module
@@ -13,7 +14,10 @@ import dagger.Module
     // MAIN
     //
     SearchFragment.Module::class,
-    DibsFragment.Module::class
+    DibsFragment.Module::class,
+
+    // DETAIL
+    DetailFragment.Module::class
 ])
 class FragmentModule {
 

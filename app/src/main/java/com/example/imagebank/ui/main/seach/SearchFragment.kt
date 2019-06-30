@@ -5,9 +5,11 @@ import brigitte.BaseDaggerFragment
 import brigitte.di.dagger.module.injectOfActivity
 import brigitte.hideKeyboard
 import com.example.imagebank.databinding.SearchFragmentBinding
+import com.example.imagebank.ui.ViewController
 import com.example.imagebank.ui.main.dibs.DibsViewModel
 import dagger.android.ContributesAndroidInjector
 import org.slf4j.LoggerFactory
+import javax.inject.Inject
 
 /**
  * Created by <a href="mailto:aucd29@hanwha.com">Burke Choi</a> on 2019-06-29 <p/>
@@ -28,7 +30,10 @@ class SearchFragment : BaseDaggerFragment<SearchFragmentBinding, SearchViewModel
         private val mLog = LoggerFactory.getLogger(SearchFragment::class.java)
     }
 
+    @Inject lateinit var mViewController: ViewController
+
     lateinit var mDibsViewModel: DibsViewModel
+
 
     override fun bindViewModel() {
         super.bindViewModel()
@@ -62,6 +67,7 @@ class SearchFragment : BaseDaggerFragment<SearchFragmentBinding, SearchViewModel
                     hideKeyboard(mBinding.root)
                 }
                 CMD_TOP_SCROLL      -> scrollToTop()
+                CMD_SHOW_DETAIL     -> mViewController.detailFragment()
             }
         }
     }

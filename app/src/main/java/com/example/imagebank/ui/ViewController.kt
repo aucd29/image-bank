@@ -1,7 +1,12 @@
 package com.example.imagebank.ui
 
 import androidx.fragment.app.FragmentManager
+import brigitte.FragmentAnim
+import brigitte.FragmentParams
+import brigitte.bindingadapter.AnimParams
+import brigitte.show
 import com.example.imagebank.R
+import com.example.imagebank.ui.detail.DetailFragment
 import kotlinx.android.synthetic.main.main_activity.view.*
 import org.slf4j.LoggerFactory
 import javax.inject.Inject
@@ -20,6 +25,8 @@ class ViewController @Inject constructor(private val manager: FragmentManager) {
         const val CONTAINER = R.id.main_container
     }
 
-    fun detail() {
+    fun detailFragment() {
+        manager.show<DetailFragment>(FragmentParams(CONTAINER,
+            anim = FragmentAnim.UP))
     }
 }

@@ -15,6 +15,7 @@
             tools:ignore="ContentDescription"
             android:background="@drawable/shape_rectangle_gray_stroke_background"
             android:layout_margin="5dp"
+            android:onClick="@{() -> model.command(model.CMD_SHOW_DETAIL)}"
     >
 
         <ImageView

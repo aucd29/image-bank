@@ -40,6 +40,7 @@ class SearchViewModel @Inject constructor(application: Application,
         const val CMD_DIBS          = "cmd-dibs"
         const val CMD_HIDE_KEYBOARD = "cmd-hide-keyboard"
         const val CMD_TOP_SCROLL    = "cmd-top-scroll"
+        const val CMD_SHOW_DETAIL   = "cmd-show-detail"
 
         const val OPT_SORT_ACCURACY = "정확도순"
         const val OPT_SORT_RECENCY  = "최신순"
