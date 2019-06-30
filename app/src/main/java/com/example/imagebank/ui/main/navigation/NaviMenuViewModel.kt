@@ -17,6 +17,8 @@ class NaviMenuViewModel @Inject constructor(application: Application
 
     companion object {
         private val mLog = LoggerFactory.getLogger(NaviMenuViewModel::class.java)
+
+        const val CMD_NAV_MENU_EVENT = "cmd-nav-menu-event"
     }
 
     init {

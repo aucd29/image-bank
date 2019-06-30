@@ -12,7 +12,7 @@
             android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="10dp"
+            android:paddingBottom="14dp"
             android:onClick="@{() -> model.command(model.CMD_NAV_GRID_EVENT, item)}"
             android:background="?selectableItemBackgroundBorderless"
     >

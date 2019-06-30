@@ -8,6 +8,7 @@ import brigitte.di.dagger.module.injectOfActivity
 import com.example.imagebank.common.Config
 import com.example.imagebank.databinding.MainActivityBinding
 import com.example.imagebank.model.local.NavigationGridItem
+import com.example.imagebank.model.local.NavigationItem
 import com.example.imagebank.ui.main.SectionsPagerAdapter
 import com.example.imagebank.ui.main.SplashViewModel
 import com.example.imagebank.ui.main.navigation.NaviGridViewModel
@@ -87,7 +88,11 @@ class MainActivity : BaseDaggerActivity<MainActivityBinding, MainViewModel>() {
             }
             NaviGridViewModel.CMD_NAV_GRID_EVENT -> if (mLog.isDebugEnabled) {
                 val menu = data as NavigationGridItem
-                mLog.debug("CLICKED GRID MENU ${menu.name}")
+                mLog.debug("CLICKED NAVIGATION GRID MENU ${menu.name}")
+            }
+            NaviMenuViewModel.CMD_NAV_MENU_EVENT -> if (mLog.isDebugEnabled) {
+                val menu = data as NavigationItem
+                mLog.debug("CLICKED NAVIGATION MENU ${menu.name}")
             }
         }
     }
