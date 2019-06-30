@@ -14,6 +14,9 @@
     <string name="search_total_searched_count">약 %s건</string>
     <string name="search_empty_list">검색된 내용이 없습니다.</string>
 
+    <!--DIBS-->
+    <string name="dibs_empty_list">추가 된 항목이 없습니다.</string>
+
     <!--NAVIGATION-->
     <string name="nav_grid_service_center">고객센터</string>
     <string name="nav_grid_security">인증/보안</string>
