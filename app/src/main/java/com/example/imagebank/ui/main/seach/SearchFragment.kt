@@ -37,6 +37,8 @@ class SearchFragment : BaseDaggerFragment<SearchFragmentBinding, SearchViewModel
     }
 
     override fun initViewBinding() {
+        clearFocusKeyword()
+
         mBinding.recycler.apply {
             layoutManager = mViewModel.layoutManager
         }
@@ -55,9 +57,19 @@ class SearchFragment : BaseDaggerFragment<SearchFragmentBinding, SearchViewModel
         SearchViewModel.apply {
             when (cmd) {
                 CMD_DIBS            -> mDibsViewModel.toggleDibs(mViewModel.mDibsList)
-                CMD_HIDE_KEYBOARD   -> hideKeyboard(mBinding.root)
+                CMD_HIDE_KEYBOARD   -> {
+                    clearFocusKeyword()
+                    hideKeyboard(mBinding.root)
+                }
                 CMD_TOP_SCROLL      -> scrollToTop()
             }
+        }
+    }
+
+    private fun clearFocusKeyword() {
+        mBinding.keyword.apply {
+            clearFocus()
+            isCursorVisible = false
         }
     }
 
