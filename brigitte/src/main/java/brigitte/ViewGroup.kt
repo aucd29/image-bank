@@ -109,9 +109,12 @@ inline fun View.spToPx(v: Int) = TypedValue.applyDimension(
 //
 ////////////////////////////////////////////////////////////////////////////////////
 
-class ScrollChangeListener(val callback: (Int, Int) -> Unit): NestedScrollView.OnScrollChangeListener {
+// https://stackoverflow.com/questions/39894792/recyclerview-scrolllistener-inside-nestedscrollview
+class ScrollChangeListener(val callback: (Int, Int, Boolean) -> Unit): NestedScrollView.OnScrollChangeListener {
     override fun onScrollChange(v: NestedScrollView?, scrollX: Int, scrollY: Int, oldScrollX: Int, oldScrollY: Int) {
-        callback.invoke(scrollX, scrollY)
+        callback.invoke(scrollX, scrollY, v?.run {
+            scrollY == (getChildAt(0).measuredHeight - measuredHeight)
+        } ?: false)
     }
 }
 

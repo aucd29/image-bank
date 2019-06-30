@@ -12,12 +12,8 @@ import androidx.databinding.ObservableField
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.ListUpdateCallback
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.*
 import brigitte.arch.SingleLiveEvent
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.util.*
 import kotlin.collections.ArrayList
@@ -280,7 +276,6 @@ class RecyclerAdapter<T: IRecyclerDiff>(
 //            }
         })
 
-
         if (mLog.isDebugEnabled) {
             mLog.debug("OLD ${oldItems.hashCode()}")
             mLog.debug("NEW ${newItems.hashCode()}")
@@ -353,6 +348,8 @@ open class RecyclerViewModel<T: IRecyclerDiff>(app: Application)
     val items           = ObservableField<List<T>>()
     val adapter         = ObservableField<RecyclerAdapter<T>>()
     val itemTouchHelper = ObservableField<ItemTouchHelper>()
+    val threshold       = 1
+    var dataLoading     = false
 
     /**
      * adapter 에 사용될 layout 을 설정한다.
@@ -465,6 +462,18 @@ open class RecyclerViewModel<T: IRecyclerDiff>(app: Application)
 //            dragTo   = -1
 //        }
     }
+
+    fun isNextLoad(lastVisiblePos: Int): Boolean {
+        if (lastVisiblePos == -1) return false
+
+        return items.get()?.let {
+            if (mLog.isDebugEnabled) {
+                mLog.debug("LAST VISIBLE POS ${lastVisiblePos}\nLAST ITEM POS ${it.size}")
+            }
+
+            !dataLoading && it.size - lastVisiblePos <= threshold
+        } ?: false
+    }
 }
 
 inline fun <T: IRecyclerExpandable<T>> List<T>.toggleExpandableItems(type: Int,
@@ -477,3 +486,61 @@ inline fun <T: IRecyclerExpandable<T>> List<T>.toggleExpandableItems(type: Int,
     }
 }
 
+class InfiniteScrollListener(val callback: (Int) -> Unit) : RecyclerView.OnScrollListener() {
+    companion object {
+        private val mLog = LoggerFactory.getLogger(InfiniteScrollListener::class.java)
+    }
+
+    lateinit var recycler: RecyclerView
+
+    override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+        super.onScrollStateChanged(recyclerView, newState)
+
+        if (mLog.isDebugEnabled) {
+            mLog.debug("SCROLL STATE : $newState")
+        }
+
+    }
+
+    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+        super.onScrolled(recyclerView, dx, dy)
+
+        val manager = recycler.layoutManager
+
+        if (mLog.isDebugEnabled) {
+            mLog.debug("SCROLLED : $dy")
+        }
+
+        if (dy <= 0) {
+            return ;
+        }
+
+        val lastVisibleItemPosition = if (manager is LinearLayoutManager) {
+            manager.findLastVisibleItemPosition()
+        } else if (manager is StaggeredGridLayoutManager) {
+            val positions = manager.findLastVisibleItemPositions(null)
+            var position = positions[0]
+            for (i in 1 until positions.size) {
+                if (position < positions[i]) {
+                    position = positions[i]
+                }
+            }
+
+            position
+        } else { -1 }
+
+        callback.invoke(lastVisibleItemPosition)
+    }
+}
+
+inline fun StaggeredGridLayoutManager.findLastVisibleItemPosition(): Int {
+    val positions = findLastVisibleItemPositions(null)
+    var position = positions[0]
+    for (i in 1 until positions.size) {
+        if (position < positions[i]) {
+            position = positions[i]
+        }
+    }
+
+    return position
+}

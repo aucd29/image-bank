@@ -26,9 +26,11 @@ import brigitte.arch.SingleLiveEvent
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.snackbar.Snackbar
+import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.util.concurrent.TimeUnit
 
 /**
  * Created by <a href="mailto:aucd29@gmail.com">Burke Choi</a> on 2018. 10. 15. <p/>
@@ -59,6 +61,12 @@ inline fun AndroidViewModel.requireContext(): Context =
 
 inline fun AndroidViewModel.color(@ColorRes resid: Int) =
     ContextCompat.getColor(app, resid)
+
+inline fun AndroidViewModel.delay(dealy: Long = 1000, noinline callback: () -> Unit) =
+    Single.just("")
+        .delay(dealy, TimeUnit.MILLISECONDS)
+        .subscribe { d -> callback.invoke() }
+
 
 /**
  * android view model 에서 쉽게 문자열을 가져올 수 있도록 wrapping 함
@@ -225,6 +233,7 @@ abstract class BaseActivity<T : ViewDataBinding, M: ViewModel>
     protected val mBackPressed: BackPressedManager by lazy {
         BackPressedManager(this, mBinding.root)
     }
+    protected val mCommandEventModels = arrayListOf<ViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -233,6 +242,8 @@ abstract class BaseActivity<T : ViewDataBinding, M: ViewModel>
 
         bindViewModel()
         dialogAware()
+
+        mCommandEventModels.add(mViewModel)
         commandEventAware()
 
         initViewBinding()
@@ -294,15 +305,17 @@ abstract class BaseActivity<T : ViewDataBinding, M: ViewModel>
     /**
      * view model 에 등록되어 있는 command live event 의 값에 변화를 감지하여 이벤트를 발생 시킨다.
      */
-    open protected fun commandEventAware() = mViewModel.run {
-        if (this is ICommandEventAware) {
-            observe(commandEvent) {
-                when (it.first) {
-                    ICommandEventAware.CMD_FINISH   -> commandFinish()
-                    ICommandEventAware.CMD_TOAST    -> commandToast(it.second.toString())
-                    ICommandEventAware.CMD_SNACKBAR -> commandSnackbar(it.second.toString())
+    open protected fun commandEventAware() {
+        mCommandEventModels.forEach { vm ->
+            if (vm is ICommandEventAware) {
+                observe(vm.commandEvent) {
+                    when (it.first) {
+                        ICommandEventAware.CMD_FINISH   -> commandFinish()
+                        ICommandEventAware.CMD_TOAST    -> commandToast(it.second.toString())
+                        ICommandEventAware.CMD_SNACKBAR -> commandSnackbar(it.second.toString())
 
-                    else -> onCommandEvent(it.first, it.second)
+                        else -> onCommandEvent(it.first, it.second)
+                    }
                 }
             }
         }

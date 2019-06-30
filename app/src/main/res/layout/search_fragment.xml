@@ -24,6 +24,11 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:bindScrollChangeListener="@{model.scrollListener}"
         >
+            <!--android:isScrollContainer="true"-->
+            <!--android:measureAllChildren="true"-->
+            <!--android:overScrollMode="never"-->
+            <!--app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
+
             <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/scroll_container"
                     android:layout_width="match_parent"
@@ -60,22 +65,32 @@
                         android:layout_marginTop="15dp"
                         android:layout_marginEnd="15dp"
                         android:background="?selectableItemBackgroundBorderless"
-                        android:onClick="@{() -> model.search()}"
+                        android:onClick="@{() -> model.search(1)}"
                 />
 
+                <!--
+                nestedscrollview 안에서 recycler 가 데이터를 insert 했을때 자동으로 scroll 되는 문제가
+                존재함
+                -->
                 <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recycler"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/keyword"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:bindStaggeredVerticalGridLayoutManager="@{model.gridCount}"
                         app:bindAdapter="@{model.adapter}"
                         app:bindItems="@{model.items}"
-                        android:layout_marginTop="10dp"
                 />
+
+                <!--android:fastScrollEnabled="true"-->
+                <!--android:scrollbarStyle="insideInset"-->
+                <!--android:scrollbars="vertical"-->
+                <!--android:splitMotionEvents="false"-->
+                <!--android:verticalScrollbarPosition="right"-->
+
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>

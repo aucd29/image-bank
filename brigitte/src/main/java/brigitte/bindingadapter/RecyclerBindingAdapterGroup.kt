@@ -7,6 +7,7 @@ import androidx.core.view.ViewCompat
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.*
 import brigitte.IRecyclerDiff
+import brigitte.InfiniteScrollListener
 import brigitte.RecyclerAdapter
 import org.slf4j.LoggerFactory
 
@@ -135,6 +136,19 @@ object RecyclerBindingAdapter {
         }
 
         recycler.smoothScrollToPosition(position)
+    }
+
+    @JvmStatic
+    @BindingAdapter("bindInfiniteScrollListener")
+    fun bindInfiniteScrollListener(recycler: RecyclerView, listener: InfiniteScrollListener?) {
+        if (mLog.isDebugEnabled) {
+            mLog.debug("BIND INFINITE SCROLL LISTENER")
+        }
+
+        listener?.let {
+            it.recycler = recycler
+            recycler.addOnScrollListener(it)
+        }
     }
 }
 

@@ -6,89 +6,111 @@
 
     <data>
         <variable name="splashModel" type="com.example.imagebank.ui.main.SplashViewModel"/>
+        <variable name="navGridModel" type="com.example.imagebank.ui.main.navigation.NaviGridViewModel"/>
+        <variable name="navMenuModel" type="com.example.imagebank.ui.main.navigation.NaviMenuViewModel"/>
         <variable name="model" type="com.example.imagebank.MainViewModel"/>
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/main_container"
+    <androidx.drawerlayout.widget.DrawerLayout
+            android:id="@+id/drawer_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".MainActivity">
+            tools:openDrawer="start">
 
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/main_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-        >
+                tools:context=".MainActivity">
 
-            <com.google.android.material.appbar.AppBarLayout
-                    android:id="@+id/appbar"
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:theme="@style/AppTheme.AppBarOverlay"
-                    android:background="@{model.bgTopView}"
-            >
-
-                <com.google.android.material.appbar.CollapsingToolbarLayout
-                        android:id="@+id/toolbar_layout"
-                        android:fitsSystemWindows="true"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        app:layout_scrollFlags="scroll|exitUntilCollapsed"
-                        >
-
-                    <TextView
-                            android:id="@+id/title"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:minHeight="?actionBarSize"
-                            android:padding="@dimen/appbar_padding"
-                            android:text="@string/app_name"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"/>
-
-                </com.google.android.material.appbar.CollapsingToolbarLayout>
-
-                <com.google.android.material.tabs.TabLayout
-                        android:id="@+id/tabs"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@{model.bgTopView}"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/title"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:bindTabChanged="@{model.tabChanged}"
-                />
-            </com.google.android.material.appbar.AppBarLayout>
-
-            <androidx.viewpager.widget.ViewPager
-                    android:id="@+id/view_pager"
+            <androidx.coordinatorlayout.widget.CoordinatorLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+            >
 
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+                <com.google.android.material.appbar.AppBarLayout
+                        android:id="@+id/appbar"
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:theme="@style/AppTheme.AppBarOverlay"
+                        android:background="@{model.bgTopView}"
+                >
 
-        <View
-                android:id="@+id/splash"
-                android:layout_width="match_parent"
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/appbar_container"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                        <ImageView
+                                android:id="@+id/menu"
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                android:src="@drawable/ic_menu_white_24dp"
+                                android:background="?selectableItemBackgroundBorderless"
+                                android:paddingStart="15dp"
+                                android:paddingEnd="15dp"
+                                android:onClick="@{() -> model.command(model.CMD_SHOW_NAVIGATION)}"
+                        />
+
+                        <com.google.android.material.tabs.TabLayout
+                                android:id="@+id/tabs"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:background="@{model.bgTopView}"
+                                app:layout_constraintStart_toEndOf="@+id/menu"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:bindTabChanged="@{model.tabChanged}"
+                        />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </com.google.android.material.appbar.AppBarLayout>
+
+                <androidx.viewpager.widget.ViewPager
+                        android:id="@+id/view_pager"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                />
+
+            </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+            <View
+                    android:id="@+id/splash"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/splash_background"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:visibility="@{splashModel.visibleSplash}"
+                    android:clickable="true"
+                    android:focusable="true"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.google.android.material.navigation.NavigationView
+                android:id="@+id/nav_view"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:background="@drawable/splash_background"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:visibility="@{splashModel.visibleSplash}"
-                android:clickable="true"
-                android:focusable="true"/>
+                android:layout_gravity="start"
+        >
+            <include layout="@layout/navigation_layout"
+                     app:model="@{model}"
+                     app:navGridModel="@{navGridModel}"
+                     app:navMenuModel="@{navMenuModel}"
+            />
+        </com.google.android.material.navigation.NavigationView>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.drawerlayout.widget.DrawerLayout>
 
 </layout>
 

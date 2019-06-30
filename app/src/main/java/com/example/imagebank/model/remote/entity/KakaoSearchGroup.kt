@@ -3,14 +3,11 @@ package com.example.imagebank.model.remote.entity
 import androidx.databinding.ObservableBoolean
 import brigitte.IRecyclerDiff
 import brigitte.IRecyclerItem
-import com.example.imagebank.model.IKakaoSearchData
 
 /**
  * Created by <a href="mailto:aucd29@hanwha.com">Burke Choi</a> on 2019-06-28 <p/>
  *
  * https://developers.kakao.com/docs/restapi/search#%EC%9D%B4%EB%AF%B8%EC%A7%80-%EA%B2%80%EC%83%89
- *
- *
  */
 
 // 문서에 오류 일때 정보가 없음 ... 일해라.. 카카오..
@@ -42,8 +39,12 @@ data class KakaoVClipResult (
 )
 
 data class KakaoSearch<T>(
-    val documents: List<T>,
-    val meta: KakaoMetaResult
+    val documents: List<T>?,
+    val meta: KakaoMetaResult?,
+
+    // {"errorType":"InvalidArgument","message":"page is more than max"}
+    val errorType: String?,
+    val message: String?
 )
 
 typealias KakaoImageSearch = KakaoSearch<KakaoImageResult>
@@ -62,15 +63,3 @@ data class KakaoMergeResult(
                 unixtime == newItem.unixtime
     }
 }
-
-
-
-//data class KakaoImageSearch(
-//    val documents: List<KakaoImageResult>,
-//    val meta: KakaoMetaResult
-//)
-//
-//data class KakaoVClipSearch(
-//    val documents: List<KakaoImageResult>,
-//    val meta: KakaoMetaResult
-//)
