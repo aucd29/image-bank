@@ -59,6 +59,11 @@
     <string name="nav_menu_info">안내</string>
     <string name="nav_menu_info_event">이벤트</string>
 
+
+    <!--DETAIL-->
+    <string name="detail_money_unit">원</string>
+    <string name="detail_vclip_not_supported">동영상은 아직 지원하지 않습니다.</string>
+
     
 
 </resources>

@@ -10,11 +10,13 @@
 
     <color name="colorLightGray">#ececec</color>
 
-    <color name="test">#3A444F</color>
+    <color name="test">#087BCD</color>
 
     <!--indicator-->
     <color name="gray_50">#FAFAFA</color>
     <color name="gray_300">#75E0E0E0</color>
 
+    <!--detail-->
+    <color name="lightBlue">#087BCD</color>
 
 </resources>

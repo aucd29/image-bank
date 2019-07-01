@@ -47,15 +47,15 @@ class SearchViewModel @Inject constructor(application: Application,
         const val V_SORT_RECENCY  = "recency"
     }
 
-    val keyword             = ObservableField<String>("설현")
-    val sort                = ObservableInt(R.string.search_sort_accuracy)
-    val totalCount          = ObservableField<String>()
+    val keyword          = ObservableField<String>("설현")
+    val sort             = ObservableInt(R.string.search_sort_accuracy)
+    val totalCount       = ObservableField<String>()
 
-    val editorAction        = ObservableField<(String?) -> Boolean>()   // editor 에서 done 버튼 선택 시
-    val scrollListener      = ObservableField<ScrollChangeListener>()
+    val editorAction     = ObservableField<(String?) -> Boolean>()   // editor 에서 done 버튼 선택 시
+    val scrollListener   = ObservableField<ScrollChangeListener>()
 
-    val visibleProgress     = ObservableInt(View.GONE)
-    val visibleTopScroll    = ObservableInt(View.GONE)
+    val visibleProgress  = ObservableInt(View.GONE)
+    val visibleTopScroll = ObservableInt(View.GONE)
 
     val mDibsList = arrayListOf<KakaoSearchResult>()
     var mPage     = 1
@@ -109,6 +109,11 @@ class SearchViewModel @Inject constructor(application: Application,
 
     @SuppressLint("StringFormatMatches")
     fun search(p: Int) {
+        if (p == 1) {
+            mIsImageApiEnd = false
+            mIsVclipApiEnd = false
+        }
+
         mPage = p
         mDataLoading = true
         command(CMD_HIDE_KEYBOARD)
@@ -149,14 +154,14 @@ class SearchViewModel @Inject constructor(application: Application,
                             image.documents?.forEach {
                                 it.thumbnail_url?.let { thumbnail ->
                                     result.add(KakaoSearchResult(thumbnail, it.datetime,
-                                        it.datetime.toUnixTime(DATE_FORMAT)))
+                                        it.datetime.toUnixTime(DATE_FORMAT),
+                                        it.image_url, it.display_sitename))
                                 }
                             }
 
                             // API 오류로 1번만 호출하고 종료 시킨다.
                             mIsImageApiEnd = true
                             totalSearchedCount = image.meta?.total_count ?: 0
-
                         } else {
                             mLog.error("ERROR: ${image.message}")
                         }
@@ -164,7 +169,9 @@ class SearchViewModel @Inject constructor(application: Application,
                         if (vclip.message == null) {
                             vclip.documents?.forEach {
                                 result.add(KakaoSearchResult(it.thumbnail, it.datetime,
-                                    it.datetime.toUnixTime(DATE_FORMAT)))
+                                    it.datetime.toUnixTime(DATE_FORMAT),
+                                    it.url, it.title,
+                                    KakaoSearchResult.T_VCLIP))
                             }
 
                             mIsVclipApiEnd = vclip.meta?.is_end ?: false
@@ -250,12 +257,11 @@ class SearchViewModel @Inject constructor(application: Application,
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { res ->
                 if (item.dibs.get()) {
-                    vibrate(3)
+                    vibrate(longArrayOf(0, 1, 100, 1), 1)
                 } else {
                     vibrate(1)
                 }
-                item.anim.set(ToLargeAlphaAnimParams(5f,
-                    endListener = { _, _ ->
+                item.anim.set(ToLargeAlphaAnimParams(5f, endListener = { _, _ ->
                     item.dibs.toggle()
                 }))
             })

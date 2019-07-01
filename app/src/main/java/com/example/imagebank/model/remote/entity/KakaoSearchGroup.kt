@@ -3,8 +3,8 @@ package com.example.imagebank.model.remote.entity
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import brigitte.IRecyclerDiff
-import brigitte.bindingadapter.AnimParams
 import brigitte.bindingadapter.ToLargeAlphaAnimParams
+import java.io.Serializable
 
 /**
  * Created by <a href="mailto:aucd29@hanwha.com">Burke Choi</a> on 2019-06-28 <p/>
@@ -17,7 +17,7 @@ data class KakaoMetaResult (
     val is_end: Boolean,
     val pageable_count: Int,
     val total_count: Int
-)
+) : Serializable
 
 // 문서에 Mandatory 인지 Optional 인지 없다 ... 일해라.. 카카오..
 data class KakaoImageResult(
@@ -29,7 +29,7 @@ data class KakaoImageResult(
     val display_sitename: String?,
     val doc_url: String?,
     val datetime: String
-)
+) : Serializable
 
 data class KakaoVClipResult (
     val title: String,
@@ -38,7 +38,7 @@ data class KakaoVClipResult (
     val play_time: Int,
     val thumbnail: String,
     val author: String
-)
+) : Serializable
 
 data class KakaoSearch<T>(
     val documents: List<T>?,
@@ -47,7 +47,7 @@ data class KakaoSearch<T>(
     // {"errorType":"InvalidArgument","message":"page is more than max"}
     val errorType: String?,
     val message: String?
-)
+) : Serializable
 
 typealias KakaoImageSearch = KakaoSearch<KakaoImageResult>
 typealias KakaoVClipSearch = KakaoSearch<KakaoVClipResult>
@@ -55,8 +55,16 @@ typealias KakaoVClipSearch = KakaoSearch<KakaoVClipResult>
 data class KakaoSearchResult(
     val thumbnail: String,
     val datetime: String,
-    val unixtime: Long
-): IRecyclerDiff {
+    val unixtime: Long,
+    val url: String?,
+    val title: String?,
+    var type: Int = T_IMAGE
+): IRecyclerDiff, Serializable {
+    companion object {
+        @JvmStatic val T_IMAGE = 0
+        @JvmStatic val T_VCLIP = 1
+    }
+
     var dibs = ObservableBoolean(false)
     var anim = ObservableField<ToLargeAlphaAnimParams>()
 
@@ -66,4 +74,6 @@ data class KakaoSearchResult(
         return thumbnail == newItem.thumbnail &&
                 unixtime == newItem.unixtime
     }
+
+    fun trace() = "TITLE: $title\n TYPE: $type\n URL: $url"
 }

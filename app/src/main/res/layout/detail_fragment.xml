@@ -4,14 +4,136 @@
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <import type="android.view.View"/>
+
         <variable name="model" type="com.example.imagebank.ui.detail.DetailViewModel"/>
+        <variable name="item" type="com.example.imagebank.model.remote.entity.KakaoSearchResult"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/detail_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorDarkGreen">
+            android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/toolbar_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:ignore="ContentDescription"
+                android:background="@color/colorPrimary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+        >
+
+            <ImageView
+                    android:id="@+id/back"
+                    android:layout_width="wrap_content" android:layout_height="?actionBarSize"
+                    android:src="@drawable/ic_arrow_back_white_24dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:onClick="@{() -> model.finish()}"
+            />
+
+            <TextView
+                    android:id="@+id/title"
+                    android:layout_width="0dp" android:layout_height="?actionBarSize"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:gravity="center"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/white"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:text="@{item.title}"
+                    android:layout_marginStart="60dp"
+                    android:layout_marginEnd="60dp"
+            />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:background="@android:color/white"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/toolbar_container"
+                app:layout_constraintEnd_toEndOf="parent"
+
+        >
+            <com.google.android.material.appbar.AppBarLayout
+                    android:id="@+id/app_bar"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:theme="@style/AppTheme.AppBarOverlay"
+                    android:background="@color/colorPrimary"
+            >
+
+                <com.google.android.material.appbar.CollapsingToolbarLayout
+                        android:id="@+id/toolbar_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                        app:contentScrim="?attr/colorPrimary"
+                >
+
+                    <ImageView
+                            android:id="@+id/detail_image"
+                            android:layout_width="match_parent" android:layout_height="wrap_content"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:bindImage="@{item.url}"
+                            android:visibility="@{item.type == 0 ? View.VISIBLE : View.GONE}"
+                    />
+
+                    <!--android:visibility="@{item.type == KakaoSearchResult.T_IMAGE ? View.VISIBLE : View.GONE}"-->
+
+
+                    <TextView
+                            android:id="@+id/detail_video"
+                            android:layout_width="match_parent" android:layout_height="300dp"
+                            android:text="@string/detail_vclip_not_supported"
+                            android:gravity="center"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            android:visibility="@{item.type == 0 ? View.GONE : View.VISIBLE}"
+                    />
+
+                    <!--<VideoView-->
+                            <!--android:id="@+id/detail_video"-->
+                            <!--android:layout_width="match_parent" android:layout_height="wrap_content"-->
+                            <!--app:layout_constraintStart_toStartOf="parent"-->
+                            <!--app:layout_constraintTop_toTopOf="parent"-->
+                            <!--app:layout_constraintEnd_toEndOf="parent"-->
+                            <!--app:layout_constraintBottom_toBottomOf="parent"-->
+                            <!--app:bindVideoUrl="@{item.url}"-->
+                    <!--/>-->
+
+                </com.google.android.material.appbar.CollapsingToolbarLayout>
+            </com.google.android.material.appbar.AppBarLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/detail_recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:bindAdapter="@{model.adapter}"
+                    app:bindItems="@{model.items}"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+            />
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>

@@ -4,6 +4,7 @@ import brigitte.BaseDaggerFragment
 import brigitte.di.dagger.module.injectOfActivity
 import brigitte.hideKeyboard
 import com.example.imagebank.databinding.SearchFragmentBinding
+import com.example.imagebank.model.remote.entity.KakaoSearchResult
 import com.example.imagebank.ui.ViewController
 import com.example.imagebank.ui.main.dibs.DibsViewModel
 import dagger.android.ContributesAndroidInjector
@@ -60,15 +61,23 @@ class SearchFragment : BaseDaggerFragment<SearchFragmentBinding, SearchViewModel
     override fun onCommandEvent(cmd: String, data: Any) {
         SearchViewModel.apply {
             when (cmd) {
-                CMD_DIBS            -> mDibsViewModel.toggleDibs(mViewModel.mDibsList)
-                CMD_HIDE_KEYBOARD   -> {
+                CMD_HIDE_KEYBOARD -> {
                     clearFocusKeyword()
                     hideKeyboard(mBinding.root)
                 }
-                CMD_TOP_SCROLL      -> scrollToTop()
-                CMD_SHOW_DETAIL     -> mViewController.detailFragment()
+                CMD_DIBS          -> mDibsViewModel.toggleDibs(mViewModel.mDibsList)
+                CMD_TOP_SCROLL    -> scrollToTop()
+                CMD_SHOW_DETAIL   -> if (data is KakaoSearchResult) mViewController.detailFragment(data)
             }
         }
+    }
+
+    private fun showDetail(data: KakaoSearchResult) {
+        if (mLog.isDebugEnabled) {
+            mLog.debug("SHOW DETAIL ${data.title}")
+        }
+
+        mViewController.detailFragment(data)
     }
 
     private fun clearFocusKeyword() {

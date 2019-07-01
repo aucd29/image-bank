@@ -1,11 +1,13 @@
 package com.example.imagebank.ui
 
+import android.os.Bundle
 import androidx.fragment.app.FragmentManager
 import brigitte.FragmentAnim
 import brigitte.FragmentParams
 import brigitte.bindingadapter.AnimParams
 import brigitte.show
 import com.example.imagebank.R
+import com.example.imagebank.model.remote.entity.KakaoSearchResult
 import com.example.imagebank.ui.detail.DetailFragment
 import kotlinx.android.synthetic.main.main_activity.view.*
 import org.slf4j.LoggerFactory
@@ -23,8 +25,11 @@ class ViewController @Inject constructor(private val manager: FragmentManager) {
         const val CONTAINER = R.id.main_container
     }
 
-    fun detailFragment() {
+    fun detailFragment(item: KakaoSearchResult) {
         manager.show<DetailFragment>(FragmentParams(CONTAINER,
-            anim = FragmentAnim.UP))
+            anim = FragmentAnim.UP, bundle = Bundle().apply {
+                putSerializable(DetailFragment.K_ITEM, item)
+            }
+        ))
     }
 }
