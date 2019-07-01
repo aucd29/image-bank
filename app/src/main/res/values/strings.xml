@@ -5,7 +5,6 @@
     <string name="tab_search">검색</string>
     <string name="tab_dibs">내 보관함</string>
 
-
     <!--SEARCH-->
     <string name="search_search">검색</string>
     <string name="search_pls_insert_keyword">검색어를 입력하세요</string>
@@ -13,6 +12,8 @@
     <string name="search_remove_dibs">찜 항목에 해제 되었습니다.</string>
     <string name="search_total_searched_count">약 %s건</string>
     <string name="search_empty_list">검색된 내용이 없습니다.</string>
+    <string name="search_sort_accuracy">정확도순</string>
+    <string name="search_sort_recency">최신순</string>
 
     <!--DIBS-->
     <string name="dibs_empty_list">추가 된 항목이 없습니다.</string>

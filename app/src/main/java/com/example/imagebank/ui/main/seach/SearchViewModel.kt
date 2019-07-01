@@ -43,15 +43,12 @@ class SearchViewModel @Inject constructor(application: Application,
         const val CMD_TOP_SCROLL    = "cmd-top-scroll"
         const val CMD_SHOW_DETAIL   = "cmd-show-detail"
 
-        const val OPT_SORT_ACCURACY = "정확도순"
-        const val OPT_SORT_RECENCY  = "최신순"
-
         const val V_SORT_ACCURACY = "accuracy"
         const val V_SORT_RECENCY  = "recency"
     }
 
     val keyword             = ObservableField<String>("설현")
-    val sort                = ObservableField(OPT_SORT_ACCURACY)
+    val sort                = ObservableInt(R.string.search_sort_accuracy)
     val totalCount          = ObservableField<String>()
 
     val editorAction        = ObservableField<(String?) -> Boolean>()   // editor 에서 done 버튼 선택 시
@@ -227,11 +224,15 @@ class SearchViewModel @Inject constructor(application: Application,
     }
 
     fun toggleSort() {
-        sort.set(if (sort.get() == OPT_SORT_ACCURACY) OPT_SORT_RECENCY else OPT_SORT_ACCURACY)
+        sort.set(if (sort.get() == R.string.search_sort_accuracy)
+            R.string.search_sort_recency
+        else
+            R.string.search_sort_accuracy)
+
         search(1)
     }
 
-    private fun sortOption() = if (sort.get() == OPT_SORT_ACCURACY) V_SORT_ACCURACY else V_SORT_RECENCY
+    private fun sortOption() = if (sort.get() == R.string.search_sort_accuracy) V_SORT_ACCURACY else V_SORT_RECENCY
 
     private fun checkDibsList(item: KakaoSearchResult) {
         mDp.add(Single.just(mDibsList)
@@ -240,20 +241,18 @@ class SearchViewModel @Inject constructor(application: Application,
                 val f = it.find { f -> f.thumbnail == item.thumbnail }
                 if (f != null) {
                     it.remove(f)
-                    R.string.search_remove_dibs
                 } else {
                     it.add(item)
-                    R.string.search_add_dibs
                 }
+
+                it
             }
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { resid ->
+            .subscribe { res ->
                 item.anim.set(ToLargeAlphaAnimParams(5f,
                     endListener = { _, _ ->
                     item.dibs.toggle()
                 }))
-
-//                snackbar(resid)
             })
     }
 
