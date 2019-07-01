@@ -4,14 +4,14 @@ import androidx.viewpager.widget.ViewPager
 import brigitte.BaseDaggerFragment
 import brigitte.di.dagger.module.injectOf
 import brigitte.di.dagger.module.injectOfActivity
-import brigitte.hideKeyboard
+import brigitte.jsonParse
 import com.example.imagebank.MainViewModel
 import com.example.imagebank.common.PreloadConfig
 import com.example.imagebank.databinding.DibsFragmentBinding
 import com.example.imagebank.model.local.Banner
-import com.example.imagebank.ui.main.dibs.banner.BannerViewModel
 import dagger.android.ContributesAndroidInjector
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import org.slf4j.LoggerFactory
 import javax.inject.Inject
 
@@ -44,10 +44,17 @@ class DibsFragment : BaseDaggerFragment<DibsFragmentBinding, DibsViewModel>() {
     override fun initViewBinding() {
         mBinding.apply {
             mDisposable.add(mPreConfig.bannerListSingle
+                .subscribeOn(Schedulers.io())
+                .map {
+                    // ism.use {} 를 이용했는데 간헐적으로 죽는문제로 수정 AssetInputStream is closed
+                    ism -> ism to ism.jsonParse<List<Banner>>()
+                }
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { list ->
-                    mItems = list
-                    dibsViewpager.adapter = DibsPagerAdapter(requireContext(), list, mBannerViewModel)
+                .subscribe { p ->
+                    mItems = p.second
+                    dibsViewpager.adapter = DibsPagerAdapter(requireContext(), p.second, mBannerViewModel)
+
+                    p.first.close()
                 })
 
             dibsViewpager.addOnPageChangeListener(object: ViewPager.SimpleOnPageChangeListener() {

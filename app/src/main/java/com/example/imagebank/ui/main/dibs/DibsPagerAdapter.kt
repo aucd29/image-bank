@@ -9,7 +9,6 @@ import androidx.viewpager.widget.PagerAdapter
 import com.example.imagebank.R
 import com.example.imagebank.databinding.BannerLayoutBinding
 import com.example.imagebank.model.local.Banner
-import com.example.imagebank.ui.main.dibs.banner.BannerViewModel
 
 /**
  * Created by <a href="mailto:aucd29@hanwha.com">Burke Choi</a> on 2019-06-30 <p/>

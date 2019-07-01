@@ -4,7 +4,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable name="model" type="com.example.imagebank.ui.main.dibs.banner.BannerViewModel" />
+        <variable name="model" type="com.example.imagebank.ui.main.dibs.BannerViewModel" />
         <variable name="item" type="com.example.imagebank.model.local.Banner" />
     </data>
 

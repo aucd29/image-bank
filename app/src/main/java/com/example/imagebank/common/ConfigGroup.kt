@@ -14,6 +14,7 @@ import com.example.imagebank.model.local.Banner
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import java.io.InputStream
 
 /**
  * Created by <a href="mailto:aucd29@gmail.com">Burke Choi</a> on 2019. 2. 15. <p/>
@@ -42,12 +43,11 @@ class PreloadConfig @Inject constructor(
     private val mDisposable: CompositeDisposable,
     private val mContext: Context
 ) {
-    val bannerListSingle: Single<List<Banner>>
+    val bannerListSingle: Single<InputStream> = Single.just(mContext.assets.open("banner_info.json"))
+        .subscribeOn(Schedulers.io())
 
     init {
-        bannerListSingle = Single.just(mContext.assets.open("banner_info.json"))
-            .subscribeOn(Schedulers.io())
-            .map { ism -> ism.use { it.jsonParse<List<Banner>>() } }
+        //            .map { ism -> ism.jsonParse<List<Banner>>()  }
     }
 
     companion object {

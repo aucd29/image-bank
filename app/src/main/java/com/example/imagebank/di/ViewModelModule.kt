@@ -6,7 +6,7 @@ import com.example.imagebank.MainViewModel
 import com.example.imagebank.ui.detail.DetailViewModel
 import com.example.imagebank.ui.main.SplashViewModel
 import com.example.imagebank.ui.main.dibs.DibsViewModel
-import com.example.imagebank.ui.main.dibs.banner.BannerViewModel
+import com.example.imagebank.ui.main.dibs.BannerViewModel
 import com.example.imagebank.ui.main.navigation.NaviGridViewModel
 import com.example.imagebank.ui.main.navigation.NaviMenuViewModel
 import com.example.imagebank.ui.main.seach.SearchViewModel

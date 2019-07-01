@@ -1,9 +1,8 @@
-package com.example.imagebank.ui.main.dibs.banner
+package com.example.imagebank.ui.main.dibs
 
 import android.app.Application
 import android.graphics.Color
 import androidx.lifecycle.AndroidViewModel
-import brigitte.CommandEventViewModel
 import brigitte.drawable
 import org.slf4j.LoggerFactory
 import javax.inject.Inject

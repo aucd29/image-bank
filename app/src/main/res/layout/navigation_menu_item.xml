@@ -41,10 +41,10 @@
                 android:background="@drawable/shape_round_rect_red_background"
                 android:textColor="@android:color/white"
                 android:textSize="8sp"
-                android:paddingStart="7dp"
-                android:paddingTop="5dp"
-                android:paddingEnd="7dp"
-                android:paddingBottom="5dp"
+                android:paddingStart="6dp"
+                android:paddingTop="4dp"
+                android:paddingEnd="6dp"
+                android:paddingBottom="4dp"
                 android:layout_marginStart="5dp"
         />
 

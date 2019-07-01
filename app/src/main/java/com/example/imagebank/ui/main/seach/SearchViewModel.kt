@@ -65,6 +65,9 @@ class SearchViewModel @Inject constructor(application: Application,
     var mIsImageApiEnd = false
     var mIsVclipApiEnd = false
 
+    // FIXME API 오류로 데이터의 첫번째가 동일하면 이를 중복 데이터로 본다.
+    var mKakaoImageResult: KakaoImageResult? = null
+
     val layoutManager = StaggeredGridLayoutManager(V_TAB_SPANCOUNT,
         StaggeredGridLayoutManager.VERTICAL)
 
@@ -112,6 +115,7 @@ class SearchViewModel @Inject constructor(application: Application,
         if (p == 1) {
             mIsImageApiEnd = false
             mIsVclipApiEnd = false
+            mKakaoImageResult = null
         }
 
         mPage = p
@@ -150,18 +154,30 @@ class SearchViewModel @Inject constructor(application: Application,
                         // FIXME 데이터를 제외 해볼까 싶었는데 정력 낭비로 생각하고 1페이지만 데이터를 참조하고
                         // FIXME 버그가 수정되면 살리는 형태로 하도록 수정
                         if (image.message == null && !mIsImageApiEnd) {
-                            // 2018-12-16T09:40:08.000+09:00
-                            image.documents?.forEach {
-                                it.thumbnail_url?.let { thumbnail ->
-                                    result.add(KakaoSearchResult(thumbnail, it.datetime,
-                                        it.datetime.toUnixTime(DATE_FORMAT),
-                                        it.image_url, it.display_sitename))
+                            // FIXME 임시코드
+                            // FIXME 페이징 시 동일한 데이터가 들어오면 이를 무시하도록 처리 한다.
+                            if (mKakaoImageResult == null) {
+                                mKakaoImageResult = image.documents?.get(0)
+                            } else {
+                                val tmp = image.documents?.get(0)
+                                if (tmp != null && mKakaoImageResult!!.image_url == tmp.image_url) {
+                                    // API 오류로 1번만 호출하고 종료 시킨다.
+                                    mIsImageApiEnd = true
                                 }
                             }
 
-                            // API 오류로 1번만 호출하고 종료 시킨다.
-                            mIsImageApiEnd = true
-                            totalSearchedCount = image.meta?.total_count ?: 0
+                            if (!mIsImageApiEnd) {
+                                // 2018-12-16T09:40:08.000+09:00
+                                image.documents?.forEach {
+                                    it.thumbnail_url?.let { thumbnail ->
+                                        result.add(KakaoSearchResult(thumbnail, it.datetime,
+                                                it.datetime.toUnixTime(DATE_FORMAT),
+                                                it.image_url, it.display_sitename))
+                                    }
+                                }
+
+                                totalSearchedCount = image.meta?.total_count ?: 0
+                            }
                         } else {
                             mLog.error("ERROR: ${image.message}")
                         }
