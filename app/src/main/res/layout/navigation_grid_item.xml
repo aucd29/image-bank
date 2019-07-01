@@ -14,7 +14,7 @@
             android:layout_height="wrap_content"
             android:paddingBottom="14dp"
             android:onClick="@{() -> model.command(model.CMD_NAV_GRID_EVENT, item)}"
-            android:background="?selectableItemBackgroundBorderless"
+            android:background="?selectableItemBackground"
     >
 
         <ImageView

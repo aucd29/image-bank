@@ -17,7 +17,8 @@
             android:paddingStart="20dp"
             android:paddingTop="7dp"
             android:paddingBottom="7dp"
-            android:background="@color/colorLightGray">
+            android:background="@color/colorLightGray"
+    >
 
         <TextView
                 android:id="@+id/text"

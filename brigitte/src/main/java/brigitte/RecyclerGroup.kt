@@ -7,6 +7,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.StringRes
+import androidx.asynclayoutinflater.view.AsyncLayoutInflater
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.databinding.ViewDataBinding
@@ -108,10 +109,12 @@ class RecyclerAdapter<T: IRecyclerDiff>(
         private const val METHOD_NAME_VIEW_MODEL = "setModel"
         private const val METHOD_NAME_ITEM       = "setItem"
         private const val METHOD_NAME_BIND       = "bind"
+        private const val CLASS_DATA_BINDING     = ".databinding."
+        private const val CLASS_BINDING          = "Binding"
 
         fun bindingClassName(context: Context, layoutId: String): String {
             var classPath = context.packageName
-            classPath += ".databinding."
+            classPath += CLASS_DATA_BINDING
             classPath += Character.toUpperCase(layoutId[0])
 
             var i = 1
@@ -128,7 +131,7 @@ class RecyclerAdapter<T: IRecyclerDiff>(
                 ++i
             }
 
-            classPath += "Binding"
+            classPath += CLASS_BINDING
 
             return classPath
         }
@@ -161,6 +164,10 @@ class RecyclerAdapter<T: IRecyclerDiff>(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerHolder {
         val context = parent.context
         val layoutId = context.resources.getIdentifier(mLayouts[viewType], "layout", context.packageName)
+
+//        AsyncLayoutInflater(context).inflate(layoutId, parent) { view, resid, p ->
+//        }
+
         val view = LayoutInflater.from(context).inflate(layoutId, parent, false)
 
         if (mLog.isTraceEnabled) {
@@ -248,15 +255,16 @@ class RecyclerAdapter<T: IRecyclerDiff>(
      * 일단 arrayList 로 하는데 이런 구조라면 linked list 가 더 적합할 듯 한 ?
      * ----
      */
-    fun setItems(recycler: RecyclerView, newItems: ArrayList<T>) {
+    fun setItems(recycler: RecyclerView, list: ArrayList<T>) {
         if (items.size == 0 || isNotifySetChanged) {
-            items = newItems
+            items = list
             notifyDataSetChanged()
 
             return
         }
 
         val oldItems = items
+        val newItems = if (oldItems.hashCode() == list.hashCode()) { ArrayList(list) } else { list }
         val result = DiffUtil.calculateDiff(object: DiffUtil.Callback() {
             override fun getOldListSize() = oldItems.size
             override fun getNewListSize() = newItems.size
