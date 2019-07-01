@@ -249,6 +249,11 @@ class SearchViewModel @Inject constructor(application: Application,
             }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { res ->
+                if (item.dibs.get()) {
+                    vibrate(3)
+                } else {
+                    vibrate(1)
+                }
                 item.anim.set(ToLargeAlphaAnimParams(5f,
                     endListener = { _, _ ->
                     item.dibs.toggle()
