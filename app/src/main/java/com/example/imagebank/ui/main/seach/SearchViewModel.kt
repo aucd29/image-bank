@@ -65,7 +65,7 @@ class SearchViewModel @Inject constructor(application: Application,
 
     // api 에서 더 이상 데이터가 없음을 알려줄 경우 api call 을 진행 하지 않기 위한 플래그
     var mIsImageApiEnd = false
-    var mIsVclipoApiEnd = false
+    var mIsVclipApiEnd = false
 
     val layoutManager = StaggeredGridLayoutManager(V_TAB_SPANCOUNT,
         StaggeredGridLayoutManager.VERTICAL)
@@ -83,6 +83,8 @@ class SearchViewModel @Inject constructor(application: Application,
             search(1)
             true
         }
+
+        // nested scroll 의 scroll 정보를 전달 받음
         scrollListener.set(ScrollChangeListener { x, y, isBottom ->
             if (mLog.isTraceEnabled()) {
                 mLog.trace("SCROLL Y : $y")
@@ -96,13 +98,9 @@ class SearchViewModel @Inject constructor(application: Application,
                 }
             }
 
-            // 페이지 처리를 하려고 하는데
-            // 데이터가 add 시 top 으로 이동하는 문제 존재
-            // 이런건 또 처음 보네 =_=
-
             // nested scroll 이라 recycler view 에 add scroll listener 에 넣는게 의미가 없어
             // 이곳에서 처리
-            if (isBottom && mPage <= 50 && !(mIsVclipoApiEnd && mIsImageApiEnd)) {
+            if (isBottom && mPage <= 50 && !(mIsVclipApiEnd && mIsImageApiEnd)) {
                 val pos = layoutManager.findLastVisibleItemPosition()
                 if (isNextLoad(pos)) {
                     search(mPage.inc())
@@ -122,13 +120,13 @@ class SearchViewModel @Inject constructor(application: Application,
             return
         }
 
-        visibleProgress.visibleToggle()
-
         keyword.get()?.let {
             if (it.isEmpty()) {
                 toast(R.string.search_pls_insert_keyword)
                 return@let
             }
+
+            visibleProgress.visible()
 
             if (mLog.isDebugEnabled) {
                 mLog.debug("SEARCH $it")
@@ -171,7 +169,7 @@ class SearchViewModel @Inject constructor(application: Application,
                                     it.datetime.toUnixTime(DATE_FORMAT)))
                             }
 
-                            mIsVclipoApiEnd = vclip.meta?.is_end ?: false
+                            mIsVclipApiEnd = vclip.meta?.is_end ?: false
                             totalSearchedCount += image.meta?.total_count ?: 0
                         } else {
                             mLog.error("ERROR: ${vclip.message}")
@@ -212,13 +210,14 @@ class SearchViewModel @Inject constructor(application: Application,
                         items.set(it)
                         mDp.add(delay {
                             mDataLoading = false
-                            visibleProgress.visibleToggle()
+                            visibleProgress.gone()
                         })
                     }, {
                         if (mLog.isDebugEnabled) {
                             it.printStackTrace()
                         }
 
+                        visibleProgress.gone()
                         mLog.error("ERROR: ${it.message}")
                         it.message?.let(::toast)
                     }))

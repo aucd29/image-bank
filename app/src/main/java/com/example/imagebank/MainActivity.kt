@@ -23,7 +23,7 @@ class MainActivity : BaseDaggerActivity<MainActivityBinding, MainViewModel>() {
         private val NAVI_GRAVITY = GravityCompat.START
     }
 
-    @Inject lateinit var config: Config
+    @Inject lateinit var mConfig: Config
     @Inject lateinit var mSplashModel: SplashViewModel
     @Inject lateinit var mNavGridModel: NaviGridViewModel
     @Inject lateinit var mNavMenuModel: NaviMenuViewModel
@@ -65,7 +65,7 @@ class MainActivity : BaseDaggerActivity<MainActivityBinding, MainViewModel>() {
         }
 
         // navigation view width 조정
-        navView.layoutWidth(config.SCREEN.x * .9f)
+        navView.layoutWidth(mConfig.SCREEN.x * .9f)
         mSplashModel.closeSplash()
     }
 

@@ -14,8 +14,6 @@ import javax.inject.Inject
 /**
  * Created by <a href="mailto:aucd29@hanwha.com">Burke Choi</a> on 2019-06-30 <p/>
  */
-
-
 class ViewController @Inject constructor(private val manager: FragmentManager) {
     // 나만의 룰을 만들었더니만 navigation editor 나와버림 =_ = ㅋ
 

@@ -1,6 +1,5 @@
 package com.example.imagebank.ui.main.seach
 
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import brigitte.BaseDaggerFragment
 import brigitte.di.dagger.module.injectOfActivity
 import brigitte.hideKeyboard

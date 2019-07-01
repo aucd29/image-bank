@@ -4,7 +4,6 @@ import android.view.View
 import androidx.databinding.ObservableInt
 import androidx.lifecycle.ViewModel
 import brigitte.arch.SingleLiveEvent
-import com.example.imagebank.common.Config
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable

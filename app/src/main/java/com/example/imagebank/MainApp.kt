@@ -33,6 +33,10 @@ import javax.inject.Inject
  */
 
 class MainApp : MultiDexApplication(), HasActivityInjector {
+    companion object {
+        private val mLog = LoggerFactory.getLogger(MainApp::class.java)
+    }
+
     @Inject lateinit var activityInjector: DispatchingAndroidInjector<Activity>
 
     override fun onCreate() {
@@ -61,9 +65,5 @@ class MainApp : MultiDexApplication(), HasActivityInjector {
     ////////////////////////////////////////////////////////////////////////////////////
 
     override fun activityInjector() = activityInjector
-
-    companion object {
-        private val mLog = LoggerFactory.getLogger(MainApp::class.java)
-    }
 }
 
