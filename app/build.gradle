@@ -1,8 +1,9 @@
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'io.fabric'
+
 
 android {
     compileSdkVersion compile_sdk
@@ -123,11 +124,11 @@ dependencies {
     implementation 'com.romandanylyk:pageindicatorview:1.0.3'
 
      // firebase
-//    implementation 'com.google.firebase:firebase-core:17.0.0'
-//    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
+    implementation 'com.google.firebase:firebase-core:17.0.0'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
 
     // local lib
     implementation project(path: ':brigitte')
 }
 
-//apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.gms.google-services'
