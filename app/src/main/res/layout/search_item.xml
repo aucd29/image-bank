@@ -16,6 +16,8 @@
             android:background="@drawable/shape_rectangle_gray_stroke_background"
             android:layout_margin="5dp"
             android:onClick="@{() -> model.command(model.CMD_SHOW_DETAIL)}"
+            android:clipChildren="false"
+            android:clipToPadding="false"
     >
 
         <ImageView
@@ -27,16 +29,19 @@
                 app:bindImage="@{item.thumbnail}"
                 />
 
+        <!--app:bindToLargeAlpha=""-->
+
         <ImageView
                 android:id="@+id/bibs"
                 android:layout_width="wrap_content" android:layout_height="wrap_content"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:src="@{item.dibs ? @drawable/ic_star_yellow_24dp : @drawable/ic_star_border_yellow_24dp}"
                 android:padding="10dp"
-                android:background="?selectableItemBackgroundBorderless"
+                android:src="@{item.dibs ? @drawable/ic_star_yellow_24dp : @drawable/ic_star_border_yellow_24dp}"
                 android:onClick="@{() -> model.command(model.CMD_DIBS, item)}"
+                app:bindToLargeAlpha="@{item.anim}"
         />
+        <!--android:background="?selectableItemBackgroundBorderless"-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

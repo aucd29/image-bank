@@ -1,7 +1,10 @@
 package com.example.imagebank.model.remote.entity
 
 import androidx.databinding.ObservableBoolean
+import androidx.databinding.ObservableField
 import brigitte.IRecyclerDiff
+import brigitte.bindingadapter.AnimParams
+import brigitte.bindingadapter.ToLargeAlphaAnimParams
 
 /**
  * Created by <a href="mailto:aucd29@hanwha.com">Burke Choi</a> on 2019-06-28 <p/>
@@ -52,9 +55,11 @@ typealias KakaoVClipSearch = KakaoSearch<KakaoVClipResult>
 data class KakaoSearchResult(
     val thumbnail: String,
     val datetime: String,
-    val unixtime: Long,
-    var dibs: ObservableBoolean = ObservableBoolean(false)
+    val unixtime: Long
 ): IRecyclerDiff {
+    var dibs = ObservableBoolean(false)
+    var anim = ObservableField<ToLargeAlphaAnimParams>()
+
     override fun compare(item: IRecyclerDiff): Boolean {
         val newItem = item as KakaoSearchResult
 

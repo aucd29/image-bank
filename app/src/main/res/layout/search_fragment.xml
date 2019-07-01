@@ -34,6 +34,8 @@
                     android:layout_height="wrap_content"
                     tools:ignore="ContentDescription"
                     android:orientation="vertical"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
             >
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -106,6 +108,8 @@
                         android:descendantFocusability="blocksDescendants"
                         app:bindAdapter="@{model.adapter}"
                         app:bindItems="@{model.items}"
+                        android:clipChildren="false"
+                        android:clipToPadding="false"
                 />
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>

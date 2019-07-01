@@ -7,6 +7,7 @@ import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import brigitte.*
+import brigitte.bindingadapter.ToLargeAlphaAnimParams
 import com.example.imagebank.R
 import com.example.imagebank.common.Config
 import com.example.imagebank.model.remote.KakaoRestSearchService
@@ -49,7 +50,7 @@ class SearchViewModel @Inject constructor(application: Application,
         const val V_SORT_RECENCY  = "recency"
     }
 
-    val keyword             = ObservableField<String>()
+    val keyword             = ObservableField<String>("설현")
     val sort                = ObservableField(OPT_SORT_ACCURACY)
     val totalCount          = ObservableField<String>()
 
@@ -116,13 +117,13 @@ class SearchViewModel @Inject constructor(application: Application,
         command(CMD_HIDE_KEYBOARD)
 
         if (!app.isNetworkConntected()) {
-            toast(R.string.network_invalid_connectivity)
+            snackbar(R.string.network_invalid_connectivity)
             return
         }
 
         keyword.get()?.let {
             if (it.isEmpty()) {
-                toast(R.string.search_pls_insert_keyword)
+                snackbar(R.string.search_pls_insert_keyword)
                 return@let
             }
 
@@ -219,10 +220,10 @@ class SearchViewModel @Inject constructor(application: Application,
 
                         visibleProgress.gone()
                         mLog.error("ERROR: ${it.message}")
-                        it.message?.let(::toast)
+                        it.message?.let(::snackbar)
                     }))
             }
-        } ?: toast(R.string.search_pls_insert_keyword)
+        } ?: snackbar(R.string.search_pls_insert_keyword)
     }
 
     fun toggleSort() {
@@ -247,8 +248,12 @@ class SearchViewModel @Inject constructor(application: Application,
             }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { resid ->
-                item.dibs.toggle()
-                toast(resid)
+                item.anim.set(ToLargeAlphaAnimParams(5f,
+                    endListener = { _, _ ->
+                    item.dibs.toggle()
+                }))
+
+//                snackbar(resid)
             })
     }
 
