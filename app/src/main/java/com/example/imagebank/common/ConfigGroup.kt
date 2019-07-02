@@ -1,6 +1,7 @@
 package com.example.imagebank.common
 
 import android.content.Context
+import android.content.res.AssetManager
 import android.graphics.Point
 import brigitte.systemService
 import io.reactivex.disposables.CompositeDisposable
@@ -41,13 +42,15 @@ class Config @Inject constructor(val context: Context) {
 @Singleton
 class PreloadConfig @Inject constructor(
     private val mDisposable: CompositeDisposable,
-    private val mContext: Context
+    private val mContext: Context,
+    private val mAssetManager: AssetManager
 ) {
-    val bannerListSingle: Single<InputStream> = Single.just(mContext.assets.open("banner_info.json"))
-        .subscribeOn(Schedulers.io())
+    val bannerList: List<Banner>
 
     init {
-        //            .map { ism -> ism.jsonParse<List<Banner>>()  }
+        bannerList = Single.just(mAssetManager.open("banner_info.json").readBytes())
+            .map { it.jsonParse<List<Banner>>() }
+            .blockingGet()
     }
 
     companion object {

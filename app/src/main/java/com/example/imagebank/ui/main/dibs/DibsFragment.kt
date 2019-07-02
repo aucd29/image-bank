@@ -43,19 +43,8 @@ class DibsFragment : BaseDaggerFragment<DibsFragmentBinding, DibsViewModel>() {
 
     override fun initViewBinding() {
         mBinding.apply {
-            mDisposable.add(mPreConfig.bannerListSingle
-                .subscribeOn(Schedulers.io())
-                .map {
-                    // ism.use {} 를 이용했는데 간헐적으로 죽는문제로 수정 AssetInputStream is closed
-                    ism -> ism to ism.jsonParse<List<Banner>>()
-                }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { p ->
-                    mItems = p.second
-                    dibsViewpager.adapter = DibsPagerAdapter(requireContext(), p.second, mBannerViewModel)
-
-                    p.first.close()
-                })
+            mItems = mPreConfig.bannerList
+            dibsViewpager.adapter = DibsPagerAdapter(requireContext(), mItems!!, mBannerViewModel)
 
             dibsViewpager.addOnPageChangeListener(object: ViewPager.SimpleOnPageChangeListener() {
                 override fun onPageSelected(position: Int) {

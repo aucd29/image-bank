@@ -1,6 +1,7 @@
 package com.example.imagebank.di
 
 import android.app.Application
+import brigitte.di.dagger.module.AssetModule
 import brigitte.di.dagger.module.ContextModule
 import com.example.imagebank.MainApp
 import dagger.BindsInstance
@@ -19,6 +20,7 @@ import javax.inject.Singleton
 @Component(modules = [
     AndroidSupportInjectionModule::class,
     ContextModule::class,
+    AssetModule::class,
     AppModule::class,
     ActivityBindingModule::class
 ])

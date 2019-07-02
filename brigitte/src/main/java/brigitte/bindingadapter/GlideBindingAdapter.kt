@@ -56,7 +56,7 @@ object GlideBindingAdapter {
     }
 
     @JvmStatic
-    @BindingAdapter("bindImage", "bindImageX", "bindImageY", requireAll = false)
+    @BindingAdapter("bindImage", "bindImageWidth", "bindImageHeight", requireAll = false)
     fun glideImage(view: ImageView, path: String, x: Int?, y: Int?) {
         if (mLog.isDebugEnabled) {
             mLog.debug("BIND IMAGE : $path")

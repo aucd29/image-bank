@@ -174,17 +174,11 @@ class SearchViewModel @Inject constructor(application: Application,
                                 // 2018-12-16T09:40:08.000+09:00
                                 image.documents?.forEach {
                                     it.thumbnail_url?.let { thumbnail ->
-                                        try {
-                                            result.add(
-                                                KakaoSearchResult(
-                                                    thumbnail, it.datetime,
-                                                    it.datetime.toUnixTime(DATE_FORMAT),
-                                                    it.image_url, it.display_sitename
-                                                )
-                                            )
-                                        } catch (e: Exception) {
-
-                                        }
+                                        result.add(KakaoSearchResult(thumbnail, it.datetime,
+                                            it.datetime.toUnixTime(DATE_FORMAT),
+                                            it.image_url, it.display_sitename,
+                                            it.width, it.height
+                                        ))
                                     }
                                 }
 

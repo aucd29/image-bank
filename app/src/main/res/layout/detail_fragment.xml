@@ -89,6 +89,8 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:bindImage="@{item.url}"
+                            app:bindImageWidth="@{item.w}"
+                            app:bindImageHeight="@{item.h}"
                             android:visibility="@{item.type == 0 ? View.VISIBLE : View.GONE}"
                     />
 
