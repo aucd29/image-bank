@@ -3,15 +3,16 @@ package brigitte.bindingadapter
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Bitmap
 import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.widget.ImageView
 import androidx.annotation.DrawableRes
 import androidx.databinding.BindingAdapter
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import brigitte.GlideApp
 import brigitte.R
+import brigitte.dpToPx
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import org.slf4j.LoggerFactory
 import java.io.File
@@ -88,11 +89,21 @@ inline fun ImageView.fitxy() {
 inline fun ImageView.glide(path: String, x: Int?, y: Int?) {
     fitxy()
 
+    val progress = CircularProgressDrawable(context)
+    progress.apply {
+        strokeWidth     = 3f.dpToPx(context)
+        centerRadius    = 20f.dpToPx(context)
+        alpha = 50
+        setColorSchemeColors(0xffffffff.toInt())
+
+        start()
+    }
+
     val glide = GlideApp.with(context)
     if (path.startsWith("http")) {
         val request = glide.load(path)
             .diskCacheStrategy(DiskCacheStrategy.ALL)
-            .placeholder(R.drawable.ic_autorenew_black_24dp)
+            .placeholder(progress)
             .error(R.drawable.ic_error_outline_black_24dp)
             .transition(DrawableTransitionOptions.withCrossFade())
 
