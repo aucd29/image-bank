@@ -226,7 +226,7 @@ class SearchViewModel @Inject constructor(application: Application,
 
                         // 찜에 넣어둔 경우 이를 검사해서 활성화 시켜준다.
                         mDibsList.value?.forEach { dibs ->
-                            it.find { f -> dibs.thumbnail == f.thumbnail }?.dibs?.toggle()
+                            it.find { f -> dibs.thumbnail == f.thumbnail }?.dibs?.set(R.drawable.ic_star_yellow_24dp)
                         }
 
                         it
@@ -311,7 +311,7 @@ class SearchViewModel @Inject constructor(application: Application,
         }
 
     private fun checkDibsList(item: KakaoSearchResult) {
-        if (item.dibs.get()) {
+        if (item.isFilledStar()) {
             vibrate(longArrayOf(0, 1, 100, 1), 1)
         } else {
             vibrate(1)
@@ -319,7 +319,7 @@ class SearchViewModel @Inject constructor(application: Application,
 
         item.anim.set(ToLargeAlphaAnimParams(5f, endListener = { _, _ ->
             mDibsList.value = toggleDibsItem(item)
-            item.dibs.toggle()
+            item.toggleDibs()
         }))
     }
 

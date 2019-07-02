@@ -97,9 +97,12 @@ class SearchFragment : BaseDaggerFragment<SearchFragmentBinding, SearchViewModel
         }
 
         mBinding.apply {
-            recycler.scrollToPosition(0)
+//            recycler.postDelayed({ recycler.smoothScrollToPosition(0) }, 200)
             scrollview.apply {
-                postDelayed({ scrollY = 0 }, 200)
+                postDelayed({
+                    scrollview.smoothScrollTo(0,0)
+
+                }, 200)
             }
         }
     }

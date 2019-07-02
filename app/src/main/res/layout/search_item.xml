@@ -35,10 +35,11 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:padding="@dimen/dp10"
-                android:src="@{item.dibs ? @drawable/ic_star_yellow_24dp : @drawable/ic_star_border_yellow_24dp}"
+                android:src="@{item.dibs}"
                 android:onClick="@{() -> model.command(model.CMD_ANIM_STAR, item)}"
                 app:bindToLargeAlpha="@{item.anim}"
         />
+        <!--android:src="@{item.dibs ? @drawable/ic_star_yellow_24dp : @drawable/ic_star_border_yellow_24dp}"-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

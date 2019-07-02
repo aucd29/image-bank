@@ -2,8 +2,10 @@ package com.example.imagebank.model.remote.entity
 
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
+import androidx.databinding.ObservableInt
 import brigitte.IRecyclerDiff
 import brigitte.bindingadapter.ToLargeAlphaAnimParams
+import com.example.imagebank.R
 import java.io.Serializable
 
 /**
@@ -52,6 +54,10 @@ data class KakaoSearch<T>(
 typealias KakaoImageSearch = KakaoSearch<KakaoImageResult>
 typealias KakaoVClipSearch = KakaoSearch<KakaoVClipResult>
 
+
+
+
+
 data class KakaoSearchResult(
     val thumbnail: String,
     val datetime: String,
@@ -61,18 +67,31 @@ data class KakaoSearchResult(
     var type: Int = T_IMAGE
 ): IRecyclerDiff, Serializable {
     companion object {
-        @JvmStatic val T_IMAGE = 0
-        @JvmStatic val T_VCLIP = 1
+        val T_IMAGE = 0
+        val T_VCLIP = 1
     }
 
-    var dibs = ObservableBoolean(false)
+    var dibs = ObservableInt(R.drawable.ic_star_border_yellow_24dp)
     var anim = ObservableField<ToLargeAlphaAnimParams>()
+
+    fun toggleDibs() {
+        dibs.set(if (dibs.get() == R.drawable.ic_star_border_yellow_24dp) {
+            R.drawable.ic_star_yellow_24dp
+        } else {
+            R.drawable.ic_star_border_yellow_24dp
+        })
+    }
+
+    fun isFilledStar() = dibs.get() == R.drawable.ic_star_yellow_24dp
+    fun fillStar() {
+        dibs.set(R.drawable.ic_star_yellow_24dp)
+    }
 
     override fun compare(item: IRecyclerDiff): Boolean {
         val newItem = item as KakaoSearchResult
 
         return thumbnail == newItem.thumbnail &&
-                unixtime == newItem.unixtime
+                unixtime == newItem.unixtime && dibs.get() == newItem.dibs.get()
     }
 
     fun trace() = "TITLE: $title\n TYPE: $type\n URL: $url"
