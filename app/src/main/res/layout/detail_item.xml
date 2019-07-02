@@ -1,0 +1,84 @@
+<layout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="android.view.View"/>
+
+        <variable name="model" type="com.example.imagebank.ui.detail.DetailViewModel" />
+        <variable name="item" type="com.example.imagebank.model.local.AccountData" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dp20"
+            android:background="?selectableItemBackground"
+        >
+
+        <TextView
+                android:id="@+id/date"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="@{item.date}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginStart="@dimen/dp20"
+        />
+
+        <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@+id/date"
+                app:layout_constraintTop_toTopOf="parent"
+                android:textSize="@dimen/sp17"
+                android:layout_marginStart="@dimen/dp20"
+                android:textColor="@android:color/black"
+                android:text="@{item.name}"
+        />
+
+        <TextView
+                android:id="@+id/tag"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@+id/name"
+                app:layout_constraintTop_toBottomOf="@+id/name"
+                android:paddingTop="2dp"
+                android:textSize="@dimen/sp10"
+                android:text="@{item.tag}"
+                android:textColor="@color/lightBlue"
+        />
+
+        <TextView
+                android:id="@+id/amount"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:textSize="@dimen/sp17"
+                android:text="@{model.convertAmount(item.amount)}"
+                android:layout_marginEnd="@dimen/dp20"
+        />
+
+        <TextView
+                android:id="@+id/balance"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/amount"
+                app:layout_constraintEnd_toEndOf="@+id/amount"
+                app:layout_constraintBottom_toTopOf="@+id/dummy"
+                android:text="@{model.convertBalance(item.balance)}"
+                android:textColor="#ACACAC"
+                android:textSize="@dimen/sp12"
+                android:layout_marginBottom="@dimen/dp20"
+        />
+
+        <View
+                android:id="@+id/dummy"
+                android:layout_width="match_parent" android:layout_height="1dp"
+                android:background="@color/colorLightGray"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

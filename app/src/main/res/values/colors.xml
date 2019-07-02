@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 앱에서 색상 추출 -->
+    <color name="colorPrimary">#ff2A384E</color>
+    <color name="colorPrimaryDark">#ff252A3D</color>
+    <color name="colorAccent">#ffF8C206</color>
+
+    <color name="colorGreen">#ff36A77C</color>
+    <color name="colorDarkGreen">#ff2C8261</color>
+
+    <color name="colorLightGray">#ececec</color>
+
+    <color name="test">#087BCD</color>
+
+    <!--indicator-->
+    <color name="gray_50">#FAFAFA</color>
+    <color name="gray_300">#75E0E0E0</color>
+
+    <!--detail-->
+    <color name="lightBlue">#087BCD</color>
+
+</resources>

@@ -1,0 +1,70 @@
+<resources>
+    <string name="app_name">Image Bank</string>
+
+    <!--TAB -->
+    <string name="tab_search">검색</string>
+    <string name="tab_dibs">내 보관함</string>
+
+    <!--SEARCH-->
+    <string name="search_search">검색</string>
+    <string name="search_pls_insert_keyword">검색어를 입력하세요</string>
+    <string name="search_add_dibs">찜 항목에 추가 되었습니다.</string>
+    <string name="search_remove_dibs">찜 항목에 해제 되었습니다.</string>
+    <string name="search_total_searched_count">약 %s건</string>
+    <string name="search_empty_list">검색된 내용이 없습니다.</string>
+    <string name="search_sort_accuracy">정확도순</string>
+    <string name="search_sort_recency">최신순</string>
+
+    <!--DIBS-->
+    <string name="dibs_empty_list">추가 된 항목이 없습니다.</string>
+
+    <!--NAVIGATION-->
+    <string name="nav_grid_service_center">고객센터</string>
+    <string name="nav_grid_security">인증/보안</string>
+    <string name="nav_grid_notice">공지사항</string>
+    <string name="nav_grid_setting">설정</string>
+
+    <string name="nav_menu_new">NEW</string>
+    <string name="nav_menu_inquire">조회/이체</string>
+    <string name="nav_menu_transfer">이체하기</string>
+    <string name="nav_menu_auto_transfer">자동이체</string>
+    <string name="nav_menu_atm_smart_withdraw">ATM 스마트출금</string>
+    <string name="nav_menu_withdraw_list">이체내역조회</string>
+
+    <string name="nav_menu_regist">상품가입</string>
+    <string name="nav_menu_open_accout">카카오뱅크 계좌개설</string>
+    <string name="nav_menu_time_deposit">정기예</string>
+    <string name="nav_menu_free_saving">매일/매주/매월26주 자유적금</string>
+    <string name="nav_menu_bankbook">함께쓰고 같이보는 모임통장</string>
+    <string name="nav_menu_stock">증권사 주식계좌</string>
+
+    <string name="nav_menu_apply_loan">대출신청</string>
+    <string name="nav_menu_cash_dough_loan">비상금 대출</string>
+    <string name="nav_menu_minus_backbook_loan">마이너스 통장대출</string>
+    <string name="nav_menu_credit_loan">신용대출</string>
+    <string name="nav_menu_personal_loan">개인사업자 대출</string>
+    <string name="nav_menu_house_rent_loan">전월세보증금 대출</string>
+
+    <string name="nav_menu_foreign_remit">해외송금</string>
+    <string name="nav_menu_send_foreign_remit">해외송금 보내기</string>
+    <string name="nav_menu_retrieve_foreign_remit">해외송금 받기</string>
+    <string name="nav_menu_foreign_remit_list">해외송금 내역조회</string>
+    <string name="nav_menu_assign_bank">거래외국환은행 지정</string>
+
+    <string name="nav_menu_my">MY</string>
+    <string name="nav_menu_my_card">내 카드</string>
+    <string name="nav_menu_my_card_list">카드 이용내역</string>
+    <string name="nav_menu_my_card_benefits">카드 혜택안내</string>
+
+    <string name="nav_menu_info">안내</string>
+    <string name="nav_menu_info_event">이벤트</string>
+
+
+    <!--DETAIL-->
+    <string name="detail_money_unit">원</string>
+    <string name="detail_vclip_not_supported">동영상은 아직 지원하지 않습니다.</string>
+
+    
+
+</resources>
+
