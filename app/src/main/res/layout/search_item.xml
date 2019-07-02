@@ -27,8 +27,6 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:bindImage="@{item.thumbnail}"
-                app:bindImageX="@{item.w}"
-                app:bindImageY="@{item.h}"
                 />
 
         <ImageView

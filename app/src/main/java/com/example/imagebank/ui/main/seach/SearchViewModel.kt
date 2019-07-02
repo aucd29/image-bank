@@ -37,7 +37,10 @@ class SearchViewModel @Inject constructor(application: Application,
         private val mLog = LoggerFactory.getLogger(SearchViewModel::class.java)
 
         const val V_TAB_SPANCOUNT   = 2
-        const val DATE_FORMAT       = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
+
+        // TODO Unknown pattern character 'X' 오류나서 변경 [aucd29][2019-07-02]
+//        const val DATE_FORMAT       = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
+        const val DATE_FORMAT       = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
 
         const val CMD_ANIM_STAR     = "cmd-anim-star"
         const val CMD_HIDE_KEYBOARD = "cmd-hide-keyboard"
@@ -171,12 +174,17 @@ class SearchViewModel @Inject constructor(application: Application,
                                 // 2018-12-16T09:40:08.000+09:00
                                 image.documents?.forEach {
                                     it.thumbnail_url?.let { thumbnail ->
-                                        val size = parseThumbnailSize(thumbnail)
+                                        try {
+                                            result.add(
+                                                KakaoSearchResult(
+                                                    thumbnail, it.datetime,
+                                                    it.datetime.toUnixTime(DATE_FORMAT),
+                                                    it.image_url, it.display_sitename
+                                                )
+                                            )
+                                        } catch (e: Exception) {
 
-                                        result.add(KakaoSearchResult(thumbnail, it.datetime,
-                                                it.datetime.toUnixTime(DATE_FORMAT),
-                                                it.image_url, it.display_sitename,
-                                                size.first, size.second))
+                                        }
                                     }
                                 }
 
@@ -188,11 +196,9 @@ class SearchViewModel @Inject constructor(application: Application,
 
                         if (vclip.message == null) {
                             vclip.documents?.forEach {
-                                val size = parseThumbnailSize(it.thumbnail)
                                 result.add(KakaoSearchResult(it.thumbnail, it.datetime,
                                     it.datetime.toUnixTime(DATE_FORMAT),
                                     it.url, it.title,
-                                    size.first, size.second,
                                     KakaoSearchResult.T_VCLIP))
                             }
 
