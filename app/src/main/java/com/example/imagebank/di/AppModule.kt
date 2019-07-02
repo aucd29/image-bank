@@ -5,7 +5,6 @@ import brigitte.di.dagger.module.ViewModelFactoryModule
 import com.example.imagebank.model.remote.KakaoRestSearchService
 import dagger.Module
 import dagger.Provides
-import okhttp3.Interceptor
 import retrofit2.Retrofit
 import javax.inject.Singleton
 

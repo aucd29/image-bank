@@ -8,13 +8,9 @@ buildscript {
         maven { url 'https://maven.fabric.io/public' }
     }
     dependencies {
-        // 버전을 높이면 빌드가 안된다. (3.3.2 일단 고정)
-        // 문제는 원인이 안 나와.. -_ - 구글.... 일해라...
         classpath 'com.android.tools.build:gradle:3.4.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.google.gms:google-services:4.2.0'
-
-        // Add dependency
         classpath 'io.fabric.tools:gradle:1.28.1'
 
         // NOTE: Do not place your application dependencies here; they belong
@@ -51,7 +47,6 @@ ext {
     lifecycle   = "2.0.0"
     material    = "1.0.0"
 
-//    support_lib = '28.0.0'
     jackson     = '2.9.7'
     logback     = '1.1.1-11'
     slf4j       = '1.7.5'

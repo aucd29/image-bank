@@ -17,11 +17,6 @@ import javax.inject.Inject
 class DetailViewModel @Inject constructor(application: Application
 
 ) : RecyclerViewModel<AccountData>(application) {
-
-    companion object {
-        private val mLog = LoggerFactory.getLogger(DetailViewModel::class.java)
-    }
-
     private val mMoneyUnit = string(R.string.detail_money_unit)
 
     init {

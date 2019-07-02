@@ -76,7 +76,6 @@ class DibsFragment : BaseDaggerFragment<DibsFragmentBinding, DibsViewModel>() {
         }
     }
 
-
     ////////////////////////////////////////////////////////////////////////////////////
     //
     // Module

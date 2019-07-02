@@ -18,8 +18,6 @@ class NaviGridViewModel @Inject constructor(application: Application
 ) : RecyclerViewModel<NavigationGridItem>(application) {
 
     companion object {
-        private val mLog = LoggerFactory.getLogger(NaviGridViewModel::class.java)
-
         const val CMD_NAV_GRID_EVENT = "cmd-nav-grid-event"
     }
 

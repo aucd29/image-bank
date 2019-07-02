@@ -34,7 +34,6 @@ class SearchFragment : BaseDaggerFragment<SearchFragmentBinding, SearchViewModel
 
     lateinit var mDibsViewModel: DibsViewModel
 
-
     override fun bindViewModel() {
         super.bindViewModel()
 
