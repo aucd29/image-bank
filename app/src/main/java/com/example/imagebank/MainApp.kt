@@ -30,6 +30,11 @@ import javax.inject.Inject
 　　　　　＊ 검색 결과에서 보관했던 이미지들이 보입니다.
 　　　　　＊ 보관한 이미지 리스트는 DB 등으로 보관되지 않아도 됩니다. (앱 종료 시에는 사라져도 무방합니다.)
 
+
+    - FIXME API 오류 관련 문의를 전달하였고 답변을 아래와 같이 받음
+        API의 page 기능 동작이 잘 동작하지 않는 부분은 페이징 구현을 생략하시거나, 같은 결과가 내려오는 것을 무시하고 구현하시는 쪽으로 우회 부탁드립니다.
+        코딩 테스트의 목적상 API의 정상 동작 여부보다 클라이언트에 구현된 코드 품질을 확인하는 것이 주목적이므로, API 동작에 구애받지 않고 구현해주시면 감사하겠습니다.
+        by chloe.hyo@kakaobank.com
  */
 
 class MainApp : MultiDexApplication(), HasActivityInjector {

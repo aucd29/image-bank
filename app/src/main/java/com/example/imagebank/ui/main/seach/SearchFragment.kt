@@ -50,6 +50,12 @@ class SearchFragment : BaseDaggerFragment<SearchFragmentBinding, SearchViewModel
     }
 
     override fun initViewModelEvents() {
+        observe(mViewModel.mDibsList) {
+            if (mLog.isDebugEnabled) {
+                mLog.debug("OBSERVE DIBS LIST : ${it.size}")
+            }
+            mDibsViewModel.items.set(it.toMutableList())
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////
@@ -65,7 +71,6 @@ class SearchFragment : BaseDaggerFragment<SearchFragmentBinding, SearchViewModel
                     clearFocusKeyword()
                     hideKeyboard(mBinding.root)
                 }
-                CMD_DIBS          -> mDibsViewModel.toggleDibs(mViewModel.mDibsList)
                 CMD_TOP_SCROLL    -> scrollToTop()
                 CMD_SHOW_DETAIL   -> if (data is KakaoSearchResult) mViewController.detailFragment(data)
             }

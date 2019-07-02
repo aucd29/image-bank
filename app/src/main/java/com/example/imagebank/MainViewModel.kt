@@ -1,14 +1,11 @@
 package com.example.imagebank
 
 import android.app.Application
-import android.graphics.Color
 import androidx.annotation.ColorInt
-import androidx.core.content.ContextCompat
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
 import brigitte.*
 import com.example.imagebank.model.remote.entity.UserInfo
-import com.google.android.material.tabs.TabLayout
 import org.slf4j.LoggerFactory
 import javax.inject.Inject
 
@@ -63,9 +60,7 @@ class MainViewModel @Inject constructor(application: Application
             }
         })
 
-        userInfo.set(
-            UserInfo("", "최철동",
-            "마지막 접속 2019.06.30 11:25")
-        )
+        // dummy data
+        userInfo.set(UserInfo("", "최철동", "마지막 접속 2019.06.30 11:25"))
     }
 }

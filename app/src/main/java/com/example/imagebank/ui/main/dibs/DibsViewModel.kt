@@ -23,11 +23,6 @@ class DibsViewModel @Inject constructor(application: Application
         initAdapter("dibs_item")
         items.set(arrayListOf())
 
-        adapter.get()?.isNotifySetChanged = true
-    }
-
-    fun toggleDibs(item: List<KakaoSearchResult>) {
-        items.set(item)
-        items.notifyChange()
+//        adapter.get()?.isNotifySetChanged = true
     }
 }

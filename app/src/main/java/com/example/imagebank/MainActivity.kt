@@ -50,9 +50,11 @@ class MainActivity : BaseDaggerActivity<MainActivityBinding, MainViewModel>() {
         mNavGridModel = mViewModelFactory.injectOfActivity(this)
         mNavMenuModel = mViewModelFactory.injectOfActivity(this)
 
-        mBinding.splashModel  = mSplashModel
-        mBinding.navGridModel = mNavGridModel
-        mBinding.navMenuModel = mNavMenuModel
+        mBinding.apply {
+            splashModel  = mSplashModel
+            navGridModel = mNavGridModel
+            navMenuModel = mNavMenuModel
+        }
 
         mCommandEventModels.add(mNavGridModel)
         mCommandEventModels.add(mNavMenuModel)

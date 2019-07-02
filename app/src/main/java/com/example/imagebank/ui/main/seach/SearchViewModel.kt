@@ -5,6 +5,7 @@ import android.app.Application
 import android.view.View
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import brigitte.*
 import brigitte.bindingadapter.ToLargeAlphaAnimParams
@@ -38,7 +39,7 @@ class SearchViewModel @Inject constructor(application: Application,
         const val V_TAB_SPANCOUNT   = 2
         const val DATE_FORMAT       = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
 
-        const val CMD_DIBS          = "cmd-dibs"
+        const val CMD_ANIM_STAR     = "cmd-anim-star"
         const val CMD_HIDE_KEYBOARD = "cmd-hide-keyboard"
         const val CMD_TOP_SCROLL    = "cmd-top-scroll"
         const val CMD_SHOW_DETAIL   = "cmd-show-detail"
@@ -57,7 +58,7 @@ class SearchViewModel @Inject constructor(application: Application,
     val visibleProgress  = ObservableInt(View.GONE)
     val visibleTopScroll = ObservableInt(View.GONE)
 
-    val mDibsList = arrayListOf<KakaoSearchResult>()
+    val mDibsList = MutableLiveData<ArrayList<KakaoSearchResult>>()
     var mPage     = 1
     val mDp       = CompositeDisposable()
 
@@ -72,7 +73,8 @@ class SearchViewModel @Inject constructor(application: Application,
         StaggeredGridLayoutManager.VERTICAL)
 
     init {
-        mThreshold = 18
+        mDibsList.value = arrayListOf()
+        mThreshold      = 18
         initAdapter("search_item")
         adapter.get()?.isScrollToPosition = false
 
@@ -113,12 +115,12 @@ class SearchViewModel @Inject constructor(application: Application,
     @SuppressLint("StringFormatMatches")
     fun search(p: Int) {
         if (p == 1) {
-            mIsImageApiEnd = false
-            mIsVclipApiEnd = false
+            mIsImageApiEnd    = false
+            mIsVclipApiEnd    = false
             mKakaoImageResult = null
         }
 
-        mPage = p
+        mPage        = p
         mDataLoading = true
         command(CMD_HIDE_KEYBOARD)
 
@@ -145,7 +147,6 @@ class SearchViewModel @Inject constructor(application: Application,
                 // 검색은 키워드 하나에 이미지 검색과 동영상 검색을 동시에 사용,
                 mDp.add(Observable.zip(api.image(it, mPage.toString(), sortOption()),
                     api.vclip(it, mPage.toString(), sortOption()),
-
                     BiFunction { image: KakaoImageSearch, vclip: KakaoVClipSearch ->
                         // 두 검색 결과를 합친 리스트를 사용합니다.
                         val result = arrayListOf<KakaoSearchResult>()
@@ -213,7 +214,7 @@ class SearchViewModel @Inject constructor(application: Application,
                         }
 
                         // 찜에 넣어둔 경우 이를 검사해서 활성화 시켜준다.
-                        mDibsList.forEach { dibs ->
+                        mDibsList.value?.forEach { dibs ->
                             it.find { f -> dibs.thumbnail == f.thumbnail }?.dibs?.toggle()
                         }
 
@@ -247,47 +248,54 @@ class SearchViewModel @Inject constructor(application: Application,
     }
 
     fun toggleSort() {
-        sort.set(if (sort.get() == R.string.search_sort_accuracy)
+        sort.set(if (sort.get() == R.string.search_sort_accuracy) {
             R.string.search_sort_recency
-        else
-            R.string.search_sort_accuracy)
+        } else {
+            R.string.search_sort_accuracy
+        })
 
         search(1)
     }
 
     private fun sortOption() = if (sort.get() == R.string.search_sort_accuracy) V_SORT_ACCURACY else V_SORT_RECENCY
 
-    private fun checkDibsList(item: KakaoSearchResult) {
-        mDp.add(Single.just(mDibsList)
-            .subscribeOn(Schedulers.io())
-            .map {
-                val f = it.find { f -> f.thumbnail == item.thumbnail }
-                if (f != null) {
-                    it.remove(f)
-                } else {
-                    it.add(item)
+    private fun toggleDibsItem(item: KakaoSearchResult) =
+        mDibsList.value?.let {
+            val f = it.find { f -> f.thumbnail == item.thumbnail }
+            if (f != null) {
+                if (mLog.isDebugEnabled) {
+                    mLog.debug("REMOVE DIBS")
                 }
 
-                it
-            }
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { res ->
-                if (item.dibs.get()) {
-                    vibrate(longArrayOf(0, 1, 100, 1), 1)
-                } else {
-                    vibrate(1)
+                it.remove(f)
+            } else {
+                if (mLog.isDebugEnabled) {
+                    mLog.debug("ADD DIBS")
                 }
-                item.anim.set(ToLargeAlphaAnimParams(5f, endListener = { _, _ ->
-                    item.dibs.toggle()
-                }))
-            })
+
+                it.add(item)
+            }
+
+            it
+        }
+
+    private fun checkDibsList(item: KakaoSearchResult) {
+        if (item.dibs.get()) {
+            vibrate(longArrayOf(0, 1, 100, 1), 1)
+        } else {
+            vibrate(1)
+        }
+
+        item.anim.set(ToLargeAlphaAnimParams(5f, endListener = { _, _ ->
+            mDibsList.value = toggleDibsItem(item)
+            item.dibs.toggle()
+        }))
     }
 
     override fun command(cmd: String, data: Any) {
         when (cmd) {
-            CMD_DIBS -> checkDibsList(data as KakaoSearchResult)
+            CMD_ANIM_STAR -> checkDibsList(data as KakaoSearchResult)
+            else          -> super.command(cmd, data)
         }
-
-        super.command(cmd, data)
     }
 }
