@@ -16,6 +16,7 @@ import com.example.imagebank.R
 import com.example.imagebank.common.Config
 import com.example.imagebank.model.remote.KakaoRestSearchService
 import com.example.imagebank.model.remote.entity.*
+import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -25,6 +26,7 @@ import javax.inject.Inject
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 
 /**
@@ -65,6 +67,7 @@ class SearchViewModel @Inject constructor(application: Application,
     val visibleTopScroll = ObservableInt(View.GONE)
 
     val mDibsList = MutableLiveData<ArrayList<KakaoSearchResult>>()
+    val mCachingList = arrayListOf<String>()
     var mPage     = 1
     val mDp       = CompositeDisposable()
 
@@ -176,7 +179,7 @@ class SearchViewModel @Inject constructor(application: Application,
                             if (!mIsImageApiEnd) {
                                 // 2018-12-16T09:40:08.000+09:00
                                 image.documents?.forEach {
-                                    it.image_url?.let { img -> preloadImage(img) }
+                                    it.image_url?.let { img -> mCachingList.add(img) }
                                     it.thumbnail_url?.let { thumbnail ->
                                         result.add(KakaoSearchResult(thumbnail, it.datetime,
                                             it.datetime.toUnixTime(DATE_FORMAT),
@@ -242,6 +245,16 @@ class SearchViewModel @Inject constructor(application: Application,
                             mDataLoading = false
                             visibleProgress.gone()
                         })
+
+                        // 의도한대로 되지 않음 ;; 삭제
+//                        // caching
+//                        mDp.add(Flowable.fromIterable(mCachingList)
+//                            .subscribeOn(Schedulers.io())
+//                            .observeOn(Schedulers.io())
+//                            .delay(300, TimeUnit.MILLISECONDS)
+//                            .map(::preloadImage)
+//                            .subscribe())
+
                     }, {
                         if (mLog.isDebugEnabled) {
                             it.printStackTrace()
@@ -313,6 +326,11 @@ class SearchViewModel @Inject constructor(application: Application,
     private fun preloadImage(url: String) {
         // https://stackoverflow.com/questions/37964187/preload-multiple-images-with-glide
         // https://bumptech.github.io/glide/int/recyclerview.html
+
+        if (mLog.isDebugEnabled) {
+            mLog.debug("PRELOAD IMAGE $url")
+        }
+
         Glide.with(app)
             .load(url)
             .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
