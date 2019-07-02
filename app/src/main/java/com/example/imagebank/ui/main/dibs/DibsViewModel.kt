@@ -22,7 +22,5 @@ class DibsViewModel @Inject constructor(application: Application
     init {
         initAdapter("dibs_item")
         items.set(arrayListOf())
-
-//        adapter.get()?.isNotifySetChanged = true
     }
 }
