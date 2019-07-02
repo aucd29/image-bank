@@ -52,8 +52,8 @@
                         app:piv_viewPager="@id/dibs_viewpager"
                         attrs:piv_padding="6dp"
                         attrs:piv_radius="2dp"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginEnd="20dp"
+                        android:layout_marginTop="@dimen/dp20"
+                        android:layout_marginEnd="@dimen/dp20"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                 />
@@ -98,7 +98,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/await_icon"
                     android:text="@string/dibs_empty_list"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="@dimen/dp5"
                     android:textColor="#C2C2C2"
             />
 

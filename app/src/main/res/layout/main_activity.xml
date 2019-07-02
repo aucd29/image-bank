@@ -54,8 +54,8 @@
                                 app:layout_constraintBottom_toBottomOf="@+id/tabs"
                                 android:src="@drawable/ic_menu_white_24dp"
                                 android:background="?selectableItemBackground"
-                                android:paddingStart="15dp"
-                                android:paddingEnd="15dp"
+                                android:paddingStart="@dimen/dp15"
+                                android:paddingEnd="@dimen/dp15"
                                 android:onClick="@{() -> model.command(model.CMD_SHOW_NAVIGATION)}"
                         />
 

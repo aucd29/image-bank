@@ -23,9 +23,9 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 android:text="@{model.kakaoText}"
-                android:textSize="14sp"
+                android:textSize="@dimen/sp14"
                 android:textColor="@android:color/black"
-                android:padding="15dp"
+                android:padding="@dimen/dp15"
         />
 
         <View
@@ -54,7 +54,7 @@
                         android:layout_width="wrap_content" android:layout_height="wrap_content"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        android:padding="25dp"
+                        android:padding="@dimen/dp25"
                         android:src="@drawable/ic_android_black_24dp"
                 />
 
@@ -63,7 +63,7 @@
                         android:layout_width="wrap_content" android:layout_height="wrap_content"
                         app:layout_constraintStart_toEndOf="@+id/user_icon"
                         app:layout_constraintTop_toTopOf="parent"
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="@dimen/dp20"
                         android:text="@{model.userInfo.name}"
                         android:textColor="@android:color/black"
                         android:textStyle="bold"
@@ -75,8 +75,8 @@
                         app:layout_constraintStart_toEndOf="@+id/user_icon"
                         app:layout_constraintBottom_toBottomOf="@+id/dummy_1"
                         android:text="@{model.userInfo.lastAccessTime}"
-                        android:layout_marginBottom="20dp"
-                        android:textSize="10sp"
+                        android:layout_marginBottom="@dimen/dp20"
+                        android:textSize="@dimen/sp10"
                         android:textColor="#A7A7A7"
                 />
 

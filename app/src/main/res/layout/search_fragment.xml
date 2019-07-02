@@ -51,9 +51,9 @@
                             android:inputType="text"
                             android:hint="@string/search_search"
                             tools:ignore="Autofill"
-                            android:textSize="20sp"
-                            android:padding="10dp"
-                            android:layout_margin="15dp"
+                            android:textSize="@dimen/sp20"
+                            android:padding="@dimen/dp10"
+                            android:layout_margin="@dimen/dp15"
                             android:background="@drawable/shape_rectangle_gray_background"
                             android:text="@={model.keyword}"
                             app:bindEditorAction="@{model.editorAction}"
@@ -67,9 +67,9 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintBottom_toBottomOf="@+id/keyword"
                             android:src="@drawable/ic_search_black_24dp"
-                            android:layout_marginStart="10dp"
-                            android:layout_marginTop="15dp"
-                            android:layout_marginEnd="15dp"
+                            android:layout_marginStart="@dimen/dp10"
+                            android:layout_marginTop="@dimen/dp15"
+                            android:layout_marginEnd="@dimen/dp15"
                             android:background="?selectableItemBackgroundBorderless"
                             android:onClick="@{() -> model.search(1)}"
                     />
@@ -80,7 +80,7 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/keyword"
                             android:text="@{model.sort}"
-                            android:padding="10dp"
+                            android:padding="@dimen/dp10"
                             android:onClick="@{() -> model.toggleSort()}"
                             android:visibility="@{model.items.size > 0 ? View.VISIBLE : View.GONE}"
                     />
@@ -92,7 +92,7 @@
                             app:layout_constraintTop_toBottomOf="@+id/keyword"
                             app:layout_constraintEnd_toEndOf="parent"
                             android:text="@{model.totalCount}"
-                            android:padding="10dp"
+                            android:padding="@dimen/dp10"
                     />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -141,7 +141,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/await_icon"
                     android:text="@string/search_empty_list"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="@dimen/dp5"
                     android:textColor="#C2C2C2"
             />
 
@@ -166,8 +166,8 @@
                 android:visibility="@{model.visibleTopScroll}"
                 android:onClick="@{() -> model.command(model.CMD_TOP_SCROLL)}"
                 android:elevation="2dp"
-                android:padding="5dp"
-                android:layout_margin="16dp"
+                android:padding="@dimen/dp5"
+                android:layout_margin="@dimen/dp16"
                 android:background="@drawable/shape_circle_yellow_stroke_background"
         />
 

@@ -14,9 +14,9 @@
             android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="20dp"
-            android:paddingTop="7dp"
-            android:paddingBottom="7dp"
+            android:paddingStart="@dimen/dp20"
+            android:paddingTop="@dimen/dp7"
+            android:paddingBottom="@dimen/dp7"
             android:background="@color/colorLightGray"
     >
 
@@ -27,7 +27,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:text="@{item.name}"
-                android:textSize="11sp"
+                android:textSize="@dimen/sp11"
                 android:textColor="#474747"
         />
 
