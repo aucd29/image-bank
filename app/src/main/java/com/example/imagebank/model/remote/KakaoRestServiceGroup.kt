@@ -17,7 +17,7 @@ interface KakaoRestSearchService {
     fun image(@Query("query") query: String,
               @Query("page") page: String = "1",
               @Query("sort") sort: String = "accuracy",
-              @Query("size") size: String = "80"): Observable<KakaoImageSearch>
+              @Query("size") size: String = "30"): Observable<KakaoImageSearch>
 
     //https://developer.kakao.com/docs/restapi/search#동영상-검색
     @GET("v2/search/vclip")

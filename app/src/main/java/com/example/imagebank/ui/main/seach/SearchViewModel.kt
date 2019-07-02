@@ -9,6 +9,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import brigitte.*
 import brigitte.bindingadapter.ToLargeAlphaAnimParams
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import com.example.imagebank.R
 import com.example.imagebank.common.Config
 import com.example.imagebank.model.remote.KakaoRestSearchService
@@ -77,7 +80,7 @@ class SearchViewModel @Inject constructor(application: Application,
 
     init {
         mDibsList.value = arrayListOf()
-        mThreshold      = 18
+        mThreshold      = 6
         initAdapter("search_item")
         adapter.get()?.isScrollToPosition = false
 
@@ -173,11 +176,11 @@ class SearchViewModel @Inject constructor(application: Application,
                             if (!mIsImageApiEnd) {
                                 // 2018-12-16T09:40:08.000+09:00
                                 image.documents?.forEach {
+                                    it.image_url?.let { img -> preloadImage(img) }
                                     it.thumbnail_url?.let { thumbnail ->
                                         result.add(KakaoSearchResult(thumbnail, it.datetime,
                                             it.datetime.toUnixTime(DATE_FORMAT),
-                                            it.image_url, it.display_sitename,
-                                            it.width, it.height
+                                            it.image_url, it.display_sitename
                                         ))
                                     }
                                 }
@@ -305,6 +308,15 @@ class SearchViewModel @Inject constructor(application: Application,
             mDibsList.value = toggleDibsItem(item)
             item.dibs.toggle()
         }))
+    }
+
+    private fun preloadImage(url: String) {
+        // https://stackoverflow.com/questions/37964187/preload-multiple-images-with-glide
+        // https://bumptech.github.io/glide/int/recyclerview.html
+        Glide.with(app)
+            .load(url)
+            .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
+            .submit()
     }
 
     override fun command(cmd: String, data: Any) {

@@ -92,7 +92,7 @@ inline fun ImageView.glide(path: String, x: Int?, y: Int?) {
     if (path.startsWith("http")) {
         val request = glide.load(path)
             .diskCacheStrategy(DiskCacheStrategy.ALL)
-//            .placeholder(R.drawable.ic_autorenew_black_24dp)
+            .placeholder(R.drawable.ic_autorenew_black_24dp)
             .error(R.drawable.ic_error_outline_black_24dp)
             .transition(DrawableTransitionOptions.withCrossFade())
 

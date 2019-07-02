@@ -109,6 +109,12 @@ dependencies {
     implementation "com.github.bumptech.glide:glide:$glide"
     kapt "com.github.bumptech.glide:compiler:$glide"
 
+    // 이미지 사이즈가 존재하면 사용할 수 있을 듯
+//    implementation ("com.github.bumptech.glide:recyclerview-integration:4.9.0") {
+//        // Excludes the support library because it's already included by Glide.
+//        transitive = false
+//    }
+
     implementation "io.reactivex.rxjava2:rxjava:$rxjava"
     implementation "io.reactivex.rxjava2:rxandroid:$rxandroid"
     implementation "io.reactivex.rxjava2:rxkotlin:$rxkotlin"
