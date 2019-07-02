@@ -171,9 +171,12 @@ class SearchViewModel @Inject constructor(application: Application,
                                 // 2018-12-16T09:40:08.000+09:00
                                 image.documents?.forEach {
                                     it.thumbnail_url?.let { thumbnail ->
+                                        val size = parseThumbnailSize(thumbnail)
+
                                         result.add(KakaoSearchResult(thumbnail, it.datetime,
                                                 it.datetime.toUnixTime(DATE_FORMAT),
-                                                it.image_url, it.display_sitename))
+                                                it.image_url, it.display_sitename,
+                                                size.first, size.second))
                                     }
                                 }
 
@@ -185,9 +188,11 @@ class SearchViewModel @Inject constructor(application: Application,
 
                         if (vclip.message == null) {
                             vclip.documents?.forEach {
+                                val size = parseThumbnailSize(it.thumbnail)
                                 result.add(KakaoSearchResult(it.thumbnail, it.datetime,
                                     it.datetime.toUnixTime(DATE_FORMAT),
                                     it.url, it.title,
+                                    size.first, size.second,
                                     KakaoSearchResult.T_VCLIP))
                             }
 
@@ -256,6 +261,16 @@ class SearchViewModel @Inject constructor(application: Application,
 
         search(1)
     }
+
+    // url 예 https://search4.kakaocdn.net/argon/130x130_85_c/9d3F8Bwbei3
+    private fun parseThumbnailSize(str: String) =
+        if (str.contains("130x130")) {
+            130 to 130
+        } else if (str.contains("138x78")) {
+            138 to 138
+        } else {
+            -1 to -1
+        }
 
     private fun sortOption() = if (sort.get() == R.string.search_sort_accuracy) V_SORT_ACCURACY else V_SORT_RECENCY
 

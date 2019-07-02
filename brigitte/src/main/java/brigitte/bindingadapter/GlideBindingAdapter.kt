@@ -1,6 +1,7 @@
 @file:Suppress("NOTHING_TO_INLINE", "unused")
 package brigitte.bindingadapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.media.MediaMetadataRetriever
@@ -11,6 +12,7 @@ import androidx.databinding.BindingAdapter
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import brigitte.GlideApp
 import brigitte.R
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import org.slf4j.LoggerFactory
 import java.io.File
 
@@ -54,13 +56,13 @@ object GlideBindingAdapter {
     }
 
     @JvmStatic
-    @BindingAdapter("bindImage")
-    fun glideImage(view: ImageView, path: String) {
+    @BindingAdapter("bindImage", "bindImageX", "bindImageY", requireAll = false)
+    fun glideImage(view: ImageView, path: String, x: Int?, y: Int?) {
         if (mLog.isDebugEnabled) {
             mLog.debug("BIND IMAGE : $path")
         }
 
-        view.glide(path)
+        view.glide(path, x, y)
     }
 }
 
@@ -82,24 +84,34 @@ inline fun ImageView.fitxy() {
     scaleType = ImageView.ScaleType.FIT_XY
 }
 
-inline fun ImageView.glide(path: String) {
+@SuppressLint("CheckResult")
+inline fun ImageView.glide(path: String, x: Int?, y: Int?) {
     fitxy()
 
     val glide = GlideApp.with(context)
     if (path.startsWith("http")) {
-        glide.load(path)
+        val request = glide.load(path)
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .placeholder(R.drawable.ic_autorenew_black_24dp)
             .error(R.drawable.ic_error_outline_black_24dp)
-            .into(this)
+            .transition(DrawableTransitionOptions.withCrossFade())
+
+        if (x != null && y != null && x > 0 && y > 0) {
+            request.override(x, y)
+        }
+
+        request.into(this)
 
         return
     }
 
     val fp = File(path)
     if (fp.isVideo(context)) {
-        glide.asBitmap().load(Uri.fromFile(fp)).into(this)
+        glide.asBitmap().load(Uri.fromFile(fp))
+            .into(this)
     } else {
-        glide.load(fp).into(this)
+        glide.load(fp)
+            .transition(DrawableTransitionOptions.withCrossFade())
+            .into(this)
     }
 }

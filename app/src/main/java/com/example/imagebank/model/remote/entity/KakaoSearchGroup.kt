@@ -58,6 +58,8 @@ data class KakaoSearchResult(
     val unixtime: Long,
     val url: String?,
     val title: String?,
+    val w: Int,
+    val h: Int,
     var type: Int = T_IMAGE
 ): IRecyclerDiff, Serializable {
     companion object {

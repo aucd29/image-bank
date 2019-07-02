@@ -110,6 +110,7 @@
                         app:bindItems="@{model.items}"
                         android:clipChildren="false"
                         android:clipToPadding="false"
+                        android:nestedScrollingEnabled="false"
                 />
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
