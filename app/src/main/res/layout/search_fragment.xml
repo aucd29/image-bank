@@ -6,7 +6,7 @@
     <data>
         <import type="android.view.View"/>
 
-        <variable name="model" type="com.example.imagebank.ui.main.seach.SearchViewModel"/>
+        <variable name="model" type="com.example.imagebank.ui.main.search.SearchViewModel"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -33,7 +33,7 @@
 
     <string name="nav_menu_regist">상품가입</string>
     <string name="nav_menu_open_accout">카카오뱅크 계좌개설</string>
-    <string name="nav_menu_time_deposit">정기예</string>
+    <string name="nav_menu_time_deposit">정기예금</string>
     <string name="nav_menu_free_saving">매일/매주/매월26주 자유적금</string>
     <string name="nav_menu_bankbook">함께쓰고 같이보는 모임통장</string>
     <string name="nav_menu_stock">증권사 주식계좌</string>

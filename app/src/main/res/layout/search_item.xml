@@ -4,7 +4,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable name="model" type="com.example.imagebank.ui.main.seach.SearchViewModel" />
+        <variable name="model" type="com.example.imagebank.ui.main.search.SearchViewModel" />
         <variable name="item" type="com.example.imagebank.model.remote.entity.KakaoSearchResult"/>
     </data>
 

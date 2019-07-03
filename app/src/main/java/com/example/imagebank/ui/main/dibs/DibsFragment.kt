@@ -19,7 +19,7 @@ import javax.inject.Inject
  * Created by <a href="mailto:aucd29@hanwha.com">Burke Choi</a> on 2019-06-29 <p/>
  */
 
-class DibsFragment : BaseDaggerFragment<DibsFragmentBinding, DibsViewModel>() {
+class DibsFragment @Inject constructor() : BaseDaggerFragment<DibsFragmentBinding, DibsViewModel>() {
     companion object {
         private val mLog = LoggerFactory.getLogger(DibsFragment::class.java)
     }
@@ -29,10 +29,9 @@ class DibsFragment : BaseDaggerFragment<DibsFragmentBinding, DibsViewModel>() {
     }
 
     @Inject lateinit var mPreConfig: PreloadConfig
-    @Inject lateinit var mBannerViewModel: BannerViewModel
     @Inject lateinit var mMainViewModel: MainViewModel
-
-    private var mItems: List<Banner>? = null
+    @Inject lateinit var mBannerViewModel: BannerViewModel
+    @Inject lateinit var mDibsPagerAdapter: DibsPagerAdapter
 
     override fun bindViewModel() {
         super.bindViewModel()
@@ -43,9 +42,7 @@ class DibsFragment : BaseDaggerFragment<DibsFragmentBinding, DibsViewModel>() {
 
     override fun initViewBinding() {
         mBinding.apply {
-            mItems = mPreConfig.bannerList
-            dibsViewpager.adapter = DibsPagerAdapter(requireContext(), mItems!!, mBannerViewModel)
-
+            dibsViewpager.adapter = mDibsPagerAdapter
             dibsViewpager.addOnPageChangeListener(object: ViewPager.SimpleOnPageChangeListener() {
                 override fun onPageSelected(position: Int) {
                     if (mLog.isDebugEnabled) {
@@ -64,7 +61,7 @@ class DibsFragment : BaseDaggerFragment<DibsFragmentBinding, DibsViewModel>() {
     }
 
     private fun topViewColorChange(pos: Int) {
-        mItems?.let {
+        mPreConfig.bannerList.let {
             val current = it[pos]
             mMainViewModel.apply {
                 bgStatusLastColor  = mBannerViewModel.convertColor(current.statusColor)

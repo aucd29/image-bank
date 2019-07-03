@@ -9,7 +9,7 @@ import com.example.imagebank.ui.main.dibs.DibsViewModel
 import com.example.imagebank.ui.main.dibs.BannerViewModel
 import com.example.imagebank.ui.main.navigation.NaviGridViewModel
 import com.example.imagebank.ui.main.navigation.NaviMenuViewModel
-import com.example.imagebank.ui.main.seach.SearchViewModel
+import com.example.imagebank.ui.main.search.SearchViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
