@@ -183,15 +183,28 @@ object FragmentCommit {
         get() = "notallow"
 }
 
+inline fun FragmentManager.showBy(params: FragmentParams) {
+    val frgmt = params.fragment
+    if (frgmt != null && frgmt.isVisible) {
+        // manager 내에 해당 fragment 가 이미 존재하면 해당 fragment 를 반환 한다
+        return
+    }
+
+    frgmt?.let { internalShow(it, params) }
+}
+
 inline fun <reified T: Fragment> FragmentManager.show(params: FragmentParams) {
-    val frgmt: Fragment
     val existFrgmt = findFragmentByTag(T::class.java.name)
     if (existFrgmt != null && existFrgmt.isVisible) {
         // manager 내에 해당 fragment 가 이미 존재하면 해당 fragment 를 반환 한다
         return
     }
 
-    frgmt = T::class.java.newInstance() as Fragment
+    val frgmt =  T::class.java.newInstance() as Fragment
+    internalShow(frgmt, params)
+}
+
+inline fun FragmentManager.internalShow(frgmt: Fragment, params: FragmentParams) {
     val transaction = beginTransaction()
 
     params.apply {
@@ -202,11 +215,11 @@ inline fun <reified T: Fragment> FragmentManager.show(params: FragmentParams) {
                 FragmentAnim.apply {
                     when (it) {
                         RIGHT -> setCustomAnimations(R.anim.slide_in_current,   R.anim.slide_in_next,
-                                                     R.anim.slide_out_current,  R.anim.slide_out_prev)
+                            R.anim.slide_out_current,  R.anim.slide_out_prev)
                         LEFT  -> setCustomAnimations(R.anim.slide_out_current,  R.anim.slide_out_prev,
-                                                     R.anim.slide_in_current,   R.anim.slide_in_next)
+                            R.anim.slide_in_current,   R.anim.slide_in_next)
                         UP    -> setCustomAnimations(R.anim.slide_up_current,   R.anim.slide_up_next,
-                                                     R.anim.slide_down_current, R.anim.slide_down_prev)
+                            R.anim.slide_down_current, R.anim.slide_down_prev)
                         ALPHA -> setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out)
 
                         else -> { }
@@ -278,6 +291,8 @@ inline fun FragmentManager.popAll() {
 data class FragmentParams(
     /** add 또는 replace 에 대상이 되는 view 의 id */
     @IdRes val containerId: Int,
+    /** dagger 나 직접 instance 를 이용시 fragment 객체 */
+    val fragment: Fragment? = null,
     /** true 면 add 시키고 false 면 replace 한다. add 면 기존에 Fragment 를 나두고 추가 시키고 replace 면 기존에 걸 교체 한다.  */
     val add: Boolean = true,
     /** 트렌젝션 시 화면에 나타나야할 animation 종류 */
