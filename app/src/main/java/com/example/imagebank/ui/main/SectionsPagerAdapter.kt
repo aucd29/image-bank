@@ -7,14 +7,16 @@ import androidx.fragment.app.FragmentPagerAdapter
 import brigitte.string
 import com.example.imagebank.R
 import com.example.imagebank.ui.main.dibs.DibsFragment
-import com.example.imagebank.ui.main.seach.SearchFragment
+import com.example.imagebank.ui.main.search.SearchFragment
+import javax.inject.Inject
 
 private val TAB_TITLES = arrayOf(
     R.string.tab_search,
     R.string.tab_dibs
 )
 
-class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) : FragmentPagerAdapter(fm) {
+class SectionsPagerAdapter @Inject constructor(private val context: Context, fm: FragmentManager)
+    : FragmentPagerAdapter(fm) {
     override fun getItem(position: Int): Fragment {
         return when(position) {
             0    -> SearchFragment()

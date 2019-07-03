@@ -1,4 +1,4 @@
-package com.example.imagebank.ui.main.seach
+package com.example.imagebank.ui.main.search
 
 import android.annotation.SuppressLint
 import android.app.Application
@@ -16,17 +16,13 @@ import com.example.imagebank.R
 import com.example.imagebank.common.Config
 import com.example.imagebank.model.remote.KakaoRestSearchService
 import com.example.imagebank.model.remote.entity.*
-import io.reactivex.Flowable
 import io.reactivex.Observable
-import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import org.slf4j.LoggerFactory
 import javax.inject.Inject
 import io.reactivex.functions.BiFunction
-import io.reactivex.schedulers.Schedulers
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 
 /**

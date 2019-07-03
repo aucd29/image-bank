@@ -1,4 +1,4 @@
-package com.example.imagebank.ui.main.seach
+package com.example.imagebank.ui.main.search
 
 import brigitte.BaseDaggerFragment
 import brigitte.di.dagger.module.injectOfActivity
@@ -6,6 +6,7 @@ import brigitte.hideKeyboard
 import com.example.imagebank.databinding.SearchFragmentBinding
 import com.example.imagebank.model.remote.entity.KakaoSearchResult
 import com.example.imagebank.ui.ViewController
+import com.example.imagebank.ui.main.SectionsPagerAdapter
 import com.example.imagebank.ui.main.dibs.DibsViewModel
 import dagger.android.ContributesAndroidInjector
 import org.slf4j.LoggerFactory

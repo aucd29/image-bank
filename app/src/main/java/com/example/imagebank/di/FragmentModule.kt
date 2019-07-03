@@ -2,7 +2,7 @@ package com.example.imagebank.di
 
 import com.example.imagebank.ui.detail.DetailFragment
 import com.example.imagebank.ui.main.dibs.DibsFragment
-import com.example.imagebank.ui.main.seach.SearchFragment
+import com.example.imagebank.ui.main.search.SearchFragment
 import dagger.Module
 
 /**

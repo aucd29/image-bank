@@ -27,6 +27,7 @@ class MainActivity : BaseDaggerActivity<MainActivityBinding, MainViewModel>() {
     @Inject lateinit var mSplashModel: SplashViewModel
     @Inject lateinit var mNavGridModel: NaviGridViewModel
     @Inject lateinit var mNavMenuModel: NaviMenuViewModel
+    @Inject lateinit var mAdapter: SectionsPagerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         exceptionCatcher { mLog.error("ERROR: $it") }
@@ -46,9 +47,11 @@ class MainActivity : BaseDaggerActivity<MainActivityBinding, MainViewModel>() {
     override fun bindViewModel() {
         super.bindViewModel()
 
-        mSplashModel  = mViewModelFactory.injectOfActivity(this)
-        mNavGridModel = mViewModelFactory.injectOfActivity(this)
-        mNavMenuModel = mViewModelFactory.injectOfActivity(this)
+        mViewModelFactory.apply {
+            mSplashModel  = injectOfActivity(this@MainActivity)
+            mNavGridModel = injectOfActivity(this@MainActivity)
+            mNavMenuModel = injectOfActivity(this@MainActivity)
+        }
 
         mBinding.apply {
             splashModel  = mSplashModel
@@ -62,7 +65,7 @@ class MainActivity : BaseDaggerActivity<MainActivityBinding, MainViewModel>() {
 
     override fun initViewBinding() = mBinding.run {
         with (viewPager) {
-            adapter = SectionsPagerAdapter(this@MainActivity, supportFragmentManager)
+            adapter = mAdapter
             tabs.setupWithViewPager(this)
         }
 
