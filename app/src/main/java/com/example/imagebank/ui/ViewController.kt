@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.fragment.app.FragmentManager
 import brigitte.FragmentAnim
 import brigitte.FragmentParams
-import brigitte.show
 import brigitte.showBy
 import com.example.imagebank.R
 import com.example.imagebank.model.remote.entity.KakaoSearchResult
@@ -22,7 +21,7 @@ class ViewController @Inject constructor(private val manager: FragmentManager) {
         const val CONTAINER = R.id.main_container
     }
 
-    @Inject lateinit var mDetailFragment: DetailFragment
+    @Inject lateinit var mDetailFragment: dagger.Lazy<DetailFragment>
 
     fun detailFragment(item: KakaoSearchResult) {
         if (mLog.isInfoEnabled) {
@@ -30,7 +29,7 @@ class ViewController @Inject constructor(private val manager: FragmentManager) {
         }
 
         manager.showBy(FragmentParams(CONTAINER,
-            fragment = mDetailFragment,
+            fragment = mDetailFragment.get(),
             anim     = FragmentAnim.UP,
             bundle   = Bundle().apply { putSerializable(DetailFragment.K_ITEM, item) }
         ))
