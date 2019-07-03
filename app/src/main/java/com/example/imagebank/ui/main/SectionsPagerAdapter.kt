@@ -17,10 +17,14 @@ private val TAB_TITLES = arrayOf(
 
 class SectionsPagerAdapter @Inject constructor(private val context: Context, fm: FragmentManager)
     : FragmentPagerAdapter(fm) {
+
+    @Inject lateinit var mSearchFragment: SearchFragment
+    @Inject lateinit var mDibsFragment: DibsFragment
+
     override fun getItem(position: Int): Fragment {
         return when(position) {
-            0    -> SearchFragment()
-            else -> DibsFragment()
+            0    -> mSearchFragment // SearchFragment()
+            else -> mDibsFragment   // DibsFragment()
         }
     }
 

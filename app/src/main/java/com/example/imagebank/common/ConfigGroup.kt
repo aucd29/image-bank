@@ -39,11 +39,8 @@ class Config @Inject constructor(val context: Context) {
 class PreloadConfig @Inject constructor(
     private val mAssetManager: AssetManager
 ) {
-    val bannerList: List<Banner>
-
-    init {
-        bannerList = Single.just(mAssetManager.open("banner_info.json").readBytes())
-            .map { it.jsonParse<List<Banner>>() }
-            .blockingGet()
-    }
+    val bannerList: List<Banner> = Single.just(mAssetManager.open("banner_info.json")
+        .readBytes())
+        .map { it.jsonParse<List<Banner>>() }
+        .blockingGet()
 }

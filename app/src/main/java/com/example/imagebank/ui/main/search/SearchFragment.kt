@@ -26,7 +26,7 @@ import javax.inject.Inject
  *
  */
 
-class SearchFragment : BaseDaggerFragment<SearchFragmentBinding, SearchViewModel>() {
+class SearchFragment @Inject constructor() : BaseDaggerFragment<SearchFragmentBinding, SearchViewModel>() {
     companion object {
         private val mLog = LoggerFactory.getLogger(SearchFragment::class.java)
     }

@@ -7,16 +7,18 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.viewpager.widget.PagerAdapter
 import com.example.imagebank.R
+import com.example.imagebank.common.PreloadConfig
 import com.example.imagebank.databinding.BannerLayoutBinding
 import com.example.imagebank.model.local.Banner
+import javax.inject.Inject
 
 /**
  * Created by <a href="mailto:aucd29@hanwha.com">Burke Choi</a> on 2019-06-30 <p/>
  */
 // https://medium.com/@cdmunoz/the-easiest-way-to-work-with-viewpager-and-without-fragments-c62ec3e8b9f3
-class DibsPagerAdapter(
+class DibsPagerAdapter @Inject constructor(
     private val mContext: Context,
-    private val mItems: List<Banner>,
+    private val mPreConfig: PreloadConfig,
     private var mBannerViewModel: BannerViewModel
 ) : PagerAdapter() {
 
@@ -26,7 +28,7 @@ class DibsPagerAdapter(
             R.layout.banner_layout, container, true)
 
         binding.model = mBannerViewModel
-        binding.item  = mItems[position]
+        binding.item  = mPreConfig.bannerList[position]
 
         return binding.root
     }
@@ -42,7 +44,7 @@ class DibsPagerAdapter(
     }
 
     override fun getCount(): Int {
-        return mItems.size
+        return mPreConfig.bannerList.size
     }
 }
 
