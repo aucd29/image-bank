@@ -33,8 +33,6 @@ class DibsFragment @Inject constructor() : BaseDaggerFragment<DibsFragmentBindin
     @Inject lateinit var mBannerViewModel: BannerViewModel
     @Inject lateinit var mDibsPagerAdapter: DibsPagerAdapter
 
-    private var mItems: List<Banner>? = null
-
     override fun bindViewModel() {
         super.bindViewModel()
 
@@ -63,7 +61,7 @@ class DibsFragment @Inject constructor() : BaseDaggerFragment<DibsFragmentBindin
     }
 
     private fun topViewColorChange(pos: Int) {
-        mItems?.let {
+        mPreConfig.bannerList.let {
             val current = it[pos]
             mMainViewModel.apply {
                 bgStatusLastColor  = mBannerViewModel.convertColor(current.statusColor)
