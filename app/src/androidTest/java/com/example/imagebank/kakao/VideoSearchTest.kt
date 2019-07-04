@@ -1,9 +1,11 @@
 package com.example.imagebank.kakao
 
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.rule.ActivityTestRule
 import com.example.imagebank.MainActivity
+import com.example.imagebank.MainApp
 import org.junit.FixMethodOrder
 import org.junit.Rule
 import org.junit.runner.RunWith
@@ -44,6 +46,10 @@ class VideoSearchTest {
     }
 
      */
+
+    @Rule
+    @JvmField
+    val app = ApplicationProvider.getApplicationContext<MainApp>()
 
     @Rule
     @JvmField

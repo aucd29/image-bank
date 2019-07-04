@@ -1,14 +1,12 @@
 package com.example.imagebank.kakao
 
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.rule.ActivityTestRule
 import com.example.imagebank.MainActivity
+import com.example.imagebank.MainApp
 import com.example.imagebank.model.remote.KakaoRestSearchService
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
-import junit.framework.TestCase.assertNotNull
-import org.junit.Before
 import org.junit.FixMethodOrder
 import org.junit.Rule
 import org.junit.runner.RunWith
@@ -51,11 +49,16 @@ import javax.inject.Inject
     }
 }
 ```
+
+
+https://github.com/fabioCollini/DaggerMock
+
  */
 @RunWith(AndroidJUnit4::class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @LargeTest
 class ImageSearchTest {
+    //https://github.com/fabioCollini/DaggerMock
     @Inject lateinit var rest: KakaoRestSearchService
 
     fun search() {
@@ -73,6 +76,10 @@ class ImageSearchTest {
 //                assertNotNull(it)
 //            }
     }
+
+    @Rule
+    @JvmField
+    val app = ApplicationProvider.getApplicationContext<MainApp>()
 
     @Rule
     @JvmField

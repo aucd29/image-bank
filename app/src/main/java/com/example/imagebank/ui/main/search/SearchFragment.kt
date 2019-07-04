@@ -46,7 +46,7 @@ class SearchFragment @Inject constructor() : BaseDaggerFragment<SearchFragmentBi
     override fun initViewBinding() {
         clearFocusKeyword()
 
-        mBinding.recycler.apply {
+        mBinding.searchRecycler.apply {
             // 분할화면에서 오류 발생 [aucd29][2019-07-04]
             // Caused by: java.lang.IllegalArgumentException:
             // LayoutManager androidx.recyclerview.widget.StaggeredGridLayoutManager@76a8ffb is already attached to a RecyclerView
