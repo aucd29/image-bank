@@ -58,14 +58,15 @@ class SearchViewModel @Inject constructor(application: Application,
 
     val editorAction     = ObservableField<(String?) -> Boolean>()   // editor 에서 done 버튼 선택 시
     val scrollListener   = ObservableField<ScrollChangeListener>()
+    val gridCount        = ObservableInt(2)
 
     val visibleProgress  = ObservableInt(View.GONE)
     val visibleTopScroll = ObservableInt(View.GONE)
 
-    val mDibsList = MutableLiveData<ArrayList<KakaoSearchResult>>()
+    val mDibsList    = MutableLiveData<ArrayList<KakaoSearchResult>>()
     val mCachingList = arrayListOf<String>()
-    var mPage     = 1
-    val mDp       = CompositeDisposable()
+    var mPage        = 1
+    val mDp          = CompositeDisposable()
 
     // api 에서 더 이상 데이터가 없음을 알려줄 경우 api call 을 진행 하지 않기 위한 플래그
     var mIsImageApiEnd = false
@@ -74,8 +75,7 @@ class SearchViewModel @Inject constructor(application: Application,
     // FIXME API 오류로 데이터의 첫번째가 동일하면 이를 중복 데이터로 본다.
     var mKakaoImageResult: KakaoImageResult? = null
 
-    val layoutManager = StaggeredGridLayoutManager(V_TAB_SPANCOUNT,
-        StaggeredGridLayoutManager.VERTICAL)
+    lateinit var layoutManager:StaggeredGridLayoutManager
 
     init {
         mDibsList.value = arrayListOf()
@@ -115,6 +115,11 @@ class SearchViewModel @Inject constructor(application: Application,
                 }
             }
         })
+    }
+
+    fun init() {
+        layoutManager = StaggeredGridLayoutManager(V_TAB_SPANCOUNT,
+            StaggeredGridLayoutManager.VERTICAL)
     }
 
     @SuppressLint("StringFormatMatches")

@@ -15,13 +15,4 @@ abstract class ContextModule {
     @Binds
     @Singleton
     abstract fun provideContext(app: Application): Context
-
-    // https://stackoverflow.com/questions/48081881/dagger-2-not-injecting-sharedpreference
-//    @Module
-//    companion object {
-//        @JvmStatic
-//        @Provides
-//        fun provideSharedPreference(context: Context)
-//                = PreferenceManager.getDefaultSharedPreferences(context)
-//    }
 }
