@@ -94,7 +94,7 @@ class SearchViewModel @Inject constructor(application: Application,
 
         // nested scroll 의 scroll 정보를 전달 받음
         scrollListener.set(ScrollChangeListener { x, y, isBottom ->
-            if (mLog.isTraceEnabled()) {
+            if (mLog.isTraceEnabled) {
                 mLog.trace("SCROLL Y : $y")
             }
 
@@ -227,7 +227,7 @@ class SearchViewModel @Inject constructor(application: Application,
 
                         // 찜에 넣어둔 경우 이를 검사해서 활성화 시켜준다.
                         mDibsList.value?.forEach { dibs ->
-                            it.find { f -> dibs.thumbnail == f.thumbnail }?.dibs?.set(R.drawable.ic_star_yellow_24dp)
+                            it.find { f -> dibs.thumbnail == f.thumbnail }?.fillStar()
                         }
 
                         it

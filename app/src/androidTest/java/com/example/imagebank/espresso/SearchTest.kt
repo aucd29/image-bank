@@ -1,45 +1,55 @@
 package com.example.imagebank.espresso
 
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.IdlingRegistry
 import androidx.test.filters.LargeTest
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import androidx.test.rule.ActivityTestRule
+import androidx.test.rule.GrantPermissionRule
+import androidx.test.runner.AndroidJUnit4
 import com.example.imagebank.MainActivity
 import com.example.imagebank.R
-import com.example.imagebank.common.RecyclerViewMatchers.hasItemCount
-import com.example.imagebank.common.RecyclerViewMatchers.hasItems
+import com.example.imagebank.common.FetchingIdlingResource
+import com.example.imagebank.common.hasRecyclerViewItem
+import com.example.imagebank.common.performClick
 import org.junit.*
 import org.junit.runner.RunWith
-import org.junit.runners.MethodSorters
 
 /**
  * Created by <a href="mailto:aucd29@hanwha.com">Burke Choi</a> on 2019-07-04 <p/>
  */
 
-@RunWith(AndroidJUnit4ClassRunner::class)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+//@RunWith(AndroidJUnit4ClassRunner::class)
+@RunWith(AndroidJUnit4::class)
+//@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @LargeTest
 class SearchTest {
-    @Test
-    fun search() {
-        activityTestRule.launchActivity(null)
-
-        onView(withId(R.id.search)).perform(click())
-        //https://stackoverflow.com/questions/36399787/how-to-count-recyclerview-items-with-espresso
-        onView(withId(R.id.search_recycler)).check(matches(hasItems()))
-    }
 
     companion object {
-        @BeforeClass
-        fun setup() {
-            // Setting up
-        }
+        @ClassRule
+        @JvmField
+        val grantExternalStoragePermissionRule: GrantPermissionRule =
+            GrantPermissionRule.grant(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
     }
 
-    @get:Rule
-    var activityTestRule = ActivityTestRule(MainActivity::class.java)
+    @Rule
+    @JvmField
+    var mActivityTestRule = ActivityTestRule(MainActivity::class.java)
+
+    private val mFetchingIdlingResource = FetchingIdlingResource()
+
+    @Before
+    fun setup() {
+        IdlingRegistry.getInstance().register(mFetchingIdlingResource)
+        mActivityTestRule.activity
+    }
+
+    @Test
+    fun search() {
+        performClick(R.id.search)
+
+        // https://medium.com/@elye.project/instrumental-test-better-espresso-without-sleep-d3391b19a581
+        Thread.sleep(3000)
+        //https://stackoverflow.com/questions/36399787/how-to-count-recyclerview-items-with-espresso
+        hasRecyclerViewItem(R.id.search_recycler)
+    }
+
 }

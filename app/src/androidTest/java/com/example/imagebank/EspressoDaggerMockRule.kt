@@ -4,7 +4,6 @@ import androidx.test.InstrumentationRegistry
 import androidx.test.core.app.ApplicationProvider
 import com.example.imagebank.di.AppComponent
 import com.example.imagebank.di.AppModule
-import it.cosenonjaviste.daggermock.DaggerMock
 
 
 /**

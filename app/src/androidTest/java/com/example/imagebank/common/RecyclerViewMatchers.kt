@@ -23,19 +23,4 @@ object RecyclerViewMatchers {
             }
         }
     }
-
-    @JvmStatic
-    fun hasItems():Matcher<View> {
-        return object : BoundedMatcher<View, RecyclerView>(RecyclerView::class.java) {
-            override fun describeTo(description: Description) {
-                description.appendText("has items")
-            }
-
-            override fun matchesSafely(view: RecyclerView): Boolean {
-                return view.adapter?.let {
-                    it.itemCount > 0
-                } ?: false
-            }
-        }
-    }
 }
