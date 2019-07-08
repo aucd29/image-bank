@@ -91,6 +91,7 @@
                             app:bindImage="@{item.url}"
                             android:visibility="@{item.type == 0 ? View.VISIBLE : View.GONE}"
                     />
+                    <!--app:bindImageThumbnail="@{item.thumbnail}"-->
 
                     <TextView
                             android:id="@+id/detail_video"

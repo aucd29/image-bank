@@ -2,6 +2,8 @@ package com.example.imagebank.ui.main.search
 
 import android.annotation.SuppressLint
 import android.app.Application
+import android.graphics.Bitmap
+import android.util.LruCache
 import android.view.View
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
@@ -16,13 +18,16 @@ import com.example.imagebank.R
 import com.example.imagebank.common.Config
 import com.example.imagebank.model.remote.KakaoRestSearchService
 import com.example.imagebank.model.remote.entity.*
+import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import org.slf4j.LoggerFactory
 import javax.inject.Inject
 import io.reactivex.functions.BiFunction
+import io.reactivex.schedulers.Schedulers
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 
 /**
@@ -58,7 +63,7 @@ class SearchViewModel @Inject constructor(application: Application,
 
     val editorAction     = ObservableField<(String?) -> Boolean>()   // editor 에서 done 버튼 선택 시
     val scrollListener   = ObservableField<ScrollChangeListener>()
-    val gridCount        = ObservableInt(2)
+//    val gridCount        = ObservableInt(2)
 
     val visibleProgress  = ObservableInt(View.GONE)
     val visibleTopScroll = ObservableInt(View.GONE)
@@ -189,6 +194,7 @@ class SearchViewModel @Inject constructor(application: Application,
                                     }
                                 }
 
+                                mIsImageApiEnd     = image.meta?.is_end ?: false    // 빠진 부분 추가
                                 totalSearchedCount = image.meta?.total_count ?: 0
                             }
                         } else {
@@ -227,7 +233,7 @@ class SearchViewModel @Inject constructor(application: Application,
 
                         // 찜에 넣어둔 경우 이를 검사해서 활성화 시켜준다.
                         mDibsList.value?.forEach { dibs ->
-                            it.find { f -> dibs.thumbnail == f.thumbnail }?.dibs?.set(R.drawable.ic_star_yellow_24dp)
+                            it.find { f -> dibs.thumbnail == f.thumbnail }?.fillStar()
                         }
 
                         it
@@ -248,13 +254,13 @@ class SearchViewModel @Inject constructor(application: Application,
                         })
 
                         // 의도한대로 되지 않음 ;; 삭제
-//                        // caching
-//                        mDp.add(Flowable.fromIterable(mCachingList)
-//                            .subscribeOn(Schedulers.io())
-//                            .observeOn(Schedulers.io())
-//                            .delay(300, TimeUnit.MILLISECONDS)
-//                            .map(::preloadImage)
-//                            .subscribe())
+                        // caching
+                        mDp.add(Flowable.fromIterable(mCachingList)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(Schedulers.io())
+                            .delay(300, TimeUnit.MILLISECONDS)
+                            .map(::preloadImage)
+                            .subscribe())
 
                     }, {
                         if (mLog.isDebugEnabled) {
@@ -324,18 +330,29 @@ class SearchViewModel @Inject constructor(application: Application,
         }))
     }
 
+    val glideMemCache = object: LruCache<String, Bitmap>(config.SCREEN.x * config.SCREEN.y) {
+        override fun sizeOf(key: String?, value: Bitmap?) = value?.byteCount ?: 0 / 1024
+    }
+
     private fun preloadImage(url: String) {
         // https://stackoverflow.com/questions/37964187/preload-multiple-images-with-glide
         // https://bumptech.github.io/glide/int/recyclerview.html
+        // https://bumptech.github.io/glide/doc/caching.html
+        // https://android.jlelse.eu/best-strategy-to-load-images-using-glide-image-loading-library-for-android-e2b6ba9f75b2
 
         if (mLog.isDebugEnabled) {
             mLog.debug("PRELOAD IMAGE $url")
         }
 
-        Glide.with(app)
-            .load(url)
-            .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
-            .submit()
+//        Glide.with(app)
+//            .load(url)
+////            .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.))
+//            .preload()
+
+//            .apply(RequestOptions
+//                .diskCacheStrategyOf(DiskCacheStrategy.ALL)
+//            )
+//            .submit()
     }
 
     override fun command(cmd: String, data: Any) {

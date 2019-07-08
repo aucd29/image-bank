@@ -13,6 +13,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import brigitte.GlideApp
 import brigitte.R
 import brigitte.dpToPx
+import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import org.slf4j.LoggerFactory
 import java.io.File
@@ -57,13 +58,13 @@ object GlideBindingAdapter {
     }
 
     @JvmStatic
-    @BindingAdapter("bindImage", "bindImageWidth", "bindImageHeight", requireAll = false)
-    fun glideImage(view: ImageView, path: String, x: Int?, y: Int?) {
+    @BindingAdapter("bindImage", "bindImageThumbnail", "bindImageWidth", "bindImageHeight", requireAll = false)
+    fun glideImage(view: ImageView, path: String, thumbnail: String?, x: Int?, y: Int?) {
         if (mLog.isDebugEnabled) {
-            mLog.debug("BIND IMAGE : $path")
+            mLog.debug("BIND IMAGE : $path\nTHUMBNAIL : $thumbnail")
         }
 
-        view.glide(path, x, y)
+        view.glide(path, thumbnail, x, y)
     }
 }
 
@@ -86,7 +87,7 @@ inline fun ImageView.fitxy() {
 }
 
 @SuppressLint("CheckResult")
-inline fun ImageView.glide(path: String, x: Int?, y: Int?) {
+inline fun ImageView.glide(path: String, thumbnail: String?, x: Int?, y: Int?) {
     fitxy()
 
     val progress = CircularProgressDrawable(context)
@@ -107,6 +108,8 @@ inline fun ImageView.glide(path: String, x: Int?, y: Int?) {
             .error(R.drawable.ic_error_outline_black_24dp)
             .transition(DrawableTransitionOptions.withCrossFade())
 
+        thumbnail?.let { request.thumbnail(Glide.with(context).load(it)) }
+
         if (x != null && y != null && x > 0 && y > 0) {
             request.override(x, y)
         }
@@ -121,8 +124,12 @@ inline fun ImageView.glide(path: String, x: Int?, y: Int?) {
         glide.asBitmap().load(Uri.fromFile(fp))
             .into(this)
     } else {
-        glide.load(fp)
+        val request = glide.load(fp)
             .transition(DrawableTransitionOptions.withCrossFade())
-            .into(this)
+
+        // 로컬 파일을 이럴 필요는 없나?
+//        thumbnail?.let { request.thumbnail(Glide.with(context).load(it)) }
+
+        request.into(this)
     }
 }
