@@ -55,7 +55,7 @@ class DetailViewModel @Inject constructor(application: Application
         if (amount > 0) {
             """<b><font color="#087BCD">${amount.numberFormat()}$mMoneyUnit</font></b>"""
         } else {
-            """<b><font color"#000000">${amount.numberFormat()}$mMoneyUnit</font></b>"""
+            """<b><font color="#000000">${amount.numberFormat()}$mMoneyUnit</font></b>"""
         }.html()
 
     fun convertBalance(balance: Int) =

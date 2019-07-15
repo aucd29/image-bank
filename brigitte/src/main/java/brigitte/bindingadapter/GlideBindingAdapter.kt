@@ -14,6 +14,8 @@ import brigitte.GlideApp
 import brigitte.R
 import brigitte.dpToPx
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import org.slf4j.LoggerFactory
 import java.io.File
@@ -58,13 +60,14 @@ object GlideBindingAdapter {
     }
 
     @JvmStatic
-    @BindingAdapter("bindImage", "bindImageThumbnail", "bindImageWidth", "bindImageHeight", requireAll = false)
-    fun glideImage(view: ImageView, path: String, thumbnail: String?, x: Int?, y: Int?) {
+    @BindingAdapter("bindImage", "bindImageThumbnail", "bindImageWidth", "bindImageHeight",
+        "bindRoundedCorners", requireAll = false)
+    fun glideImage(view: ImageView, path: String, thumbnail: String?, x: Int?, y: Int?, roundedCorners: Int?) {
         if (mLog.isDebugEnabled) {
             mLog.debug("BIND IMAGE : $path\nTHUMBNAIL : $thumbnail")
         }
 
-        view.glide(path, thumbnail, x, y)
+        view.glide(path, thumbnail, x, y, roundedCorners)
     }
 }
 
@@ -87,7 +90,7 @@ inline fun ImageView.fitxy() {
 }
 
 @SuppressLint("CheckResult")
-inline fun ImageView.glide(path: String, thumbnail: String?, x: Int?, y: Int?) {
+inline fun ImageView.glide(path: String, thumbnail: String?, x: Int?, y: Int?, roundedCorners: Int?) {
     fitxy()
 
     val progress = CircularProgressDrawable(context)
@@ -109,6 +112,9 @@ inline fun ImageView.glide(path: String, thumbnail: String?, x: Int?, y: Int?) {
             .transition(DrawableTransitionOptions.withCrossFade())
 
         thumbnail?.let { request.thumbnail(Glide.with(context).load(it)) }
+
+        // https://github.com/wasabeef/glide-transformations
+//        roundedCorners?.let { request.transform(CenterCrop(), RoundedCorners(it))}
 
         if (x != null && y != null && x > 0 && y > 0) {
             request.override(x, y)

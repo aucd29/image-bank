@@ -2,8 +2,6 @@ package com.example.imagebank.ui.main.search
 
 import android.annotation.SuppressLint
 import android.app.Application
-import android.graphics.Bitmap
-import android.util.LruCache
 import android.view.View
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
@@ -12,13 +10,10 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import brigitte.*
 import brigitte.bindingadapter.ToLargeAlphaAnimParams
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
 import com.example.imagebank.R
 import com.example.imagebank.common.Config
 import com.example.imagebank.model.remote.KakaoRestSearchService
 import com.example.imagebank.model.remote.entity.*
-import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -27,13 +22,60 @@ import javax.inject.Inject
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import java.util.*
-import java.util.concurrent.TimeUnit
+
 
 
 /**
  * Created by <a href="mailto:aucd29@hanwha.com">Burke Choi</a> on 2019-06-29 <p/>
+ *
+ * 복기
+ * - 일단 질문에서 의도하고자 하는 의미를 파악 못 한게 여럿 있는 듯
+ * - 왜 daum 을 clone 했냐는 질문을 받음 -> 네이버는 ui 바뀌고 어려워서 그런거라고 생각하면 되는 것이냐고 혼잣말 한분이 있는데
+ *   물론 의도하지 않았겠지만 이분 남에게 상처주는 타입인듯 =_ =ㅋ 제일 질문도 많이 하는걸 보면 PL 인듯한 ?
+ *
+ * - 자료구조... OTL...
+ *  > hash code ??? 질문의 의도 파악 안됨
+ *  > 질문자분은 gdg 에서 뵌듯한 느낌? 성격좋아보임 일단 다이아임!!
+ *
+ * - test 에서 AndroidViewModel 을 이용 관련해서 질문을 받았는데 mock 을 질문하고 싶어서 그런건지?, 개인적으로 android 에서 pure 한 코드 이외는
+ *   androidTest 로 동작 시키는게 나을듯 싶은데 +_+? 내가 생각하는것과 먼가 다른게 있는걸까?
+ *   > 질문자분는 전형적인 학자 스타일로 보임 조용히 핵심을 찌르는 스타일
+ *
+ * - Rx 는 책을 사서 한번 보긴해야될듯 주먹 구구식으로 한듯 (일단 구매)
+ *
+ * - activity lifecycle 중 onStart 사용처? -> 개인적으로 사용하지 않았음 -> https://developer.android.com/guide/components/activities/activity-lifecycle
+ * - save Instance State 관련 ? -> 개인적으로는 shared preference 를 이용한다고 함 -> http://egloos.zum.com/skyswim42/v/3925726
+ *
+ * - camera api 1 을 써봄 camerax 나온걸 이야기 함
+ *  > 질문자 분이 "잘생김" + 차분함
+ *
+ * - rsa 관련 간단한 설명을 함,
+ *  > 인증서 관련해서 알고 있는지 문의가 왔으나 해보지 않음을 이야기 함 - https://opentutorials.org/course/228/4894
+ *  > https 구조에 관련하여 질문 받음 - https://opentutorials.org/course/228/4894
+ *  > 설명을 보는데 회사에서 사용하는 암호화 방식과 동일 함 대칭키 공개키 조합
+ *
+ * - http cache control 관련 질문 받음
+ *  > 개인적으로 프로토콜 스팩을 중요시 생각 한다고 했는데 막상 질문 받으니 하.나.도. 기억 안남
+ *    https://developer.mozilla.org/ko/docs/Web/HTTP/Headers/Cache-Control
+ *
+ * - atomic 변수들에대한 질문 받음 -> sync 관련해서 사용은 해봤다고는 했는데 어디에 사용했는지는 기억안난다고 이야기 함... 나중에 생각해보니 single live event 도 atomic boolean !!
+ * - 책 & 인터넷 중 어디에서 자료를 참고하냐라는 질문을 받음 -> 주로 인터넷 참고하고 최신기술을 찾아보기 위해서는 인터넷이 먼저라고 이야기 함
+ * - 소스나 문서 쓰는걸로 보면 잘 적는데 자기 소개는 왜케 성의 없게 적었냐고 들음 -> 팀장님이였고 서글서글한 느낌? 이야길 많이 안하셔서 잘은 모름
+ *  > 자기 소개 같은거 적는게 좀 어려워한다고 이야기 함.. 뭐랄까 내가 하고 싶다고해서 되는것도 아니니.. 흠.. 너무 현실적인건가?
+ *
+ * - 근데 왜 2차에서 OTL.... 뭐가 심기를 건드린걸까?
+ *  > 회사 그만둔 이유 각각 이야기
+ *  > 그 다음 부터는 CTO 분이 질문에 대한 답변으로 계속 꼬투리 잡는 식으로 질문을 이어 나감
+ *  > 하이브리드+네이티브 방식 플랫폼을 만들었다 -> 왜 네이티브로 그냥하면 되는데 그리했나? -> 초기에는 하이브리드만 있었는데 반응성이 느려서 네이티브 추가함을 이야기함
+ *  > 주로 플랫폼을 작업해서 native ui 능력이 떨어져 보인다 -> 저도 그리 생각해서 개인 프로젝트를 좀 했다 -> 뭐했냐? -> daum clone -> 앱 시연 ->
+ *    살짝 당황하시며 -> 아래 웹뷰죠 -> 네
+ *  > 다른 한분이 다음 개발자도 많은데 왜 그걸 만들었냐 -> CTO 분이 그게 아니라 .. 대신 설명하심 -> 여기서 내가 살짝 당황
+ *  > 중앙에 젤로 높으신분으로 보이는 분이 커트하시고 -> 현재 연봉은? -> 그대로 알려드리니 -> 엥? 하시면서 그옆에 분이 원천이야기 하라고 ->
+ *  > 원천을 생각해보지 않아서 근사치 이야기 드리고 끝
+ *  > 나오는데 출구에 버튼 누르는걸 못보고 헤메다가 나옴
+ *
+ * - 좋은 인력들과 논의하면서 개발해보고 싶었는데, 혼자하는게 힘든데 말이지 이젠 꿈도 희망도 =_ = 저 멀리 ~ 어쩌니?
  */
-
 class SearchViewModel @Inject constructor(application: Application,
     private val api: KakaoRestSearchService,
     private val config: Config
@@ -68,6 +110,8 @@ class SearchViewModel @Inject constructor(application: Application,
     val visibleProgress  = ObservableInt(View.GONE)
     val visibleTopScroll = ObservableInt(View.GONE)
 
+    // FIXME live data 도 UI 에 바로 반영 될수 있도록 기능 추가 되었다고 함 (좋은 정보를 알게 됨!)
+    // FIXME https://developer.android.com/jetpack/androidx/releases/lifecycle
     val mDibsList    = MutableLiveData<ArrayList<KakaoSearchResult>>()
     val mCachingList = arrayListOf<String>()
     var mPage        = 1
@@ -99,7 +143,7 @@ class SearchViewModel @Inject constructor(application: Application,
 
         // nested scroll 의 scroll 정보를 전달 받음
         scrollListener.set(ScrollChangeListener { x, y, isBottom ->
-            if (mLog.isTraceEnabled()) {
+            if (mLog.isTraceEnabled) {
                 mLog.trace("SCROLL Y : $y")
             }
 
@@ -158,7 +202,7 @@ class SearchViewModel @Inject constructor(application: Application,
 
             var totalSearchedCount = 0
 
-            ioThread {
+//            ioThread {
                 // 검색은 키워드 하나에 이미지 검색과 동영상 검색을 동시에 사용,
                 mDp.add(Observable.zip(api.image(it, mPage.toString(), sortOption()),
                     api.vclip(it, mPage.toString(), sortOption()),
@@ -217,6 +261,8 @@ class SearchViewModel @Inject constructor(application: Application,
 
                         result
                     })
+                    .subscribeOn(Schedulers.io())       // FIXME UI 가 버벅여서 ioThread 로 우회했었는데 먼가 빌드가 제대로 되지 않았던 상황이였었는지, 인터뷰때 이렇게 해도 잘 동작했다.
+                    .observeOn(Schedulers.io())         // FIXME map 에도 io 적용
                     .map {
                         // 두 검색 결과를 datetime 필드를 이용해 최신순으로 나열하여 출력합니다.
                         it.sortWith(Comparator { o1, o2 ->
@@ -254,13 +300,15 @@ class SearchViewModel @Inject constructor(application: Application,
                         })
 
                         // 의도한대로 되지 않음 ;; 삭제
-                        // caching
-                        mDp.add(Flowable.fromIterable(mCachingList)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(Schedulers.io())
-                            .delay(300, TimeUnit.MILLISECONDS)
-                            .map(::preloadImage)
-                            .subscribe())
+//                        mDp.add(Flowable.fromIterable(mCachingList)
+//                            .subscribeOn(Schedulers.newThread())
+//                            .map(::preloadImage)
+//                            .delay(1, TimeUnit.SECONDS)
+//                            .subscribe({
+//                                if (mLog.isDebugEnabled) {
+//                                    mLog.debug("CACHED : $it")
+//                                }
+//                            }))
 
                     }, {
                         if (mLog.isDebugEnabled) {
@@ -272,7 +320,7 @@ class SearchViewModel @Inject constructor(application: Application,
                         it.message?.let(::snackbar)
                     }))
             }
-        } ?: snackbar(R.string.search_pls_insert_keyword)
+//        } ?: snackbar(R.string.search_pls_insert_keyword)
     }
 
     fun toggleSort() {
@@ -330,29 +378,19 @@ class SearchViewModel @Inject constructor(application: Application,
         }))
     }
 
-    val glideMemCache = object: LruCache<String, Bitmap>(config.SCREEN.x * config.SCREEN.y) {
-        override fun sizeOf(key: String?, value: Bitmap?) = value?.byteCount ?: 0 / 1024
-    }
-
-    private fun preloadImage(url: String) {
-        // https://stackoverflow.com/questions/37964187/preload-multiple-images-with-glide
-        // https://bumptech.github.io/glide/int/recyclerview.html
-        // https://bumptech.github.io/glide/doc/caching.html
-        // https://android.jlelse.eu/best-strategy-to-load-images-using-glide-image-loading-library-for-android-e2b6ba9f75b2
+    private fun preloadImage(url: String): String {
+        //http://bumptech.github.io/glide/doc/getting-started.html#background-threads
+        //https://stackoverflow.com/questions/37964187/preload-multiple-images-with-glide
 
         if (mLog.isDebugEnabled) {
             mLog.debug("PRELOAD IMAGE $url")
         }
 
-//        Glide.with(app)
-//            .load(url)
-////            .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.))
-//            .preload()
+        Glide.with(app)
+            .load(url)
+            .preload()
 
-//            .apply(RequestOptions
-//                .diskCacheStrategyOf(DiskCacheStrategy.ALL)
-//            )
-//            .submit()
+        return url
     }
 
     override fun command(cmd: String, data: Any) {
