@@ -61,6 +61,7 @@ import java.util.*
  * - http cache control 관련 질문 받음
  *  > 개인적으로 프로토콜 스팩을 중요시 생각 했지만, 막상 질문 받으니 하.나.도. 기억 안남
  *  (퍼센트 인코딩에서 GET 과 POST 가 다른 딱 하나의 단어같은거 물어봤으면 대답할수 있었을터인데!!!)
+ *  (chucked 와 일반 방식의 차이점이라던지 OTL..)
  *    https://developer.mozilla.org/ko/docs/Web/HTTP/Headers/Cache-Control
  *
  * - atomic 변수들에대한 질문 받음 -> sync 관련해서 사용은 해봤다고는 했는데 어디에 사용했는지는 기억안난다고 이야기 함... 나중에 생각해보니 single live event 도 atomic boolean !!
