@@ -1,6 +1,5 @@
 package com.example.imagebank.model.remote.entity
 
-import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
 import brigitte.IRecyclerDiff

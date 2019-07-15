@@ -50,10 +50,15 @@ interface IRecyclerPosition {
     var position: Int
 }
 
+/** 아이템 확장 관련 인터페이스 */
 interface IRecyclerExpandable<T> {
     var toggle: ObservableBoolean
     var childList: List<T>
 
+    /**
+     * @param list 확장할 아이템 정보
+     * @param adapter 확장 대상의 adapter
+     */
     fun toggle(list: List<T>, adapter: RecyclerView.Adapter<*>? = null) {
         var i = 0
         if (list is ArrayList) {
@@ -265,12 +270,20 @@ class RecyclerAdapter<T: IRecyclerDiff>(
 
         val oldItems = items
         val newItems = if (oldItems.hashCode() == list.hashCode()) { ArrayList(list) } else { list }
+
+        // FIXME 이곳의 구현 방식이 일반적이지 않다라고 들었고 관련 내용을 다시 찾아봄
+        //
+        // https://blog.kmshack.kr/RecyclerView-DiffUtil%EB%A1%9C-%EC%84%B1%EB%8A%A5-%ED%96%A5%EC%83%81%ED%95%98%EA%B8%B0/
         val result = DiffUtil.calculateDiff(object: DiffUtil.Callback() {
+            // 이전 목록 개수 반환
             override fun getOldListSize() = oldItems.size
+            // 새로운 목록 개수 반환
             override fun getNewListSize() = newItems.size
+            // 두 객체가 같은 항목인지 여부 결정 (레퍼런스 비교가 아님) 이번에 얻은 지식 중 === 이 있음 레퍼런스 비교시 === 으로 비교할 수 있음
             override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =
                 oldItems[oldItemPosition] == newItems[newItemPosition]
 
+            // 두 항목의 데이터가 같은지 비교 (이곳에서 데이터 비교를 위해 IRecycerDiff 인터페이스 이용)
             override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
                 val oldItem = oldItems[oldItemPosition]
                 val newItem = newItems[newItemPosition]
@@ -279,6 +292,7 @@ class RecyclerAdapter<T: IRecyclerDiff>(
             }
 
             // https://medium.com/mindorks/diffutils-improving-performance-of-recyclerview-102b254a9e4a
+            // areItemsTheSame 이 true 인데, areContentsTheSame 이 false 이면 변경 내용에 대한 페이로드를 가져옴
 //            override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
 //                return super.getChangePayload(oldItemPosition, newItemPosition)
 //            }
@@ -380,7 +394,7 @@ open class RecyclerViewModel<T: IRecyclerDiff>(app: Application)
         itemTouchHelper.set(ItemTouchHelper(callback))
 
         bindingCallback?.let {
-            adapter.get()?.viewHolderCallback = { holder, pos ->
+            adapter.get()?.viewHolderCallback = { holder, _ ->
                 it.invoke(holder.mBinding)?.setOnTouchListener { v, ev ->
                     if (ev.action == MotionEvent.ACTION_DOWN) {
                         itemTouchHelper.get()?.startDrag(holder)
