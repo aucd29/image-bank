@@ -42,12 +42,20 @@ import java.util.*
  *   androidTest 로 동작 시키는게 나을듯 싶은데 +_+? 내가 생각하는것과 먼가 다른게 있는걸까?
  *   > 질문자분는 전형적인 학자 스타일로 보임 조용히 핵심을 찌르는 스타일
  *
+ * - diff util 의 경우 일반적으로 구현하는것과 다른거 같다고 해서 일단 찾아봤는데 diff util 이 알려지기 전 초기에 == 으로 비교해서 이를 참조
+ * 하였지만 현재는 id 를 생성해서 이를 비교하는 형태가 주를 이루는거 같아서 리펙 함
+ *
  * - single live event 를 쓰게 된 이유? 같은걸 질문 받았는데 딱히 이유가 안 떠올라 해당 클래스의 주석을 보여드렸다.. 마치 장금이가 홍시맛이 나서 홍시라고 이야기 한것 같은 심정으로
  *
  * - Rx 는 책을 사서 한번 보긴해야될듯 주먹 구구식으로 한듯 (일단 구매)
  *
  * - activity lifecycle 중 onStart 사용처? -> 개인적으로 사용하지 않았음 -> https://developer.android.com/guide/components/activities/activity-lifecycle
  * - save Instance State 관련 ? -> 개인적으로는 shared preference 를 이용한다고 함 -> http://egloos.zum.com/skyswim42/v/3925726
+ *
+ * - imageview 에 contentDescription 써봤는지 -> 아니요
+ *
+ * - recyclerview model 에서 adapter 에 layoutid 설정하는게 string 인 이유에 대해 물었고 invoke 하기 위함이였다고 이야기 했는데
+ *   banner view model 을 일반화 하면서 보니 ViewDataBinding 으로 받되 setModel, setItem 을 그냥 호출할 수도 있어 코드 리펙 함
  *
  * - camera api 1 을 써봄 camerax 나온걸 이야기 했다. camera2 를 했다고 하면 이외의 질문이 있었을까? 2 의 경우 몇몇 메소드가 min version 이 지나치게
  *   높아 꺼려지긴했지만 flashlight 의 경우 camera1 / 2 를  분기 처리 하긴 했다. 그걸로 camera2 를 써보았다라고 하긴 뭐해서...
@@ -155,7 +163,7 @@ class SearchViewModel @Inject constructor(application: Application,
     init {
         mDibsList.value = arrayListOf()
         mThreshold      = 6
-        initAdapter("search_item")
+        initAdapter(R.layout.search_item)
         adapter.get()?.isScrollToPosition = false
 
         editorAction.set {

@@ -26,12 +26,12 @@ class NaviGridViewModel @Inject constructor(application: Application
     init {
         val list = arrayListOf<NavigationGridItem>()
 
-        list.add(NavigationGridItem(string(R.string.nav_grid_service_center), R.drawable.ic_mood_black_24dp))
-        list.add(NavigationGridItem(string(R.string.nav_grid_security), R.drawable.ic_lock_outline_black_24dp))
-        list.add(NavigationGridItem(string(R.string.nav_grid_notice), R.drawable.ic_notifications_none_black_24dp))
-        list.add(NavigationGridItem(string(R.string.nav_grid_setting), R.drawable.ic_settings_black_24dp))
+        list.add(NavigationGridItem(1, string(R.string.nav_grid_service_center), R.drawable.ic_mood_black_24dp))
+        list.add(NavigationGridItem(2, string(R.string.nav_grid_security), R.drawable.ic_lock_outline_black_24dp))
+        list.add(NavigationGridItem(3, string(R.string.nav_grid_notice), R.drawable.ic_notifications_none_black_24dp))
+        list.add(NavigationGridItem(4, string(R.string.nav_grid_setting), R.drawable.ic_settings_black_24dp))
 
-        initAdapter("navigation_grid_item")
+        initAdapter(R.layout.navigation_grid_item)
         items.set(list)
     }
 }

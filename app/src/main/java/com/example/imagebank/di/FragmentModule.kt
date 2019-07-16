@@ -3,6 +3,7 @@ package com.example.imagebank.di
 import com.example.imagebank.ui.detail.DetailFragment
 import com.example.imagebank.ui.main.dibs.DibsFragment
 import com.example.imagebank.ui.main.search.SearchFragment
+import com.example.imagebank.ui.main.some.SomeFragment
 import dagger.Module
 
 /**
@@ -15,6 +16,7 @@ import dagger.Module
     //
     SearchFragment.Module::class,
     DibsFragment.Module::class,
+    SomeFragment.Module::class,
 
     // DETAIL
     DetailFragment.Module::class

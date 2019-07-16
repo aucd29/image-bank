@@ -131,7 +131,11 @@ dependencies {
     // page indicator
     implementation 'com.romandanylyk:pageindicatorview:1.0.3'
 
-     // firebase
+    // chip layout
+    implementation 'com.beloo.widget:ChipsLayoutManager:0.3.7@aar'
+
+
+    // firebase
     implementation 'com.google.firebase:firebase-core:17.0.0'
     implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
 

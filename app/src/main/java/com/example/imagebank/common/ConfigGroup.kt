@@ -43,4 +43,9 @@ class PreloadConfig @Inject constructor(
         .readBytes())
         .map { it.jsonParse<List<Banner>>() }
         .blockingGet()
+
+    val someList: List<Banner> = Single.just(mAssetManager.open("some_info.json")
+        .readBytes())
+        .map { it.jsonParse<List<Banner>>() }
+        .blockingGet()
 }

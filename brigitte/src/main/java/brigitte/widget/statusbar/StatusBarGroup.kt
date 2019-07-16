@@ -1,13 +1,14 @@
 package brigitte.widget.statusbar
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.MutableLiveData
+import javax.inject.Inject
 
 /**
  * Created by <a href="mailto:aucd29@hanwha.com">Burke Choi</a> on 2019-07-15 <p/>
  */
 
-class StatusBarViewModel : ViewModel() {
-    val color: StatusBarColor? = null
+open class StatusBarViewModel @Inject constructor(app: Application) : AndroidViewModel(app) {
+    val statusColor = MutableLiveData<Int>()
 }
-
-data class StatusBarColor(val color: Int, val darkColor: Int)

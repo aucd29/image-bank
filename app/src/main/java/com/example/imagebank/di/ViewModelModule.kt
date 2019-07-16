@@ -3,6 +3,7 @@ package com.example.imagebank.di
 import androidx.lifecycle.ViewModel
 import brigitte.di.dagger.module.ViewModelKey
 import com.example.imagebank.MainViewModel
+import com.example.imagebank.MainColorViewModel
 import com.example.imagebank.ui.detail.DetailViewModel
 import com.example.imagebank.ui.main.SplashViewModel
 import com.example.imagebank.ui.main.dibs.DibsViewModel
@@ -10,6 +11,9 @@ import com.example.imagebank.ui.main.dibs.DibsBannerViewModel
 import com.example.imagebank.ui.main.navigation.NaviGridViewModel
 import com.example.imagebank.ui.main.navigation.NaviMenuViewModel
 import com.example.imagebank.ui.main.search.SearchViewModel
+import com.example.imagebank.ui.main.some.SomeBannerViewModel
+import com.example.imagebank.ui.main.some.SomeChipViewModel
+import com.example.imagebank.ui.main.some.SomeViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -32,13 +36,13 @@ abstract class ViewModelModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(MainViewModel::class)
-    abstract fun bindMainViewModel(vm: MainViewModel): ViewModel
+    @ViewModelKey(MainColorViewModel::class)
+    abstract fun bindStatusAndBannerModel(vm: MainColorViewModel): ViewModel
 
     @Binds
     @IntoMap
-    @ViewModelKey(DibsViewModel::class)
-    abstract fun bindDibsViewModel(vm: DibsViewModel): ViewModel
+    @ViewModelKey(MainViewModel::class)
+    abstract fun bindMainViewModel(vm: MainViewModel): ViewModel
 
     @Binds
     @IntoMap
@@ -55,10 +59,43 @@ abstract class ViewModelModule {
     @ViewModelKey(NaviMenuViewModel::class)
     abstract fun bindNaviMenuViewModel(vm: NaviMenuViewModel): ViewModel
 
+    ////////////////////////////////////////////////////////////////////////////////////
+    //
+    // DIBS
+    //
+    ////////////////////////////////////////////////////////////////////////////////////
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(DibsViewModel::class)
+    abstract fun bindDibsViewModel(vm: DibsViewModel): ViewModel
+
     @Binds
     @IntoMap
     @ViewModelKey(DibsBannerViewModel::class)
     abstract fun bindBannerViewModel(vm: DibsBannerViewModel): ViewModel
+
+    ////////////////////////////////////////////////////////////////////////////////////
+    //
+    // SOME
+    //
+    ////////////////////////////////////////////////////////////////////////////////////
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SomeViewModel::class)
+    abstract fun bindSomeViewModel(vm: SomeViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SomeBannerViewModel::class)
+    abstract fun bindSomeBannerViewModel(vm: SomeBannerViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SomeChipViewModel::class)
+    abstract fun bindSomeChipViewModel(vm: SomeChipViewModel): ViewModel
+
 
     ////////////////////////////////////////////////////////////////////////////////////
     //

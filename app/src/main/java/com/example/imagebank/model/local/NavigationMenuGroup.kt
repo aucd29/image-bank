@@ -8,22 +8,34 @@ import brigitte.IRecyclerItem
  */
 
 data class NavigationGridItem(
+    val id: Int,
     val name: String,
     val resid: Int
 ) : IRecyclerDiff {
-    override fun compare(item: IRecyclerDiff): Boolean {
+    override fun itemSame(item: IRecyclerDiff): Boolean {
+        val newItem = item as NavigationGridItem
+        return id == newItem.id
+    }
+
+    override fun contentsSame(item: IRecyclerDiff): Boolean {
         val newItem = item as NavigationGridItem
         return name == newItem.name && resid == newItem.resid
     }
 }
 
 data class NavigationItem(
+    val id: Int,
     val name: String,
     val isNew: Boolean = false
 ): IRecyclerDiff, IRecyclerItem {
     override var type = TYPE_DEFAULT
 
-    override fun compare(item: IRecyclerDiff): Boolean {
+    override fun itemSame(item: IRecyclerDiff): Boolean {
+        val newItem = item as NavigationItem
+        return id == newItem.id
+    }
+
+    override fun contentsSame(item: IRecyclerDiff): Boolean {
         val newItem = item as NavigationItem
         return name == newItem.name
     }

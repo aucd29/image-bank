@@ -1,20 +1,16 @@
 package brigitte
 
 import android.app.Application
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.StringRes
-import androidx.asynclayoutinflater.view.AsyncLayoutInflater
+import androidx.databinding.DataBindingUtil
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.databinding.ViewDataBinding
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.*
-import brigitte.arch.SingleLiveEvent
 import org.slf4j.LoggerFactory
 import java.util.*
 import kotlin.collections.ArrayList
@@ -37,7 +33,8 @@ import kotlin.collections.ArrayList
 
 /** item 비교 인터페이스 */
 interface IRecyclerDiff {
-    fun compare(item: IRecyclerDiff): Boolean
+    fun itemSame(item: IRecyclerDiff): Boolean
+    fun contentsSame(item: IRecyclerDiff): Boolean
 }
 
 /** Item 타입 비교 인터페이스 */
@@ -106,7 +103,7 @@ class RecyclerHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
  * 한다.
  */
 class RecyclerAdapter<T: IRecyclerDiff>(
-    private val mLayouts: Array<String>
+    private val mLayouts: Array<Int>
 ) : RecyclerView.Adapter<RecyclerHolder>() {
     companion object {
         private val mLog = LoggerFactory.getLogger(RecyclerAdapter::class.java)
@@ -117,29 +114,29 @@ class RecyclerAdapter<T: IRecyclerDiff>(
         private const val CLASS_DATA_BINDING     = ".databinding."
         private const val CLASS_BINDING          = "Binding"
 
-        fun bindingClassName(context: Context, layoutId: String): String {
-            var classPath = context.packageName
-            classPath += CLASS_DATA_BINDING
-            classPath += Character.toUpperCase(layoutId[0])
-
-            var i = 1
-            while (i < layoutId.length) {
-                var c = layoutId[i]
-
-                if (c == '_') {
-                    c = layoutId[++i]
-                    classPath += Character.toUpperCase(c)
-                } else {
-                    classPath += c
-                }
-
-                ++i
-            }
-
-            classPath += CLASS_BINDING
-
-            return classPath
-        }
+//        fun bindingClassName(context: Context, layoutId: String): String {
+//            var classPath = context.packageName
+//            classPath += CLASS_DATA_BINDING
+//            classPath += Character.toUpperCase(layoutId[0])
+//
+//            var i = 1
+//            while (i < layoutId.length) {
+//                var c = layoutId[i]
+//
+//                if (c == '_') {
+//                    c = layoutId[++i]
+//                    classPath += Character.toUpperCase(c)
+//                } else {
+//                    classPath += c
+//                }
+//
+//                ++i
+//            }
+//
+//            classPath += CLASS_BINDING
+//
+//            return classPath
+//        }
 
         fun invokeMethod(binding: ViewDataBinding, methodName: String, argType: Class<*>, argValue: Any, log: Boolean) {
             try {
@@ -160,35 +157,19 @@ class RecyclerAdapter<T: IRecyclerDiff>(
     var isScrollToPosition = true
     var isNotifySetChanged = false
 
-    constructor(layoutId: String) : this(arrayOf(layoutId))
+    constructor(layoutId: Int) : this(arrayOf(layoutId))
 
     /**
      * 전달 받은 layout ids 와 IRecyclerItem 을 통해 화면에 출력해야할 layout 를 찾고
      * 해당 layout 의 RecyclerHolder 를 생성 한다.
      */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerHolder {
-        val context = parent.context
-        val layoutId = context.resources.getIdentifier(mLayouts[viewType], "layout", context.packageName)
+        val layoutId = mLayouts[viewType]
+        val inflater = LayoutInflater.from(parent.context)
+        val binding = DataBindingUtil.inflate<ViewDataBinding>(inflater,
+            layoutId, parent, false)
 
-//        AsyncLayoutInflater(context).inflate(layoutId, parent) { view, resid, p ->
-//        }
-
-        val view = LayoutInflater.from(context).inflate(layoutId, parent, false)
-
-        if (mLog.isTraceEnabled) {
-            mLog.trace("LAYOUT ID : ${mLayouts[viewType]} ($layoutId)")
-        }
-
-        val classPath = bindingClassName(context, mLayouts[viewType])
-
-        if (mLog.isTraceEnabled) {
-            mLog.trace("BINDING CLASS $classPath")
-        }
-
-        val bindingClass = Class.forName(classPath)
-        val method = bindingClass.getDeclaredMethod(METHOD_NAME_BIND, *arrayOf(View::class.java))
-        val binding = method.invoke(null, *arrayOf(view)) as ViewDataBinding
-        val vh = RecyclerHolder(view)
+        val vh = RecyclerHolder(binding.root)
         vh.mBinding = binding
 
         return vh
@@ -201,13 +182,13 @@ class RecyclerAdapter<T: IRecyclerDiff>(
     override fun onBindViewHolder(holder: RecyclerHolder, position: Int) {
         viewModel.let { invokeMethod(holder.mBinding, METHOD_NAME_VIEW_MODEL, it.javaClass, it, false) }
 
-        items.let { it[position].let { item ->
+        items[position].let { item ->
             when (item) {
                 is IRecyclerPosition -> item.position = position
             }
 
             invokeMethod(holder.mBinding, METHOD_NAME_ITEM, item.javaClass, item, true)
-        } }
+        }
 
         holder.mBinding.executePendingBindings()
         viewHolderCallback?.invoke(holder, position)
@@ -279,16 +260,22 @@ class RecyclerAdapter<T: IRecyclerDiff>(
             override fun getOldListSize() = oldItems.size
             // 새로운 목록 개수 반환
             override fun getNewListSize() = newItems.size
+
             // 두 객체가 같은 항목인지 여부 결정 (레퍼런스 비교가 아님) 이번에 얻은 지식 중 === 이 있음 레퍼런스 비교시 === 으로 비교할 수 있음
+            // 인터넷상으로는 객체 자체를 비교하는것과 객체 내부에 id 를 따로 생성해서 비교하는것 이렇게 크게 2가지 형태로
+            // 구현되고 있으며 diff util 이 알려지기전 일부 샘플에 객체를 비교하던것에서
+            // 현재는 id 를 비교하고 있는게 많다. 그렇다면 IRecyclerDIff 에 id 를 추가해서 해당 값을
+            // 비교 하는 형태로 진행할 수도 있다.
+            // https://qiita.com/kubode/items/92c1190a6421ba055cc0
             override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =
-                oldItems[oldItemPosition] == newItems[newItemPosition]
+                oldItems[oldItemPosition].itemSame(newItems[newItemPosition])
 
             // 두 항목의 데이터가 같은지 비교 (이곳에서 데이터 비교를 위해 IRecycerDiff 인터페이스 이용)
             override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
                 val oldItem = oldItems[oldItemPosition]
                 val newItem = newItems[newItemPosition]
 
-                return oldItem.compare(newItem)
+                return oldItem.contentsSame(newItem)
             }
 
             // https://medium.com/mindorks/diffutils-improving-performance-of-recyclerview-102b254a9e4a
@@ -377,7 +364,7 @@ open class RecyclerViewModel<T: IRecyclerDiff>(app: Application)
      *
      * @param ids 문자열 형태의 layout 이름
      */
-    fun initAdapter(vararg ids: String) {
+    fun initAdapter(vararg ids: Int) {
         val adapter = RecyclerAdapter<T>(ids.toList().toTypedArray())
         adapter.viewModel = this
 

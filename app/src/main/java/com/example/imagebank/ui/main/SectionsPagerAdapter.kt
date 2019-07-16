@@ -8,11 +8,14 @@ import brigitte.string
 import com.example.imagebank.R
 import com.example.imagebank.ui.main.dibs.DibsFragment
 import com.example.imagebank.ui.main.search.SearchFragment
+import com.example.imagebank.ui.main.some.SomeFragment
 import javax.inject.Inject
 
+// string array 가 더 나을 듯 ?
 private val TAB_TITLES = arrayOf(
     R.string.tab_search,
-    R.string.tab_dibs
+    R.string.tab_dibs,
+    R.string.tab_some
 )
 
 class SectionsPagerAdapter @Inject constructor(private val context: Context, fm: FragmentManager)
@@ -20,11 +23,13 @@ class SectionsPagerAdapter @Inject constructor(private val context: Context, fm:
 
     @Inject lateinit var mSearchFragment: SearchFragment
     @Inject lateinit var mDibsFragment: DibsFragment
+    @Inject lateinit var mSomeFragment: SomeFragment
 
     override fun getItem(position: Int): Fragment {
         return when(position) {
-            0    -> mSearchFragment // SearchFragment()
-            else -> mDibsFragment   // DibsFragment()
+            0    -> mSearchFragment
+            1    -> mDibsFragment
+            else -> mSomeFragment
         }
     }
 

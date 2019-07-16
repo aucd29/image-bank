@@ -1,52 +1,52 @@
-package com.example.imagebank.ui.main.dibs
+package com.example.imagebank.ui.main.some
 
 import brigitte.BaseDaggerFragment
 import brigitte.di.dagger.module.injectOf
 import brigitte.di.dagger.module.injectOfActivity
 import brigitte.toColor
 import com.example.imagebank.MainColorViewModel
-import com.example.imagebank.common.PreloadConfig
-import com.example.imagebank.databinding.DibsFragmentBinding
+import com.example.imagebank.databinding.SomeFragmentBinding
 import dagger.android.ContributesAndroidInjector
 import org.slf4j.LoggerFactory
 import javax.inject.Inject
-import kotlin.math.log
 
 /**
- * Created by <a href="mailto:aucd29@hanwha.com">Burke Choi</a> on 2019-06-29 <p/>
+ * Created by <a href="mailto:aucd29@hanwha.com">Burke Choi</a> on 2019-07-16 <p/>
  */
 
-class DibsFragment @Inject constructor() : BaseDaggerFragment<DibsFragmentBinding, DibsViewModel>() {
+class SomeFragment @Inject constructor(): BaseDaggerFragment<SomeFragmentBinding, SomeViewModel>() {
     companion object {
-        private val mLog = LoggerFactory.getLogger(DibsFragment::class.java)
+        private val mLog = LoggerFactory.getLogger(SomeFragment::class.java)
     }
 
-    init {
-        mViewModelScope = SCOPE_ACTIVITY
-    }
-
-    @Inject lateinit var mBannerViewModel: DibsBannerViewModel
+    @Inject lateinit var mBannerViewModel: SomeBannerViewModel
+    @Inject lateinit var mChipViewModel: SomeChipViewModel
     @Inject lateinit var mColorModel: MainColorViewModel
 
     override fun bindViewModel() {
         super.bindViewModel()
 
-        mBannerViewModel = mViewModelFactory.injectOf(this)
-        mColorModel      = mViewModelFactory.injectOfActivity(this)
+        with (mViewModelFactory) {
+            mBannerViewModel = injectOf(this@SomeFragment)
+            mChipViewModel   = injectOf(this@SomeFragment)
+            mColorModel      = injectOfActivity(this@SomeFragment)
+        }
 
-        mBinding.bannerModel = mBannerViewModel
+        with(mBinding) {
+            bannerModel = mBannerViewModel
+            chipModel   = mChipViewModel
+        }
     }
 
     override fun initViewBinding() {
-
     }
 
     override fun initViewModelEvents() {
-        mColorModel.dibsFragmentFocus = {
-            val it = mBinding.dibsViewpager.currentItem
+        mColorModel.someFragmentFocus = {
+            val it = mBinding.someBanner.currentItem
 
             if (mLog.isDebugEnabled) {
-                mLog.debug("DIBS FRAGMENT FOCUS $it")
+                mLog.debug("SOME FRAGMENT FOCUS ($it)")
             }
 
             changeStatusColor(it)
@@ -75,6 +75,6 @@ class DibsFragment @Inject constructor() : BaseDaggerFragment<DibsFragmentBindin
     @dagger.Module
     abstract class Module {
         @ContributesAndroidInjector
-        abstract fun contributeDibsFragmentInjector(): DibsFragment
+        abstract fun contributeSomeFragmentInjector(): SomeFragment
     }
 }

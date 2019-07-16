@@ -65,6 +65,10 @@ data class KakaoSearchResult(
     val title: String?,
     var type: Int = T_IMAGE
 ): IRecyclerDiff, Serializable {
+    override fun itemSame(item: IRecyclerDiff): Boolean {
+        return this === item
+    }
+
     companion object {
         val T_IMAGE = 0
         val T_VCLIP = 1
@@ -86,7 +90,7 @@ data class KakaoSearchResult(
         dibs.set(R.drawable.ic_star_yellow_24dp)
     }
 
-    override fun compare(item: IRecyclerDiff): Boolean {
+    override fun contentsSame(item: IRecyclerDiff): Boolean {
         val newItem = item as KakaoSearchResult
 
         return thumbnail == newItem.thumbnail &&

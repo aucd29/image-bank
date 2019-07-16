@@ -8,6 +8,7 @@
         <variable name="splashModel" type="com.example.imagebank.ui.main.SplashViewModel"/>
         <variable name="navGridModel" type="com.example.imagebank.ui.main.navigation.NaviGridViewModel"/>
         <variable name="navMenuModel" type="com.example.imagebank.ui.main.navigation.NaviMenuViewModel"/>
+        <variable name="colorModel" type="com.example.imagebank.MainColorViewModel"/>
         <variable name="model" type="com.example.imagebank.MainViewModel"/>
     </data>
 
@@ -37,7 +38,7 @@
                         android:layout_height="wrap_content"
                         android:layout_width="match_parent"
                         android:theme="@style/AppTheme.AppBarOverlay"
-                        android:background="@{model.bgTopViewColor}"
+                        android:background="@{colorModel.viewColor}"
                         app:elevation="0dp"
                 >
 
@@ -69,9 +70,9 @@
                                 app:layout_constraintTop_toTopOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintBottom_toBottomOf="parent"
-                                android:background="@{model.bgTopViewColor}"
-                                app:bindTabChanged="@{model.tabChangedCallback}"
-                                app:bindIndicatorColor="@{model.tabIndicatorColor}"
+                                android:background="@{colorModel.viewColor}"
+                                app:bindTabChanged="@{colorModel.tabChangedCallback}"
+                                app:bindIndicatorColor="@{colorModel.tabIndicatorColor}"
                         />
 
                         <View
@@ -91,6 +92,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                        app:bindOffscreenPageLimit="@{model.offscreenLimit}"
                 />
 
             </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -3,6 +3,7 @@ package com.example.imagebank.ui.main.dibs
 import android.app.Application
 import androidx.databinding.ObservableInt
 import brigitte.RecyclerViewModel
+import com.example.imagebank.R
 import com.example.imagebank.model.remote.entity.KakaoSearchResult
 import org.slf4j.LoggerFactory
 import javax.inject.Inject
@@ -20,7 +21,7 @@ class DibsViewModel @Inject constructor(application: Application
     val gridCount = ObservableInt(2)
 
     init {
-        initAdapter("dibs_item")
+        initAdapter(R.layout.dibs_item)
         items.set(arrayListOf())
     }
 }

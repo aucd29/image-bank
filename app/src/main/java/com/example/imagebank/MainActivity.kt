@@ -28,6 +28,7 @@ class MainActivity : BaseDaggerActivity<MainActivityBinding, MainViewModel>() {
     @Inject lateinit var mNavGridModel: NaviGridViewModel
     @Inject lateinit var mNavMenuModel: NaviMenuViewModel
     @Inject lateinit var mAdapter: SectionsPagerAdapter
+    @Inject lateinit var mColorModel: MainColorViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         exceptionCatcher { mLog.error("ERROR: $it") }
@@ -48,15 +49,17 @@ class MainActivity : BaseDaggerActivity<MainActivityBinding, MainViewModel>() {
         super.bindViewModel()
 
         mViewModelFactory.apply {
-            mSplashModel  = injectOfActivity(this@MainActivity)
-            mNavGridModel = injectOfActivity(this@MainActivity)
-            mNavMenuModel = injectOfActivity(this@MainActivity)
+            mSplashModel    = injectOfActivity(this@MainActivity)
+            mNavGridModel   = injectOfActivity(this@MainActivity)
+            mNavMenuModel   = injectOfActivity(this@MainActivity)
+            mColorModel     = injectOfActivity(this@MainActivity)
         }
 
         mBinding.apply {
             splashModel  = mSplashModel
             navGridModel = mNavGridModel
             navMenuModel = mNavMenuModel
+            colorModel   = mColorModel
         }
 
         mCommandEventModels.add(mNavGridModel)
@@ -74,17 +77,21 @@ class MainActivity : BaseDaggerActivity<MainActivityBinding, MainViewModel>() {
         mSplashModel.closeSplash()
     }
 
-    override fun initViewModelEvents() = mSplashModel.run {
-        observe(closeSplashEvent) {
-            visibleSplash.set(View.GONE)
+    override fun initViewModelEvents() {
+        observe(mColorModel.statusColor) { changeStatusBarColor(it) }
 
-            mBinding.mainContainer.removeView(mBinding.splash)
+        with(mSplashModel) {
+            observe(closeSplashEvent) {
+                visibleSplash.set(View.GONE)
+
+                mBinding.mainContainer.removeView(mBinding.splash)
+            }
         }
     }
 
     override fun onCommandEvent(cmd: String, data: Any) {
         when(cmd) {
-            MainViewModel.CMD_STATUS_BAR_COLOR -> changeStatusBarColor(data as Int)
+//            MainViewModel.CMD_STATUS_BAR_COLOR -> changeStatusBarColor(data as Int)
             MainViewModel.CMD_SHOW_NAVIGATION  -> {
                 hideKeyboard(mBinding.root)
                 mBinding.drawerLayout.openDrawer(NAVI_GRAVITY)

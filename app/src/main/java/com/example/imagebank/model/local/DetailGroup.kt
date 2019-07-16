@@ -7,13 +7,19 @@ import brigitte.IRecyclerDiff
  */
 
 data class AccountData(
+    val id: Int,
     val name: String,
     val date: String,
     val amount: Int,
     val balance: Int,
     val tag: String? = null
 ) : IRecyclerDiff {
-    override fun compare(item: IRecyclerDiff): Boolean {
+    override fun itemSame(item: IRecyclerDiff): Boolean {
+        val newItem = item as AccountData
+        return id == newItem.id
+    }
+
+    override fun contentsSame(item: IRecyclerDiff): Boolean {
         val newItem = item as AccountData
         return name == newItem.name && date == newItem.date && balance == newItem.balance
     }

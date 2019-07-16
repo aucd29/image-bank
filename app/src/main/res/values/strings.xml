@@ -4,6 +4,7 @@
     <!--TAB -->
     <string name="tab_search">검색</string>
     <string name="tab_dibs">내 보관함</string>
+    <string name="tab_some">어떤?</string>
 
     <!--SEARCH-->
     <string name="search_search">검색</string>
@@ -59,6 +60,8 @@
     <string name="nav_menu_info">안내</string>
     <string name="nav_menu_info_event">이벤트</string>
 
+    <!--SOME-->
+    <string name="some_kakaotalk">카카오톡</string>
 
     <!--DETAIL-->
     <string name="detail_money_unit">원</string>

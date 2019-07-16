@@ -22,6 +22,7 @@ import javax.inject.Singleton
     ContextModule::class,
     AssetModule::class,
     AppModule::class,
+    ChipModule::class,
     ActivityBindingModule::class
 ])
 interface AppComponent {

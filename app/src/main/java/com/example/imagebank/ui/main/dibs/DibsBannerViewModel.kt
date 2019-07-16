@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.viewpager.widget.ViewPager
 import brigitte.drawable
 import brigitte.widget.BannerViewModel
+import com.example.imagebank.R
 import com.example.imagebank.common.PreloadConfig
 import com.example.imagebank.model.local.Banner
 import org.slf4j.LoggerFactory
@@ -26,22 +27,8 @@ class DibsBannerViewModel @Inject constructor(application: Application,
         private val mLog = LoggerFactory.getLogger(DibsBannerViewModel::class.java)
     }
 
-    val pageChangedLive = MutableLiveData<Int>()
-
     init {
-        if (mLog.isDebugEnabled) {
-            mLog.debug("INIT DIBS BANNER ")
-        }
-
-        pageChangeCallback.set {
-            pageChangedLive.value = it
-        }
-
-        initAdapter("banner_layout")
+        initAdapter(R.layout.dibs_banner_layout)
         items.set(mPreConfig.bannerList)
-
-        if (mLog.isDebugEnabled) {
-            mLog.debug("DIBS BANNER ITEMS (${items.get()?.size})")
-        }
     }
 }
