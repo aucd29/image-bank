@@ -360,12 +360,10 @@ class RecyclerAdapter<T: IRecyclerDiff>(
  * Recycler View 에 사용될 items 정보와 adapter 를 쉽게 설정하게 만드는 ViewModel
  */
 open class RecyclerViewModel<T: IRecyclerDiff>(app: Application)
-    : AndroidViewModel(app), ICommandEventAware {
+    : CommandEventViewModel(app) {
     companion object {
         private val mLog = LoggerFactory.getLogger(RecyclerViewModel::class.java)
     }
-
-    override val commandEvent = SingleLiveEvent<Pair<String, Any>>()
 
     protected var mThreshold   = 1
     protected var mDataLoading = false
@@ -404,16 +402,6 @@ open class RecyclerViewModel<T: IRecyclerDiff>(app: Application)
                 }
             }
         }
-    }
-
-    fun snackbar(@StringRes resid: Int) = snackbar(string(resid))
-    fun toast(@StringRes resid: Int) = toast(string(resid))
-    fun errorLog(e: Throwable) {
-        if (mLog.isDebugEnabled) {
-            e.printStackTrace()
-        }
-
-        mLog.error("ERROR: ${e.message}")
     }
 
     ////////////////////////////////////////////////////////////////////////////////////

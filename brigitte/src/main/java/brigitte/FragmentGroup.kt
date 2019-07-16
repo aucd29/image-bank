@@ -215,11 +215,11 @@ inline fun FragmentManager.internalShow(frgmt: Fragment, params: FragmentParams)
                 FragmentAnim.apply {
                     when (it) {
                         RIGHT -> setCustomAnimations(R.anim.slide_in_current,   R.anim.slide_in_next,
-                            R.anim.slide_out_current,  R.anim.slide_out_prev)
+                                                     R.anim.slide_out_current,  R.anim.slide_out_prev)
                         LEFT  -> setCustomAnimations(R.anim.slide_out_current,  R.anim.slide_out_prev,
-                            R.anim.slide_in_current,   R.anim.slide_in_next)
+                                                     R.anim.slide_in_current,   R.anim.slide_in_next)
                         UP    -> setCustomAnimations(R.anim.slide_up_current,   R.anim.slide_up_next,
-                            R.anim.slide_down_current, R.anim.slide_down_prev)
+                                                     R.anim.slide_down_current, R.anim.slide_down_prev)
                         ALPHA -> setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out)
 
                         else -> { }

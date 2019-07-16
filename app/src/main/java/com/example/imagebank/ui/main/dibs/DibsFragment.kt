@@ -1,17 +1,12 @@
 package com.example.imagebank.ui.main.dibs
 
-import androidx.viewpager.widget.ViewPager
 import brigitte.BaseDaggerFragment
 import brigitte.di.dagger.module.injectOf
 import brigitte.di.dagger.module.injectOfActivity
-import brigitte.jsonParse
 import com.example.imagebank.MainViewModel
 import com.example.imagebank.common.PreloadConfig
 import com.example.imagebank.databinding.DibsFragmentBinding
-import com.example.imagebank.model.local.Banner
 import dagger.android.ContributesAndroidInjector
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import org.slf4j.LoggerFactory
 import javax.inject.Inject
 
@@ -30,34 +25,26 @@ class DibsFragment @Inject constructor() : BaseDaggerFragment<DibsFragmentBindin
 
     @Inject lateinit var mPreConfig: PreloadConfig
     @Inject lateinit var mMainViewModel: MainViewModel
-    @Inject lateinit var mBannerViewModel: BannerViewModel
-    @Inject lateinit var mDibsPagerAdapter: DibsPagerAdapter
+    @Inject lateinit var mBannerViewModel: DibsBannerViewModel
 
     override fun bindViewModel() {
         super.bindViewModel()
 
         mBannerViewModel = mViewModelFactory.injectOf(this)
         mMainViewModel   = mViewModelFactory.injectOfActivity(this)
+
+        mBinding.bannerModel = mBannerViewModel
     }
 
     override fun initViewBinding() {
-        mBinding.apply {
-            dibsViewpager.adapter = mDibsPagerAdapter
-            dibsViewpager.addOnPageChangeListener(object: ViewPager.SimpleOnPageChangeListener() {
-                override fun onPageSelected(position: Int) {
-                    if (mLog.isDebugEnabled) {
-                        mLog.debug("BANNER PAGE SELECTED : $position")
-                    }
 
-                    pageIndicatorView.setSelected(position)
-                    topViewColorChange(position)
-                }
-            })
-        }
     }
 
     override fun initViewModelEvents() {
-
+        observe(mBannerViewModel.pageChangedLive) {
+            mBinding.pageIndicatorView.setSelected(it)
+            topViewColorChange(it)
+        }
     }
 
     private fun topViewColorChange(pos: Int) {

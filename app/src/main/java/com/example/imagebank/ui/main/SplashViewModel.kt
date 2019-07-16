@@ -41,7 +41,7 @@ class SplashViewModel @Inject constructor(
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
                 if (mLog.isInfoEnabled && mState) {
-                    mLog.info("SPLASH TIMEOUT ($SPLASH_TIMEOUT SECOND)")
+                    mLog.info("SPLASH TIMEOUT ($SPLASH_TIMEOUT MILLISECOND)")
                 }
 
                 closeSplash()

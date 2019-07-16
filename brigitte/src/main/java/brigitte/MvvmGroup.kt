@@ -35,7 +35,6 @@ private const val LAYOUT          = "layout"         // 레이아웃
 //
 ////////////////////////////////////////////////////////////////////////////////////
 
-
 inline fun <reified T : ViewModel> FragmentActivity.obtainViewModel(provider: ViewModelProvider.Factory? = null) =
     provider?.let {
         ViewModelProviders.of(this, it).get(T::class.java)
@@ -44,7 +43,6 @@ inline fun <reified T : ViewModel> FragmentActivity.obtainViewModel(provider: Vi
 inline fun <reified T : ViewModel> Fragment.obtainViewModel(provider: ViewModelProvider.Factory? = null) =
     activity?.obtainViewModel<T>( provider)
 
-
 ////////////////////////////////////////////////////////////////////////////////////
 //
 // DATA BINDING
@@ -52,16 +50,16 @@ inline fun <reified T : ViewModel> Fragment.obtainViewModel(provider: ViewModelP
 ////////////////////////////////////////////////////////////////////////////////////
 
 
-inline fun <T : ViewDataBinding> Fragment.dataBinding(@LayoutRes resid: Int, parent: ViewGroup? = null,
+inline fun <T : ViewDataBinding> Fragment.dataBinding(@LayoutRes layoutid: Int, parent: ViewGroup? = null,
                                                       attachToParent: Boolean = false): T =
-        DataBindingUtil.inflate(layoutInflater, resid, parent, attachToParent)
+        DataBindingUtil.inflate(layoutInflater, layoutid, parent, attachToParent)
 
-inline fun <T : ViewDataBinding> Activity.dataBinding(@LayoutRes resid: Int, parent: ViewGroup? = null,
+inline fun <T : ViewDataBinding> Activity.dataBinding(@LayoutRes layoutid: Int, parent: ViewGroup? = null,
                                                       attachToParent: Boolean = false): T =
-        DataBindingUtil.inflate(layoutInflater, resid, parent, attachToParent)
+        DataBindingUtil.inflate(layoutInflater, layoutid, parent, attachToParent)
 
-inline fun <T : ViewDataBinding> Activity.dataBindingView(@LayoutRes resid: Int): T =
-        DataBindingUtil.setContentView(this, resid)
+inline fun <T : ViewDataBinding> Activity.dataBindingView(@LayoutRes layoutid: Int): T =
+        DataBindingUtil.setContentView(this, layoutid)
 
 inline fun <T: ViewDataBinding> PagerAdapter.dataBinding(@LayoutRes resid: Int, parent: ViewGroup? = null,
                                                          attachToParent: Boolean = false): T =

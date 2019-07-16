@@ -15,36 +15,36 @@ import javax.inject.Inject
 /**
  * Created by <a href="mailto:aucd29@hanwha.com">Burke Choi</a> on 2019-06-30 <p/>
  */
-// https://medium.com/@cdmunoz/the-easiest-way-to-work-with-viewpager-and-without-fragments-c62ec3e8b9f3
-class DibsPagerAdapter @Inject constructor(
-    private val mContext: Context,
-    private val mPreConfig: PreloadConfig,
-    private var mBannerViewModel: BannerViewModel
-) : PagerAdapter() {
-
-    override fun instantiateItem(container: ViewGroup, position: Int): Any {
-        val inflator = LayoutInflater.from(mContext)
-        val binding = DataBindingUtil.inflate<BannerLayoutBinding>(inflator,
-            R.layout.banner_layout, container, true)
-
-        binding.model = mBannerViewModel
-        binding.item  = mPreConfig.bannerList[position]
-
-        return binding.root
-    }
-
-    override fun isViewFromObject(view: View, obj: Any): Boolean {
-        return view == obj
-    }
-
-    override fun destroyItem(container: ViewGroup, position: Int, obj: Any) {
-        if (obj is View) {
-            container.removeView(obj)
-        }
-    }
-
-    override fun getCount(): Int {
-        return mPreConfig.bannerList.size
-    }
-}
-
+//// https://medium.com/@cdmunoz/the-easiest-way-to-work-with-viewpager-and-without-fragments-c62ec3e8b9f3
+//class DibsPagerAdapter @Inject constructor(
+//    private val mContext: Context,
+//    private val mPreConfig: PreloadConfig,
+//    private var mBannerViewModel: BannerViewModel
+//) : PagerAdapter() {
+//
+//    override fun instantiateItem(container: ViewGroup, position: Int): Any {
+//        val inflator = LayoutInflater.from(mContext)
+//        val binding = DataBindingUtil.inflate<BannerLayoutBinding>(inflator,
+//            R.layout.banner_layout, container, true)
+//
+//        binding.model = mBannerViewModel
+//        binding.item  = mPreConfig.bannerList[position]
+//
+//        return binding.root
+//    }
+//
+//    override fun isViewFromObject(view: View, obj: Any): Boolean {
+//        return view == obj
+//    }
+//
+//    override fun destroyItem(container: ViewGroup, position: Int, obj: Any) {
+//        if (obj is View) {
+//            container.removeView(obj)
+//        }
+//    }
+//
+//    override fun getCount(): Int {
+//        return mPreConfig.bannerList.size
+//    }
+//}
+//

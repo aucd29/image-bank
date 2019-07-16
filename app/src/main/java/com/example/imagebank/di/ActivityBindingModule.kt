@@ -1,12 +1,11 @@
 package com.example.imagebank.di
 
+import android.view.Window
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import androidx.viewpager.widget.PagerAdapter
 import com.example.imagebank.MainActivity
 import com.example.imagebank.ui.ViewController
 import com.example.imagebank.ui.main.SectionsPagerAdapter
-import com.example.imagebank.ui.main.dibs.DibsPagerAdapter
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -33,8 +32,8 @@ abstract class ActivityBindingModule {
     @Binds
     abstract fun bindSectionsPagerAdapter(adapter: SectionsPagerAdapter): FragmentPagerAdapter
 
-    @Binds
-    abstract fun bindDibsPagerAdapter(adapter: DibsPagerAdapter): PagerAdapter
+//    @Binds
+//    abstract fun bindDibsPagerAdapter(adapter: DibsPagerAdapter): PagerAdapter
 }
 
 // https://stackoverflow.com/questions/48533899/how-to-inject-members-in-baseactivity-using-dagger-android
@@ -43,4 +42,8 @@ class MainActivityModule {
     @Provides
     fun provideFragmentManager(activity: MainActivity): FragmentManager =
         activity.supportFragmentManager
+
+    @Provides
+    fun provideWindow(activity: MainActivity): Window =
+        activity.window
 }
