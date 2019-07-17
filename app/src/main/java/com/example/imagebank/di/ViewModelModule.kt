@@ -13,6 +13,7 @@ import com.example.imagebank.ui.main.navigation.NaviMenuViewModel
 import com.example.imagebank.ui.main.search.SearchViewModel
 import com.example.imagebank.ui.main.some.SomeBannerViewModel
 import com.example.imagebank.ui.main.some.SomeChipViewModel
+import com.example.imagebank.ui.main.some.SomeLinkViewModel
 import com.example.imagebank.ui.main.some.SomeViewModel
 import dagger.Binds
 import dagger.Module
@@ -95,6 +96,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(SomeChipViewModel::class)
     abstract fun bindSomeChipViewModel(vm: SomeChipViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SomeLinkViewModel::class)
+    abstract fun bindSomeLinkViewModel(vm: SomeLinkViewModel): ViewModel
 
 
     ////////////////////////////////////////////////////////////////////////////////////

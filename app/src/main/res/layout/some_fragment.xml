@@ -9,6 +9,7 @@
         <variable name="model" type="com.example.imagebank.ui.main.some.SomeViewModel"/>
         <variable name="bannerModel" type="com.example.imagebank.ui.main.some.SomeBannerViewModel"/>
         <variable name="chipModel" type="com.example.imagebank.ui.main.some.SomeChipViewModel"/>
+        <variable name="linkModel" type="com.example.imagebank.ui.main.some.SomeLinkViewModel"/>
     </data>
 
     <androidx.core.widget.NestedScrollView
@@ -52,59 +53,25 @@
             />
 
             <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/some_icon_recycler"
+                    android:id="@+id/some_icon_link_recycler"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/some_banner"
                     app:layout_constraintEnd_toEndOf="parent"
-
+                    app:bindItems="@{linkModel.items}"
+                    app:bindAdapter="@{linkModel.adapter}"
+                    app:bindLockedGridLayoutManager="@{linkModel.gridCount}"
+                    android:layout_marginTop="@dimen/dp20"
             />
-            <!--app:bindItems="@{chipModel.items}"-->
-            <!--app:bindAdapter="@{chipModel.adapter}"-->
-            <!--app:bindLockedGridLayoutManager="@{navGridModel.gridCount}"-->
-
-            <!--<androidx.constraintlayout.widget.ConstraintLayout-->
-                    <!--android:id="@+id/some_icon_container"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:padding="@dimen/dp20"-->
-                    <!--app:layout_constraintStart_toStartOf="parent"-->
-                    <!--app:layout_constraintTop_toBottomOf="@+id/some_banner"-->
-                    <!--app:layout_constraintEnd_toEndOf="parent"-->
-                    <!--android:onClick=""-->
-            <!--&gt;-->
-
-                <!--<ImageView-->
-                        <!--android:id="@+id/link_kakao"-->
-                        <!--android:layout_width="wrap_content" android:layout_height="wrap_content"-->
-                        <!--app:layout_constraintStart_toStartOf="parent"-->
-                        <!--app:layout_constraintTop_toTopOf="parent"-->
-                        <!--app:layout_constraintEnd_toEndOf="parent"-->
-                        <!--android:src="@drawable/ic_android_gray_24dp"-->
-                        <!--android:padding="@dimen/dp20"-->
-                        <!--android:background="@drawable/selector_chip_background"-->
-                <!--/>-->
-
-                <!--<TextView-->
-                        <!--android:id="@+id/label_link_kakao"-->
-                        <!--android:layout_width="0dp" android:layout_height="wrap_content"-->
-                        <!--app:layout_constraintStart_toStartOf="@+id/link_kakao"-->
-                        <!--app:layout_constraintTop_toBottomOf="@+id/link_kakao"-->
-                        <!--app:layout_constraintEnd_toEndOf="@+id/link_kakao"-->
-                        <!--android:layout_marginTop="@dimen/dp5"-->
-                        <!--android:text="@{model.kakaoTalk}"-->
-                        <!--android:gravity="center"-->
-                <!--/>-->
-
-            <!--</androidx.constraintlayout.widget.ConstraintLayout>-->
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/chip_recycler"
+                android:id="@+id/some_chip_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp20"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/some_icon_container"
+                app:layout_constraintTop_toBottomOf="@+id/some_icon_link_recycler"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:bindItems="@{chipModel.items}"
                 app:bindAdapter="@{chipModel.adapter}"

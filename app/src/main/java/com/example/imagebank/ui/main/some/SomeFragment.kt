@@ -19,26 +19,32 @@ class SomeFragment @Inject constructor(): BaseDaggerFragment<SomeFragmentBinding
         private val mLog = LoggerFactory.getLogger(SomeFragment::class.java)
     }
 
+    @Inject lateinit var mColorModel: MainColorViewModel
+
     @Inject lateinit var mBannerViewModel: SomeBannerViewModel
     @Inject lateinit var mChipViewModel: SomeChipViewModel
-    @Inject lateinit var mColorModel: MainColorViewModel
+    @Inject lateinit var mLinkModel: SomeLinkViewModel
 
     override fun bindViewModel() {
         super.bindViewModel()
 
         with (mViewModelFactory) {
+            mColorModel      = injectOfActivity(this@SomeFragment)
+
             mBannerViewModel = injectOf(this@SomeFragment)
             mChipViewModel   = injectOf(this@SomeFragment)
-            mColorModel      = injectOfActivity(this@SomeFragment)
+            mLinkModel       = injectOf(this@SomeFragment)
         }
 
         with(mBinding) {
             bannerModel = mBannerViewModel
             chipModel   = mChipViewModel
+            linkModel   = mLinkModel
         }
     }
 
-    override fun initViewBinding() {
+    override fun initViewBinding() = mBinding.run {
+        pageIndicatorView.selection = someBanner.currentItem
     }
 
     override fun initViewModelEvents() {

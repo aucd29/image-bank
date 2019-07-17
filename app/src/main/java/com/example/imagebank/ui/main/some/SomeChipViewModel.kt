@@ -26,10 +26,11 @@ class SomeChipViewModel @Inject constructor(application: Application,
     init {
         initAdapter(R.layout.some_chip_item)
         items.set(arrayListOf(
-            ChipItem(1, "test1", "content://"),
+            ChipItem(1, "test1 test", "content://"),
             ChipItem(2, "test2", "content://"),
-            ChipItem(3, "test3", "content://"),
-            ChipItem(4, "test4", "content://")
+            ChipItem(3, "test3 dfdfdf", "content://"),
+            ChipItem(4, "test4", "content://"),
+            ChipItem(5, "test4", "content://")
         ))
     }
 }

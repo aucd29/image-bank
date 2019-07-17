@@ -37,8 +37,8 @@ class DibsFragment @Inject constructor() : BaseDaggerFragment<DibsFragmentBindin
         mBinding.bannerModel = mBannerViewModel
     }
 
-    override fun initViewBinding() {
-
+    override fun initViewBinding() = mBinding.run {
+        pageIndicatorView.selection = dibsViewpager.currentItem
     }
 
     override fun initViewModelEvents() {
