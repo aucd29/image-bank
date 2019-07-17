@@ -12,7 +12,7 @@
             android:id="@+id/link_item_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="@{() -> model.command(model.CMD_CLICK)}"
+            android:onClick="@{() -> model.command(model.CMD_CLICK, item.id)}"
     >
 
         <ImageView

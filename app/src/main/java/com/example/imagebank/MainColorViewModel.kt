@@ -5,7 +5,7 @@ import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
 import brigitte.TabSelectedCallback
 import brigitte.color
-import brigitte.widget.statusbar.StatusBarViewModel
+import brigitte.widget.StatusBarViewModel
 import org.slf4j.LoggerFactory
 import javax.inject.Inject
 

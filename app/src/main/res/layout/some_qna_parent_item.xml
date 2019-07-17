@@ -1,0 +1,29 @@
+<layout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable name="model" type="com.example.imagebank.ui.main.some.SomeQnaViewModel" />
+        <variable name="item" type="com.example.imagebank.model.local.QnaItem"/>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/link_item_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?selectableItemBackground"
+            android:onClick="@{() -> model.toggle(item)}"
+    >
+
+        <TextView
+                android:id="@+id/qna_parent_title"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:padding="@dimen/dp25"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:text="@{item.title}"
+        />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

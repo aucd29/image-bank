@@ -70,9 +70,7 @@ class BannerPagerAdapter <T: IBannerItem> (
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
-//        val context = container.context
-//        val layoutId = context.resources.getIdentifier(mLayout, "layout", context.packageName)
-        val inflater = LayoutInflater.from(container.context)
+        val inflater   = LayoutInflater.from(container.context)
         val binding = DataBindingUtil.inflate<ViewDataBinding>(inflater,
             mLayoutId, container, true)
 
@@ -84,15 +82,12 @@ class BannerPagerAdapter <T: IBannerItem> (
         return binding.root
     }
 
-    override fun isViewFromObject(view: View, obj: Any): Boolean {
-        return view == obj
-    }
+    override fun isViewFromObject(view: View, obj: Any): Boolean = view == obj
+    override fun getCount(): Int = mItems.size
 
     override fun destroyItem(container: ViewGroup, position: Int, obj: Any) {
         if (obj is View) {
             container.removeView(obj)
         }
     }
-
-    override fun getCount() = mItems.size
 }

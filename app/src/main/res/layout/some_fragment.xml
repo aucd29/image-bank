@@ -10,6 +10,7 @@
         <variable name="bannerModel" type="com.example.imagebank.ui.main.some.SomeBannerViewModel"/>
         <variable name="chipModel" type="com.example.imagebank.ui.main.some.SomeChipViewModel"/>
         <variable name="linkModel" type="com.example.imagebank.ui.main.some.SomeLinkViewModel"/>
+        <variable name="qnaModel" type="com.example.imagebank.ui.main.some.SomeQnaViewModel"/>
     </data>
 
     <androidx.core.widget.NestedScrollView
@@ -35,7 +36,7 @@
             />
 
             <com.rd.PageIndicatorView
-                    android:id="@+id/pageIndicatorView"
+                    android:id="@+id/some_banner_indicator"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp20"
@@ -70,12 +71,27 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp20"
+                android:layout_marginStart="@dimen/dp20"
+                android:layout_marginEnd="@dimen/dp20"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/some_icon_link_recycler"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:bindItems="@{chipModel.items}"
                 app:bindAdapter="@{chipModel.adapter}"
                 app:bindLayoutManager="@{chipModel.chipLayoutManager}"
+            />
+
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/some_qna_recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp20"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/some_chip_recycler"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:bindItems="@{qnaModel.items}"
+                    app:bindAdapter="@{qnaModel.adapter}"
             />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

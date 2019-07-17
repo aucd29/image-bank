@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment
  */
 
 inline fun Activity.initCookieManager() {
-    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT_WATCH) {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
         CookieSyncManager.createInstance(this)
     }
 
@@ -24,13 +24,13 @@ inline fun Activity.initCookieManager() {
 }
 
 inline fun Activity.startCookieSync() {
-    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT_WATCH) {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
         CookieSyncManager.getInstance().startSync()
     }
 }
 
 inline fun Activity.stopCookieSync() {
-    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT_WATCH) {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
         CookieSyncManager.getInstance().stopSync()
     }
 }

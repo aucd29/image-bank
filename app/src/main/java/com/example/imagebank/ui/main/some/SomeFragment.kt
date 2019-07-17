@@ -1,5 +1,6 @@
 package com.example.imagebank.ui.main.some
 
+import android.content.Intent
 import brigitte.BaseDaggerFragment
 import brigitte.di.dagger.module.injectOf
 import brigitte.di.dagger.module.injectOfActivity
@@ -24,6 +25,7 @@ class SomeFragment @Inject constructor(): BaseDaggerFragment<SomeFragmentBinding
     @Inject lateinit var mBannerViewModel: SomeBannerViewModel
     @Inject lateinit var mChipViewModel: SomeChipViewModel
     @Inject lateinit var mLinkModel: SomeLinkViewModel
+    @Inject lateinit var mQnaModel: SomeQnaViewModel
 
     override fun bindViewModel() {
         super.bindViewModel()
@@ -34,22 +36,27 @@ class SomeFragment @Inject constructor(): BaseDaggerFragment<SomeFragmentBinding
             mBannerViewModel = injectOf(this@SomeFragment)
             mChipViewModel   = injectOf(this@SomeFragment)
             mLinkModel       = injectOf(this@SomeFragment)
+            mQnaModel        = injectOf(this@SomeFragment)
         }
 
         with(mBinding) {
             bannerModel = mBannerViewModel
             chipModel   = mChipViewModel
             linkModel   = mLinkModel
+            qnaModel    = mQnaModel
         }
     }
 
-    override fun initViewBinding() = mBinding.run {
-        pageIndicatorView.selection = someBanner.currentItem
+    override fun initViewBinding() {
+
     }
 
     override fun initViewModelEvents() {
         mColorModel.someFragmentFocus = {
             val it = mBinding.someBanner.currentItem
+
+            // 이상하게 indicator 가 이걸 저장 못하네 ?
+            mBinding.someBannerIndicator.selection = it
 
             if (mLog.isDebugEnabled) {
                 mLog.debug("SOME FRAGMENT FOCUS ($it)")
@@ -59,7 +66,7 @@ class SomeFragment @Inject constructor(): BaseDaggerFragment<SomeFragmentBinding
         }
 
         mBannerViewModel.pageChangeCallback.set {
-            mBinding.pageIndicatorView.selection = it
+            mBinding.someBannerIndicator.selection = it
             changeStatusColor(it)
         }
     }
@@ -70,6 +77,33 @@ class SomeFragment @Inject constructor(): BaseDaggerFragment<SomeFragmentBinding
             mColorModel.changeColor(current.statusColor.toColor(),
                 current.bgcolor.toColor())
         }
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////
+    //
+    //
+    //
+    ////////////////////////////////////////////////////////////////////////////////////
+
+    override fun onCommandEvent(cmd: String, data: Any) {
+        when (cmd) {
+            SomeLinkViewModel.CMD_CLICK -> openLink(data as Int)
+        }
+    }
+
+    private fun openLink(id: Int) {
+        startActivity(when (id) {
+            1 -> Intent(Intent.ACTION_CALL)
+            2 -> Intent(Intent.ACTION_SEND).apply {
+                type = "text/plain"
+                setPackage("com.kakao.talk")
+            }
+            else -> Intent(Intent.ACTION_CALL).apply {
+                type = "text/plain"
+                setPackage("com.kakao.talk")
+                // 1:1
+            }
+        })
     }
 
     ////////////////////////////////////////////////////////////////////////////////////

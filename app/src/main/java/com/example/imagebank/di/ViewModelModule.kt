@@ -11,10 +11,7 @@ import com.example.imagebank.ui.main.dibs.DibsBannerViewModel
 import com.example.imagebank.ui.main.navigation.NaviGridViewModel
 import com.example.imagebank.ui.main.navigation.NaviMenuViewModel
 import com.example.imagebank.ui.main.search.SearchViewModel
-import com.example.imagebank.ui.main.some.SomeBannerViewModel
-import com.example.imagebank.ui.main.some.SomeChipViewModel
-import com.example.imagebank.ui.main.some.SomeLinkViewModel
-import com.example.imagebank.ui.main.some.SomeViewModel
+import com.example.imagebank.ui.main.some.*
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -101,6 +98,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(SomeLinkViewModel::class)
     abstract fun bindSomeLinkViewModel(vm: SomeLinkViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SomeQnaViewModel::class)
+    abstract fun bindSomeQnaViewModel(vm: SomeQnaViewModel): ViewModel
 
 
     ////////////////////////////////////////////////////////////////////////////////////

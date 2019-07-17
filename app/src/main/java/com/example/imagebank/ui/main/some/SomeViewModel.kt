@@ -18,12 +18,5 @@ class SomeViewModel @Inject constructor(application: Application
 
     companion object {
         private val mLog = LoggerFactory.getLogger(SomeViewModel::class.java)
-
-        const val CMD_OPEN_KAKAO = "open-kakao"
-    }
-
-    val kakaoTalk = ObservableInt(R.string.some_kakaotalk)
-
-    init {
     }
 }

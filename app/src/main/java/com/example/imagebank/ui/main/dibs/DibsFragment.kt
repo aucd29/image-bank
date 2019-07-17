@@ -37,13 +37,16 @@ class DibsFragment @Inject constructor() : BaseDaggerFragment<DibsFragmentBindin
         mBinding.bannerModel = mBannerViewModel
     }
 
-    override fun initViewBinding() = mBinding.run {
-        pageIndicatorView.selection = dibsViewpager.currentItem
+    override fun initViewBinding() {
+
     }
 
     override fun initViewModelEvents() {
         mColorModel.dibsFragmentFocus = {
             val it = mBinding.dibsViewpager.currentItem
+
+            // 이상하게 indicator 가 이걸 저장 못하네 ?
+            mBinding.dibsBannerIndicator.selection = it
 
             if (mLog.isDebugEnabled) {
                 mLog.debug("DIBS FRAGMENT FOCUS $it")
@@ -53,7 +56,7 @@ class DibsFragment @Inject constructor() : BaseDaggerFragment<DibsFragmentBindin
         }
 
         mBannerViewModel.pageChangeCallback.set {
-            mBinding.pageIndicatorView.selection = it
+            mBinding.dibsBannerIndicator.selection = it
             changeStatusColor(it)
         }
     }
