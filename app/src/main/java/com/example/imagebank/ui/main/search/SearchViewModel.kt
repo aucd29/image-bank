@@ -52,7 +52,7 @@ import java.util.*
  * - activity lifecycle 중 onStart 사용처? -> 개인적으로 사용하지 않았음 -> https://developer.android.com/guide/components/activities/activity-lifecycle
  * - save Instance State 관련 ? -> 개인적으로는 shared preference 를 이용한다고 함 -> http://egloos.zum.com/skyswim42/v/3925726
  *
- * - imageview 에 contentDescription 써봤는지 -> 아니요
+ * - imageview 에 contentDescription 써봤는지 -> 아니요 -> 문자열 바인딩 하는건 알고 있었는데 찾아보니 정말 그게 다더라 마치 html 의 alt 느낌?
  *
  * - recyclerview model 에서 adapter 에 layoutid 설정하는게 string 인 이유에 대해 물었고 invoke 하기 위함이였다고 이야기 했는데
  *   banner view model 을 일반화 하면서 보니 ViewDataBinding 으로 받되 setModel, setItem 을 그냥 호출할 수도 있어 코드 리펙 함
@@ -129,13 +129,15 @@ import java.util.*
  * - 좋은 인력들과 논의하면서 개발해보고 싶었는데, 혼자하는게 힘든데 말이지 이젠 꿈도 희망도 =_ = 저 멀리 ~ 어쩌니?
  *
  * 복기 후 보이는 것들
- * - 자료구조 -_-;; php -> cpp -> java 로 넘어가서 그런지 기초가 없네?  
+ * - 자료구조 -_-;; php -> cpp -> java 로 넘어가서 그런지 기초가 없네?
  * - 지나지게 낮아진 자존감 (뭘 해도 잘할 수 있다!! 그리 이야기 못한 느낌?, 이 회사에 와서 자존감만 낮아진건가?, 예전엔 안그랬는데 흠;;)
  * - 다른곳에 가서 무얼 할 수 있는지?
  *   > 내가 잘하는건 베이스쪽 설계를 그려 그거 기반으로 공통적인 화면을 구성하게 할 수 있는 점 그걸로 인한 생산성 향상,
  *     이를 이용하는 개발자는 비즈니스 로직 개발에 집중해 좀더 좋은 코드를 생산해 내도록 해줄수 있다라고 이야기 하고 싶다.
  * - test case 를 하고는 있지만 표출하지 않는 점? 뭐 잘 모르긴 한다. 해봐야 espresso, network mock 정도
- *
+ * - platform / framework 위주로 개발하여 ui 가 약할 것 이라는 질문에 동의는 하지만 내가 작업하였던게 ui 와 동떨어져 있는것도 아닌
+ *   한번 더 생각하여 코드를 재활용성 있게 만들기 때문에 더 나은 효과를 낼수 있음을 이야기 해야할 것 같다. 이와 관련되어.
+ *   recycler group 의 코드를 예로 들어봐야할 까?, 각각 구현하던걸 데이터에 인터페이스만 상속하면 그냥 됩니다! 라고
  * - 언제 다시 트라이를 해볼수 있을지는 모르겠지만...반성하자! 팀장님이 어제 주신 책상에 놓여있는 '코틀린 마이크로서비스 개발' 책을 보며 복잡/미묘한 감정이다.
  *
  */

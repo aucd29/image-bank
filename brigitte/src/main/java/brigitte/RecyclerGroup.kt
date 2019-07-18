@@ -48,18 +48,18 @@ interface IRecyclerPosition {
 }
 
 /** 아이템 확장 관련 인터페이스 */
-interface IRecyclerExpandable<T> {
-    var toggle: ObservableBoolean
+interface IRecyclerExpandable<T>: IRecyclerItem, IRecyclerDiff {
+    var status: ObservableBoolean
     var childList: List<T>
 
     /**
      * @param list 확장할 아이템 정보
      * @param adapter 확장 대상의 adapter
      */
-    fun toggle(list: List<T>, adapter: RecyclerView.Adapter<*>? = null) {
+    fun toggle(list: List<T>?, adapter: RecyclerView.Adapter<*>?) {
         var i = 0
         if (list is ArrayList) {
-            if (!this.toggle.get()) {
+            if (!this.status.get()) {
                 i = findIndex(list)
 
                 list.addAll(i, childList)
@@ -74,7 +74,7 @@ interface IRecyclerExpandable<T> {
             }
         }
 
-        this.toggle.set(!toggle.get())
+        this.status.set(!status.get())
     }
 
     private fun findIndex(list: List<T>): Int {
@@ -471,6 +471,14 @@ open class RecyclerViewModel<T: IRecyclerDiff>(app: Application)
 
             !mDataLoading && it.size - lastVisiblePos <= mThreshold
         } ?: false
+    }
+}
+
+open class RecyclerExpandableViewModel<T: IRecyclerExpandable<T>>(app: Application)
+    : RecyclerViewModel<T>(app) {
+
+    fun toggle(item: T) {
+        item.toggle(items.get(), adapter.get())
     }
 }
 

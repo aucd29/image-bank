@@ -2,6 +2,7 @@ package com.example.imagebank.ui.main.some
 
 import android.app.Application
 import androidx.databinding.ObservableInt
+import brigitte.RecyclerExpandableViewModel
 import brigitte.RecyclerViewModel
 import com.example.imagebank.R
 import com.example.imagebank.model.local.QnaItem
@@ -13,7 +14,7 @@ import javax.inject.Inject
  */
 
 class SomeQnaViewModel @Inject constructor(application: Application
-) : RecyclerViewModel<QnaItem>(application) {
+) : RecyclerExpandableViewModel<QnaItem>(application) {
 
     companion object {
         private val mLog = LoggerFactory.getLogger(SomeQnaViewModel::class.java)
@@ -34,9 +35,5 @@ class SomeQnaViewModel @Inject constructor(application: Application
             QnaItem("7", "qna 7", childList = arrayListOf(QnaItem("7-1","child item 7", QnaItem.T_CHILD))),
             QnaItem("8", "qna 8", childList = arrayListOf(QnaItem("8-1","child item 8", QnaItem.T_CHILD)))
         ))
-    }
-
-    fun toggle(item: QnaItem) {
-        item.toggle(items.get()!!, adapter.get()!!)
     }
 }

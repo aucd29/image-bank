@@ -9,7 +9,7 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/link_item_container"
+            android:id="@+id/qna_parent_item_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?selectableItemBackground"
@@ -23,6 +23,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 android:text="@{item.title}"
+        />
+
+        <ImageView
+                android:id="@+id/qna_parent_arrow"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/dp20"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:src="@{item.status ? @drawable/ic_arrow_drop_up_black_24dp : @drawable/ic_arrow_drop_down_black_24dp}"
         />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

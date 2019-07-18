@@ -30,6 +30,7 @@ inline fun Activity.startCookieSync() {
 }
 
 inline fun Activity.stopCookieSync() {
+    // 간만에 다시 보는데 버전 분기에 오류가 있어서 수정 ; ; ; [aucd29][2019-07-18]
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
         CookieSyncManager.getInstance().stopSync()
     }
@@ -39,6 +40,7 @@ inline fun Activity.syncCookie() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
         CookieManager.getInstance().flush()
     } else {
+        // sync 가 내부적으로는 CookieManager.getInstance().flush() 를 호출 한다.
         CookieSyncManager.getInstance().sync()
     }
 }
