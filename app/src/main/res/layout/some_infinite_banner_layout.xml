@@ -1,0 +1,46 @@
+<layout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable name="model" type="com.example.imagebank.ui.main.some.SomeInfiniteBannerViewModel" />
+        <variable name="item" type="com.example.imagebank.model.local.Banner" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/infinite_banner_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@{model.convertColor(item.bgcolor)}"
+    >
+
+        <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="@dimen/dp20"
+                android:textSize="@dimen/sp20"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:text="@{item.title}"
+        />
+
+        <TextView
+                android:id="@+id/description"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/title"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="@dimen/dp12"
+                android:textSize="@dimen/sp13"
+                android:textColor="@android:color/white"
+                android:text="@{item.description}"
+                android:textAlignment="center"
+                android:gravity="center"
+        />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

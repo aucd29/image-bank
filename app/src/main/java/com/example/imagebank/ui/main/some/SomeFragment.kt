@@ -20,30 +20,33 @@ class SomeFragment @Inject constructor(): BaseDaggerFragment<SomeFragmentBinding
         private val mLog = LoggerFactory.getLogger(SomeFragment::class.java)
     }
 
-    @Inject lateinit var mColorModel: MainColorViewModel
+    lateinit var mColorModel: MainColorViewModel
 
-    @Inject lateinit var mBannerViewModel: SomeBannerViewModel
-    @Inject lateinit var mChipViewModel: SomeChipViewModel
-    @Inject lateinit var mLinkModel: SomeLinkViewModel
-    @Inject lateinit var mQnaModel: SomeQnaViewModel
+    lateinit var mBannerViewModel: SomeBannerViewModel
+    lateinit var mChipViewModel: SomeChipViewModel
+    lateinit var mLinkModel: SomeLinkViewModel
+    lateinit var mQnaModel: SomeQnaViewModel
+    lateinit var mInfiniteBannerViewModel: SomeInfiniteBannerViewModel
 
     override fun bindViewModel() {
         super.bindViewModel()
 
         with (mViewModelFactory) {
-            mColorModel      = injectOfActivity(this@SomeFragment)
+            mColorModel = injectOfActivity(this@SomeFragment)
 
-            mBannerViewModel = injectOf(this@SomeFragment)
-            mChipViewModel   = injectOf(this@SomeFragment)
-            mLinkModel       = injectOf(this@SomeFragment)
-            mQnaModel        = injectOf(this@SomeFragment)
+            mBannerViewModel         = injectOf(this@SomeFragment)
+            mChipViewModel           = injectOf(this@SomeFragment)
+            mLinkModel               = injectOf(this@SomeFragment)
+            mQnaModel                = injectOf(this@SomeFragment)
+            mInfiniteBannerViewModel = injectOf(this@SomeFragment)
         }
 
         with(mBinding) {
-            bannerModel = mBannerViewModel
-            chipModel   = mChipViewModel
-            linkModel   = mLinkModel
-            qnaModel    = mQnaModel
+            bannerModel         = mBannerViewModel
+            chipModel           = mChipViewModel
+            linkModel           = mLinkModel
+            qnaModel            = mQnaModel
+            infiniteBannerModel = mInfiniteBannerViewModel
         }
     }
 

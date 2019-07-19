@@ -24,11 +24,12 @@ class MainActivity : BaseDaggerActivity<MainActivityBinding, MainViewModel>() {
     }
 
     @Inject lateinit var mConfig: Config
-    @Inject lateinit var mSplashModel: SplashViewModel
-    @Inject lateinit var mNavGridModel: NaviGridViewModel
-    @Inject lateinit var mNavMenuModel: NaviMenuViewModel
     @Inject lateinit var mAdapter: SectionsPagerAdapter
-    @Inject lateinit var mColorModel: MainColorViewModel
+
+    lateinit var mSplashModel: SplashViewModel
+    lateinit var mNavGridModel: NaviGridViewModel
+    lateinit var mNavMenuModel: NaviMenuViewModel
+    lateinit var mColorModel: MainColorViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         exceptionCatcher { mLog.error("ERROR: $it") }

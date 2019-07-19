@@ -91,6 +91,11 @@ abstract class ViewModelModule {
 
     @Binds
     @IntoMap
+    @ViewModelKey(SomeInfiniteBannerViewModel::class)
+    abstract fun bindSomeInfiniteBannerViewModel(vm: SomeInfiniteBannerViewModel): ViewModel
+
+    @Binds
+    @IntoMap
     @ViewModelKey(SomeChipViewModel::class)
     abstract fun bindSomeChipViewModel(vm: SomeChipViewModel): ViewModel
 
@@ -103,7 +108,6 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(SomeQnaViewModel::class)
     abstract fun bindSomeQnaViewModel(vm: SomeQnaViewModel): ViewModel
-
 
     ////////////////////////////////////////////////////////////////////////////////////
     //

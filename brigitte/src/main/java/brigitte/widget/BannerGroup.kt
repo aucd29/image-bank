@@ -1,7 +1,9 @@
 package brigitte.widget
 
 import android.app.Application
+import android.database.DataSetObserver
 import android.graphics.Color
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,29 +21,31 @@ import org.slf4j.LoggerFactory
  */
 
 interface IBannerItem
+abstract class IBannerPagerAdapter : PagerAdapter()
 
 open class BannerViewModel<T: IBannerItem> constructor(application: Application
 ) : AndroidViewModel(application) {
 
-    val items               = ObservableField<List<T>>()
-    val adapter             = ObservableField<BannerPagerAdapter<T>>()
-    val pageChangeCallback  = ObservableField<(Int) -> Unit>()
+    val items              = ObservableField<List<T>>()
+    val adapter            = ObservableField<IBannerPagerAdapter>()
+    val pageChangeCallback = ObservableField<(Int) -> Unit>()
 
     fun initAdapter(layout: Int) {
-        adapter.set(BannerPagerAdapter(layout, this))
+        adapter.set(BannerPagerAdapter<T>(layout, this))
     }
 
-    fun convertColor(str: String) =
-        Color.parseColor(str)
+    fun initInfiniteAdapter(layout: Int) {
+        adapter.set(InfinitePagerAdapter(BannerPagerAdapter<T>(layout, this)))
+    }
 
-    fun convertImage(str: String) =
-        drawable(str)
+    fun convertColor(str: String) = Color.parseColor(str)
+    fun convertImage(str: String) = drawable(str)
 }
 
 class BannerPagerAdapter <T: IBannerItem> (
     private val mLayoutId: Int,
     private val mViewModel: ViewModel
-) : PagerAdapter() {
+) : IBannerPagerAdapter() {
 
     companion object {
         private val mLog = LoggerFactory.getLogger(BannerPagerAdapter::class.java)
@@ -90,4 +94,91 @@ class BannerPagerAdapter <T: IBannerItem> (
             container.removeView(obj)
         }
     }
+}
+
+////////////////////////////////////////////////////////////////////////////////////
+//
+// InfinitePagerAdapter
+//
+// https://github.com/antonyt/InfiniteViewPager/blob/master/library/src/main/java/com/antonyt/infiniteviewpager/InfinitePagerAdapter.java
+// https://github.com/antonyt/InfiniteViewPager/blob/master/library/src/main/java/com/antonyt/infiniteviewpager/InfiniteViewPager.java
+//
+////////////////////////////////////////////////////////////////////////////////////
+
+class InfinitePagerAdapter(val adapter: PagerAdapter): IBannerPagerAdapter() {
+    companion object {
+        private val mLog = LoggerFactory.getLogger(InfinitePagerAdapter::class.java)
+    }
+
+    val realCount: Int
+        get() = adapter.count
+
+    override fun instantiateItem(container: ViewGroup, position: Int): Any {
+        val virtualPos = position % realCount
+
+        if (mLog.isDebugEnabled) {
+            mLog.debug("   REAL POS : $position")
+            mLog.debug("VIRTUAL POS : $virtualPos")
+        }
+
+        return adapter.instantiateItem(container, virtualPos)
+    }
+
+    override fun destroyItem(container: ViewGroup, position: Int, obj: Any) {
+        val virtualPos = position % realCount
+
+        if (mLog.isDebugEnabled) {
+            mLog.debug("   REAL POS : $position")
+            mLog.debug("VIRTUAL POS : $virtualPos")
+        }
+
+        adapter.destroyItem(container, virtualPos, obj)
+    }
+
+    fun setBannerItems(items: List<*>) {
+        if (adapter is BannerPagerAdapter<*>) {
+            adapter.setBannerItems(items as List<Nothing>)
+        }
+
+        notifyDataSetChanged()
+    }
+
+    override fun finishUpdate(container: ViewGroup) =
+        adapter.finishUpdate(container)
+
+    override fun isViewFromObject(view: View, obj: Any) =
+        adapter.isViewFromObject(view, obj)
+
+    override fun restoreState(state: Parcelable?, loader: ClassLoader?) =
+        adapter.restoreState(state, loader)
+
+    override fun saveState() =
+        adapter.saveState()
+
+    override fun startUpdate(container: ViewGroup) =
+        adapter.startUpdate(container)
+
+    override fun getPageTitle(position: Int) =
+        adapter.getPageTitle(position % realCount)
+
+    override fun getPageWidth(position: Int) =
+        adapter.getPageWidth(position)
+
+    override fun setPrimaryItem(container: ViewGroup, position: Int, obj: Any) =
+        adapter.setPrimaryItem(container, position, obj)
+
+    override fun unregisterDataSetObserver(observer: DataSetObserver) =
+        adapter.unregisterDataSetObserver(observer)
+
+    override fun registerDataSetObserver(observer: DataSetObserver) =
+        adapter.registerDataSetObserver(observer)
+
+    override fun notifyDataSetChanged() =
+        adapter.notifyDataSetChanged()
+
+    override fun getItemPosition(obj: Any) =
+        adapter.getItemPosition(obj)
+
+    override fun getCount() =
+        if (realCount == 0) 0 else Int.MAX_VALUE
 }

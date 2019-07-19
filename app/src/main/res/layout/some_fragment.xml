@@ -11,6 +11,7 @@
         <variable name="chipModel" type="com.example.imagebank.ui.main.some.SomeChipViewModel"/>
         <variable name="linkModel" type="com.example.imagebank.ui.main.some.SomeLinkViewModel"/>
         <variable name="qnaModel" type="com.example.imagebank.ui.main.some.SomeQnaViewModel"/>
+        <variable name="infiniteBannerModel" type="com.example.imagebank.ui.main.some.SomeInfiniteBannerViewModel"/>
     </data>
 
     <androidx.core.widget.NestedScrollView
@@ -57,13 +58,14 @@
                     android:id="@+id/some_icon_link_recycler"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:descendantFocusability="blocksDescendants"
+                    android:layout_marginTop="@dimen/dp20"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/some_banner"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:bindItems="@{linkModel.items}"
                     app:bindAdapter="@{linkModel.adapter}"
                     app:bindLockedGridLayoutManager="@{linkModel.gridCount}"
-                    android:layout_marginTop="@dimen/dp20"
             />
 
             <androidx.recyclerview.widget.RecyclerView
@@ -73,6 +75,7 @@
                 android:layout_marginTop="@dimen/dp20"
                 android:layout_marginStart="@dimen/dp20"
                 android:layout_marginEnd="@dimen/dp20"
+                android:descendantFocusability="blocksDescendants"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/some_icon_link_recycler"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -86,6 +89,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp20"
+                    android:descendantFocusability="blocksDescendants"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/some_chip_recycler"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -94,8 +98,19 @@
                     app:bindAdapter="@{qnaModel.adapter}"
             />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            <brigitte.widget.viewpager.InfiniteViewPager
+                    android:id="@+id/some_infinite_banner"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/some_qna_recycler"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:bindBannerAdapter="@{infiniteBannerModel.adapter}"
+                    app:bindBannerItems="@{infiniteBannerModel.items}"
+            />
+            <!--app:bindPageChangeCallback="@{infiniteBannerModel.pageChangeCallback}"-->
 
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
 </layout>

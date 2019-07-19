@@ -25,8 +25,8 @@ class DibsFragment @Inject constructor() : BaseDaggerFragment<DibsFragmentBindin
         mViewModelScope = SCOPE_ACTIVITY
     }
 
-    @Inject lateinit var mBannerViewModel: DibsBannerViewModel
-    @Inject lateinit var mColorModel: MainColorViewModel
+    lateinit var mBannerViewModel: DibsBannerViewModel
+    lateinit var mColorModel: MainColorViewModel
 
     override fun bindViewModel() {
         super.bindViewModel()
