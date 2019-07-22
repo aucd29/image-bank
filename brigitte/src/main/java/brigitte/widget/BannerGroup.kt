@@ -14,10 +14,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.viewpager.widget.PagerAdapter
 import brigitte.drawable
-import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import org.slf4j.LoggerFactory
-import java.util.concurrent.TimeUnit
 
 /**
  * Created by <a href="mailto:aucd29@hanwha.com">Burke Choi</a> on 2019-07-03 <p/>
@@ -112,13 +110,13 @@ class BannerPagerAdapter <T: IBannerItem> (
 //
 ////////////////////////////////////////////////////////////////////////////////////
 
-class InfinitePagerAdapter(val adapterProxy: PagerAdapter): IBannerPagerAdapter() {
+class InfinitePagerAdapter(private val mAdapter: PagerAdapter): IBannerPagerAdapter() {
     companion object {
         private val mLog = LoggerFactory.getLogger(InfinitePagerAdapter::class.java)
     }
 
     val realCount: Int
-        get() = adapterProxy.count
+        get() = mAdapter.count
 
     override fun getCount() =
         if (realCount == 0) 0 else Int.MAX_VALUE
@@ -127,67 +125,65 @@ class InfinitePagerAdapter(val adapterProxy: PagerAdapter): IBannerPagerAdapter(
         val virtualPos = position % realCount
 
         if (mLog.isDebugEnabled) {
-            mLog.debug("   REAL POS : $position")
-            mLog.debug("VIRTUAL POS : $virtualPos")
+            mLog.debug("INSTANTIATE ITEM : $virtualPos ($position)")
         }
 
-        return adapterProxy.instantiateItem(container, virtualPos)
+        return mAdapter.instantiateItem(container, virtualPos)
     }
 
     override fun destroyItem(container: ViewGroup, position: Int, obj: Any) {
         val virtualPos = position % realCount
 
         if (mLog.isDebugEnabled) {
-            mLog.debug("   REAL POS : $position")
-            mLog.debug("VIRTUAL POS : $virtualPos")
+            mLog.debug("DESTORY ITEM : $virtualPos ($position)")
         }
 
-        adapterProxy.destroyItem(container, virtualPos, obj)
+        mAdapter.destroyItem(container, virtualPos, obj)
     }
 
     fun setBannerItems(items: List<*>) {
-        if (adapterProxy is BannerPagerAdapter<*>) {
-            adapterProxy.setBannerItems(items as List<Nothing>, false)
+        if (mAdapter is BannerPagerAdapter<*>) {
+            mAdapter.setBannerItems(items as List<Nothing>, false)
         }
 
         notifyDataSetChanged()
     }
 
     override fun finishUpdate(container: ViewGroup) =
-        adapterProxy.finishUpdate(container)
+        mAdapter.finishUpdate(container)
 
     override fun isViewFromObject(view: View, obj: Any) =
-        adapterProxy.isViewFromObject(view, obj)
+        mAdapter.isViewFromObject(view, obj)
 
     override fun restoreState(state: Parcelable?, loader: ClassLoader?) =
-        adapterProxy.restoreState(state, loader)
+        mAdapter.restoreState(state, loader)
 
     override fun saveState() =
-        adapterProxy.saveState()
+        mAdapter.saveState()
 
     override fun startUpdate(container: ViewGroup) =
-        adapterProxy.startUpdate(container)
+        mAdapter.startUpdate(container)
 
     override fun getPageTitle(position: Int) =
-        adapterProxy.getPageTitle(position % realCount)
+        mAdapter.getPageTitle(position % realCount)
 
     override fun getPageWidth(position: Int) =
-        adapterProxy.getPageWidth(position)
+        mAdapter.getPageWidth(position)
 
     override fun setPrimaryItem(container: ViewGroup, position: Int, obj: Any) =
-        adapterProxy.setPrimaryItem(container, position, obj)
+        mAdapter.setPrimaryItem(container, position, obj)
 
     override fun unregisterDataSetObserver(observer: DataSetObserver) =
-        adapterProxy.unregisterDataSetObserver(observer)
+        mAdapter.unregisterDataSetObserver(observer)
 
     override fun registerDataSetObserver(observer: DataSetObserver) =
-        adapterProxy.registerDataSetObserver(observer)
+        mAdapter.registerDataSetObserver(observer)
 
     override fun notifyDataSetChanged() {
-        adapterProxy.notifyDataSetChanged()
+        mAdapter.notifyDataSetChanged()
         super.notifyDataSetChanged()
     }
 
     override fun getItemPosition(obj: Any) =
-        adapterProxy.getItemPosition(obj)
+        mAdapter.getItemPosition(obj)
 }

@@ -17,7 +17,7 @@ open class WrapContentViewPager: ViewPager {
         this.initLayout()
     }
 
-    fun initLayout() {
+    open fun initLayout() {
 
     }
 

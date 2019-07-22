@@ -51,7 +51,7 @@ class SomeFragment @Inject constructor(): BaseDaggerFragment<SomeFragmentBinding
     }
 
     override fun initViewBinding() {
-        mBinding.someInfiniteBanner.runAutoScroll(300)
+
     }
 
     override fun initViewModelEvents() {
@@ -84,6 +84,18 @@ class SomeFragment @Inject constructor(): BaseDaggerFragment<SomeFragmentBinding
             mColorModel.changeColor(current.statusColor.toColor(),
                 current.bgcolor.toColor())
         }
+    }
+
+    override fun onPause() {
+        mBinding.someInfiniteBanner.stopAutoScroll()
+
+        super.onPause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        mBinding.someInfiniteBanner.runAutoScroll(4000)
     }
 
     ////////////////////////////////////////////////////////////////////////////////////
