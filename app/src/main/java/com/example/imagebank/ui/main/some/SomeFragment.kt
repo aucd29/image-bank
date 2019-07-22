@@ -73,9 +73,11 @@ class SomeFragment @Inject constructor(): BaseDaggerFragment<SomeFragmentBinding
             changeStatusColor(it)
         }
 
-//        mInfiniteBannerViewModel.pageChangeCallback.set {
-////            mBinding.someInfiniteBannerIndicator.selection = it
-//        }
+        val size = mInfiniteBannerViewModel.items.get()?.size ?: 0
+        mBinding.someInfiniteBannerIndicator.count = size
+        mInfiniteBannerViewModel.pageChangeCallback.set {
+            mBinding.someInfiniteBannerIndicator.selection = it % size
+        }
     }
 
     private fun changeStatusColor(selection: Int) {
