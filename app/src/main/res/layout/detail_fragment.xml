@@ -36,6 +36,7 @@
                     android:paddingStart="@dimen/dp20"
                     android:paddingEnd="@dimen/dp20"
                     android:onClick="@{() -> model.finish()}"
+                    android:contentDescription="@string/cd_detail_back"
             />
 
             <TextView
@@ -89,6 +90,7 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:bindImage="@{item.url}"
+                            android:contentDescription="@string/cd_detail_detail_image"
                             android:visibility="@{item.type == 0 ? View.VISIBLE : View.GONE}"
                     />
                     <!--app:bindImageThumbnail="@{item.thumbnail}"-->

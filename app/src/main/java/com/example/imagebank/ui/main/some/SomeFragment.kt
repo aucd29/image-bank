@@ -51,7 +51,7 @@ class SomeFragment @Inject constructor(): BaseDaggerFragment<SomeFragmentBinding
     }
 
     override fun initViewBinding() {
-
+        mBinding.someInfiniteBanner.runAutoScroll(300)
     }
 
     override fun initViewModelEvents() {
@@ -72,6 +72,10 @@ class SomeFragment @Inject constructor(): BaseDaggerFragment<SomeFragmentBinding
             mBinding.someBannerIndicator.selection = it
             changeStatusColor(it)
         }
+
+//        mInfiniteBannerViewModel.pageChangeCallback.set {
+////            mBinding.someInfiniteBannerIndicator.selection = it
+//        }
     }
 
     private fun changeStatusColor(selection: Int) {

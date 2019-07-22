@@ -14,7 +14,10 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.viewpager.widget.PagerAdapter
 import brigitte.drawable
+import io.reactivex.Single
+import io.reactivex.disposables.CompositeDisposable
 import org.slf4j.LoggerFactory
+import java.util.concurrent.TimeUnit
 
 /**
  * Created by <a href="mailto:aucd29@hanwha.com">Burke Choi</a> on 2019-07-03 <p/>
@@ -29,12 +32,13 @@ open class BannerViewModel<T: IBannerItem> constructor(application: Application
     val items              = ObservableField<List<T>>()
     val adapter            = ObservableField<IBannerPagerAdapter>()
     val pageChangeCallback = ObservableField<(Int) -> Unit>()
+    val disposable         = CompositeDisposable()
 
     fun initAdapter(layout: Int) {
         adapter.set(BannerPagerAdapter<T>(layout, this))
     }
 
-    fun initInfiniteAdapter(layout: Int) {
+    fun initInfiniteAdapter(layout: Int, autoScroll: Long = 0) {
         adapter.set(InfinitePagerAdapter(BannerPagerAdapter<T>(layout, this)))
     }
 
@@ -68,9 +72,12 @@ class BannerPagerAdapter <T: IBannerItem> (
 
     private var mItems: List<T> = arrayListOf()
 
-    fun setBannerItems(items: List<T>) {
+    fun setBannerItems(items: List<T>, invalidate: Boolean = true) {
         mItems = items
-        notifyDataSetChanged()
+
+        if (invalidate) {
+            notifyDataSetChanged()
+        }
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
@@ -105,13 +112,16 @@ class BannerPagerAdapter <T: IBannerItem> (
 //
 ////////////////////////////////////////////////////////////////////////////////////
 
-class InfinitePagerAdapter(val adapter: PagerAdapter): IBannerPagerAdapter() {
+class InfinitePagerAdapter(val adapterProxy: PagerAdapter): IBannerPagerAdapter() {
     companion object {
         private val mLog = LoggerFactory.getLogger(InfinitePagerAdapter::class.java)
     }
 
     val realCount: Int
-        get() = adapter.count
+        get() = adapterProxy.count
+
+    override fun getCount() =
+        if (realCount == 0) 0 else Int.MAX_VALUE
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val virtualPos = position % realCount
@@ -121,7 +131,7 @@ class InfinitePagerAdapter(val adapter: PagerAdapter): IBannerPagerAdapter() {
             mLog.debug("VIRTUAL POS : $virtualPos")
         }
 
-        return adapter.instantiateItem(container, virtualPos)
+        return adapterProxy.instantiateItem(container, virtualPos)
     }
 
     override fun destroyItem(container: ViewGroup, position: Int, obj: Any) {
@@ -132,53 +142,52 @@ class InfinitePagerAdapter(val adapter: PagerAdapter): IBannerPagerAdapter() {
             mLog.debug("VIRTUAL POS : $virtualPos")
         }
 
-        adapter.destroyItem(container, virtualPos, obj)
+        adapterProxy.destroyItem(container, virtualPos, obj)
     }
 
     fun setBannerItems(items: List<*>) {
-        if (adapter is BannerPagerAdapter<*>) {
-            adapter.setBannerItems(items as List<Nothing>)
+        if (adapterProxy is BannerPagerAdapter<*>) {
+            adapterProxy.setBannerItems(items as List<Nothing>, false)
         }
 
         notifyDataSetChanged()
     }
 
     override fun finishUpdate(container: ViewGroup) =
-        adapter.finishUpdate(container)
+        adapterProxy.finishUpdate(container)
 
     override fun isViewFromObject(view: View, obj: Any) =
-        adapter.isViewFromObject(view, obj)
+        adapterProxy.isViewFromObject(view, obj)
 
     override fun restoreState(state: Parcelable?, loader: ClassLoader?) =
-        adapter.restoreState(state, loader)
+        adapterProxy.restoreState(state, loader)
 
     override fun saveState() =
-        adapter.saveState()
+        adapterProxy.saveState()
 
     override fun startUpdate(container: ViewGroup) =
-        adapter.startUpdate(container)
+        adapterProxy.startUpdate(container)
 
     override fun getPageTitle(position: Int) =
-        adapter.getPageTitle(position % realCount)
+        adapterProxy.getPageTitle(position % realCount)
 
     override fun getPageWidth(position: Int) =
-        adapter.getPageWidth(position)
+        adapterProxy.getPageWidth(position)
 
     override fun setPrimaryItem(container: ViewGroup, position: Int, obj: Any) =
-        adapter.setPrimaryItem(container, position, obj)
+        adapterProxy.setPrimaryItem(container, position, obj)
 
     override fun unregisterDataSetObserver(observer: DataSetObserver) =
-        adapter.unregisterDataSetObserver(observer)
+        adapterProxy.unregisterDataSetObserver(observer)
 
     override fun registerDataSetObserver(observer: DataSetObserver) =
-        adapter.registerDataSetObserver(observer)
+        adapterProxy.registerDataSetObserver(observer)
 
-    override fun notifyDataSetChanged() =
-        adapter.notifyDataSetChanged()
+    override fun notifyDataSetChanged() {
+        adapterProxy.notifyDataSetChanged()
+        super.notifyDataSetChanged()
+    }
 
     override fun getItemPosition(obj: Any) =
-        adapter.getItemPosition(obj)
-
-    override fun getCount() =
-        if (realCount == 0) 0 else Int.MAX_VALUE
+        adapterProxy.getItemPosition(obj)
 }

@@ -24,7 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-            <com.example.imagebank.common.widget.BkViewPager
+            <brigitte.widget.viewpager.WrapContentViewPager
                     android:id="@+id/some_banner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
                     app:piv_interactiveAnimation="true"
                     app:piv_selectedColor="@color/gray_50"
                     app:piv_unselectedColor="@color/gray_300"
-                    app:piv_viewPager="@id/dibs_viewpager"
+                    app:piv_viewPager="@id/some_banner"
             />
 
             <androidx.recyclerview.widget.RecyclerView
@@ -101,14 +101,32 @@
             <brigitte.widget.viewpager.InfiniteViewPager
                     android:id="@+id/some_infinite_banner"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:layout_height="wrap_content"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/some_qna_recycler"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:bindBannerAdapter="@{infiniteBannerModel.adapter}"
                     app:bindBannerItems="@{infiniteBannerModel.items}"
             />
-            <!--app:bindPageChangeCallback="@{infiniteBannerModel.pageChangeCallback}"-->
+
+            <!--app:bindPageChangeCallback="@{bannerModel.pageChangeCallback}"-->
+            <!--<com.rd.PageIndicatorView-->
+                    <!--android:id="@+id/some_infinite_banner_indicator"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginTop="@dimen/dp20"-->
+                    <!--android:layout_marginEnd="@dimen/dp20"-->
+                    <!--attrs:piv_padding="6dp"-->
+                    <!--attrs:piv_radius="2dp"-->
+                    <!--app:layout_constraintTop_toTopOf="@+id/some_infinite_banner"-->
+                    <!--app:layout_constraintEnd_toEndOf="parent"-->
+                    <!--app:piv_animationType="worm"-->
+                    <!--app:piv_dynamicCount="true"-->
+                    <!--app:piv_interactiveAnimation="true"-->
+                    <!--app:piv_selectedColor="@color/gray_50"-->
+                    <!--app:piv_unselectedColor="@color/gray_300"-->
+                    <!--app:piv_viewPager="@id/some_infinite_banner"-->
+            <!--/>-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

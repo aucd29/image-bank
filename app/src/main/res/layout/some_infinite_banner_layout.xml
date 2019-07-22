@@ -13,6 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@{model.convertColor(item.bgcolor)}"
+            android:paddingBottom="@dimen/dp20"
     >
 
         <TextView

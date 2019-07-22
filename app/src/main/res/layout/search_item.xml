@@ -26,6 +26,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                android:contentDescription="@string/cd_search_image_searched_image"
                 app:bindImage="@{item.thumbnail}"
                 />
 
@@ -35,6 +36,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:padding="@dimen/dp10"
+                android:contentDescription="@string/cd_search_dibs_icon"
                 android:src="@{item.dibs}"
                 android:onClick="@{() -> model.command(model.CMD_ANIM_STAR, item)}"
                 app:bindToLargeAlpha="@{item.anim}"

@@ -54,24 +54,36 @@ object ViewPagerBindingAdapter {
             var myadapter: IBannerPagerAdapter? = null
             adapter?.let {
                 if (viewpager.adapter == null) {
-                    if (it is BannerPagerAdapter<*> || it is InfinitePagerAdapter) {
-                        myadapter = it
-                        viewpager.adapter = it
+                    when (it) {
+                        is BannerPagerAdapter<*> -> {
+                            items?.let { list -> it.setBannerItems(list as List<Nothing>) }
+
+                            myadapter         = it
+                            viewpager.adapter = it
+                        }
+                        is InfinitePagerAdapter -> {
+                            items?.let { list -> it.setBannerItems(list as List<Nothing>) }
+
+                            myadapter         = it
+                            viewpager.adapter = it
+                        }
+                        else -> {}
                     }
                 } else {
                     myadapter = viewpager.adapter as IBannerPagerAdapter
-                }
-            }
 
-            items?.let { list ->
-                myadapter?.let {
-                    if (it is BannerPagerAdapter<*>) {
-                        it.setBannerItems(list as List<Nothing>)
-                    } else if (it is InfinitePagerAdapter) {
-                        it.setBannerItems(list as List<*>)
+                    items?.let { list ->
+                        myadapter?.let {
+                            if (it is BannerPagerAdapter<*>) {
+                                it.setBannerItems(list as List<Nothing>)
+                            } else if (it is InfinitePagerAdapter) {
+                                it.setBannerItems(list as List<*>)
+                            }
+                        }
                     }
                 }
             }
+
         } catch (e: Exception) {
             if (mLog.isDebugEnabled) {
                 e.printStackTrace()
