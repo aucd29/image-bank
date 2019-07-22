@@ -50,6 +50,8 @@ inline val FragmentManager.count: Int
 inline fun <reified T: Fragment> FragmentManager.find() =
     findFragmentByTag(T::class.java.name) as T?
 
+inline fun <reified F: Fragment> Fragment.find() =
+    fragmentManager?.find<F>()
 
 /**
  * 다이얼로그를 띄우기 위한 옵저버 로 view model 에 선언되어 있는 single live event 의 값의 변화를 인지 하여 dialog 을 띄운다.

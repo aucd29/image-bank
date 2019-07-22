@@ -83,7 +83,6 @@ object ViewPagerBindingAdapter {
                     }
                 }
             }
-
         } catch (e: Exception) {
             if (mLog.isDebugEnabled) {
                 e.printStackTrace()

@@ -391,6 +391,8 @@ open class RecyclerViewModel<T: IRecyclerDiff>(app: Application)
         }
     }
 
+    fun errorLog(e: Throwable) = errorLog(e, mLog)
+
     ////////////////////////////////////////////////////////////////////////////////////
     //
     // DragCallback
