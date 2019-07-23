@@ -22,8 +22,8 @@ class MainColorViewModel @Inject constructor(app: Application) : StatusBarViewMo
     val tabChangedCallback = ObservableField<TabSelectedCallback>()
     val tabIndicatorColor  = ObservableInt(color(R.color.colorAccent))
 
-    var dibsFragmentFocus: (() -> Unit)? = null
-    var someFragmentFocus: (() -> Unit)? = null
+    var focusDibsFragment: (() -> Unit)? = null
+    var focusSomeFragment: (() -> Unit)? = null
 
     init {
         statusColor.value = color(R.color.colorPrimaryDark)
@@ -39,11 +39,11 @@ class MainColorViewModel @Inject constructor(app: Application) : StatusBarViewMo
                     tabIndicatorColor.set(color(R.color.colorAccent))
                 }
                 1 -> {
-                    dibsFragmentFocus?.invoke()
+                    focusDibsFragment?.invoke()
                     tabIndicatorColor.set(color(android.R.color.white))
                 }
                 else -> {
-                    someFragmentFocus?.invoke()
+                    focusSomeFragment?.invoke()
                     tabIndicatorColor.set(color(android.R.color.white))
                 }
             }

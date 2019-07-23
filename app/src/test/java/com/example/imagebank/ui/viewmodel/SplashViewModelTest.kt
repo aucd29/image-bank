@@ -30,25 +30,15 @@ import org.mockito.Captor
 
 @RunWith(JUnit4::class)
 class SplashViewModelTest {
-    @get:Rule
-    var instantExecutorRule = InstantTaskExecutorRule()
-
-    @Mock
-    lateinit var lifecycleOwner: LifecycleOwner
-    lateinit var lifecycle: LifecycleRegistry
-
     @Mock
     lateinit var observer: Observer<Void>
-
     lateinit var viewModel: SplashViewModel
 
     @Before
     @Throws(Exception::class)
     fun setup() {
         MockitoAnnotations.initMocks(this)
-        lifecycle = LifecycleRegistry(lifecycleOwner)
-        lifecycle.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
-        Mockito.`when`(lifecycleOwner.lifecycle).thenReturn(lifecycle)
+        mockLifecycle()
 
         viewModel = SplashViewModel()
     }
@@ -59,5 +49,22 @@ class SplashViewModelTest {
         viewModel.closeSplash()
 
         verify(observer).onChanged(null)
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////////////
+    //
+    // MOCK
+    //
+    ////////////////////////////////////////////////////////////////////////////////////
+    @get:Rule
+    var instantExecutorRule = InstantTaskExecutorRule()
+
+    @Mock
+    lateinit var lifecycleOwner: LifecycleOwner
+    lateinit var lifecycle: LifecycleRegistry
+    private fun mockLifecycle() {
+        lifecycle = LifecycleRegistry(lifecycleOwner)
+        lifecycle.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
+        Mockito.`when`(lifecycleOwner.lifecycle).thenReturn(lifecycle)
     }
 }

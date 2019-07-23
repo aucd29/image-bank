@@ -55,7 +55,7 @@ class SomeFragment @Inject constructor(): BaseDaggerFragment<SomeFragmentBinding
     }
 
     override fun initViewModelEvents() {
-        mColorModel.someFragmentFocus = {
+        mColorModel.focusSomeFragment = {
             val it = mBinding.someBanner.currentItem
 
             // 이상하게 indicator 가 이걸 저장 못하네 ?

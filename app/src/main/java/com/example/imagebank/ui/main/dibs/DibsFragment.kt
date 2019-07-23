@@ -5,12 +5,10 @@ import brigitte.di.dagger.module.injectOf
 import brigitte.di.dagger.module.injectOfActivity
 import brigitte.toColor
 import com.example.imagebank.MainColorViewModel
-import com.example.imagebank.common.PreloadConfig
 import com.example.imagebank.databinding.DibsFragmentBinding
 import dagger.android.ContributesAndroidInjector
 import org.slf4j.LoggerFactory
 import javax.inject.Inject
-import kotlin.math.log
 
 /**
  * Created by <a href="mailto:aucd29@hanwha.com">Burke Choi</a> on 2019-06-29 <p/>
@@ -42,7 +40,7 @@ class DibsFragment @Inject constructor() : BaseDaggerFragment<DibsFragmentBindin
     }
 
     override fun initViewModelEvents() {
-        mColorModel.dibsFragmentFocus = {
+        mColorModel.focusDibsFragment = {
             val it = mBinding.dibsViewpager.currentItem
 
             // 이상하게 indicator 가 이걸 저장 못하네 ?
