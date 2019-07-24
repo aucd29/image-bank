@@ -1,9 +1,6 @@
 package com.example.imagebank.ui.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LifecycleRegistry
 import androidx.lifecycle.Observer
 import com.example.imagebank.ui.main.SplashViewModel
 import org.junit.Before
@@ -11,13 +8,10 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
-import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations
-import org.mockito.ArgumentCaptor
-import org.mockito.Captor
-
+import org.mockito.Mockito.verifyNoMoreInteractions
 
 
 /**
@@ -30,25 +24,25 @@ import org.mockito.Captor
 
 @RunWith(JUnit4::class)
 class SplashViewModelTest {
-    @Mock
-    lateinit var observer: Observer<Void>
     lateinit var viewModel: SplashViewModel
 
     @Before
     @Throws(Exception::class)
     fun setup() {
         MockitoAnnotations.initMocks(this)
-        mockLifecycle()
+//        mockLifecycle()
 
         viewModel = SplashViewModel()
     }
 
     @Test
     fun closeTest() {
-        viewModel.closeSplashEvent.observe(lifecycleOwner, observer)
+        val observer = Mockito.mock(Observer::class.java) as Observer<Void>
+        viewModel.closeSplashEvent.observeForever(observer)
         viewModel.closeSplash()
 
         verify(observer).onChanged(null)
+        verifyNoMoreInteractions(observer)
     }
     
     ////////////////////////////////////////////////////////////////////////////////////
@@ -59,12 +53,12 @@ class SplashViewModelTest {
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
-    @Mock
-    lateinit var lifecycleOwner: LifecycleOwner
-    lateinit var lifecycle: LifecycleRegistry
-    private fun mockLifecycle() {
-        lifecycle = LifecycleRegistry(lifecycleOwner)
-        lifecycle.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
-        Mockito.`when`(lifecycleOwner.lifecycle).thenReturn(lifecycle)
-    }
+//    @Mock
+//    lateinit var lifecycleOwner: LifecycleOwner
+//    lateinit var lifecycle: LifecycleRegistry
+//    private fun mockLifecycle() {
+//        lifecycle = LifecycleRegistry(lifecycleOwner)
+//        lifecycle.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
+//        Mockito.`when`(lifecycleOwner.lifecycle).thenReturn(lifecycle)
+//    }
 }

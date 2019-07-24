@@ -18,7 +18,7 @@ class MainColorViewModel @Inject constructor(app: Application) : StatusBarViewMo
         private val mLog = LoggerFactory.getLogger(MainColorViewModel::class.java)
     }
 
-    val viewColor          = ObservableField(color(R.color.colorPrimary))
+    val viewColor          = ObservableInt(color(R.color.colorPrimary))
     val tabChangedCallback = ObservableField<TabSelectedCallback>()
     val tabIndicatorColor  = ObservableInt(color(R.color.colorAccent))
 

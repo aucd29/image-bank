@@ -4,22 +4,19 @@ import android.app.Application
 import android.content.Context
 import android.content.res.Resources
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LifecycleRegistry
 import androidx.lifecycle.Observer
 import com.example.imagebank.MainColorViewModel
 import com.example.imagebank.R
+import com.google.android.material.tabs.TabLayout
+import junit.framework.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import org.mockito.Mock
-import org.mockito.Mockito
 import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
-import org.robolectric.RobolectricTestRunner
 
 /**
  * Created by <a href="mailto:aucd29@hanwha.com">Burke Choi</a> on 2019-07-23 <p/>
@@ -28,13 +25,11 @@ import org.robolectric.RobolectricTestRunner
  *
  * http://juranosaurus.blogspot.com/2015/10/robolectric-1.html
  * https://github.com/nongdenchet/android-mvvm-with-tests
+ * https://github.com/adibfara/Lives/blob/master/lives/src/test/java/com/snakydesign/livedataextensions/TransformingTest.kt
  */
 
-//@RunWith(RobolectricTestRunner::class)
 @RunWith(JUnit4::class)
 class MainColorViewModelTest {
-    @Mock
-    lateinit var observer: Observer<Int>
     lateinit var viewModel: MainColorViewModel
 
     @Before
@@ -43,16 +38,83 @@ class MainColorViewModelTest {
         MockitoAnnotations.initMocks(this)
 
         mockContext()
-        mockLifecycle()
 
         viewModel = MainColorViewModel(context)
     }
 
     @Test
-    fun testStatusColor() {
-        viewModel.statusColor.observe(lifecycleOwner, observer)
+    fun defaultStatusColor() {
+        val observer = mock(Observer::class.java) as Observer<Int>
 
+        viewModel.statusColor.observeForever(observer)
         verify(observer).onChanged(COLOR_PRIMARY_DARK)
+        verifyNoMoreInteractions(observer)
+    }
+
+    @Test
+    fun defaultViewColor() {
+        assertEquals(viewModel.viewColor.get(), COLOR_PRIMARY)
+    }
+
+    @Test
+    fun defaultTabIndicatorColor() {
+        assertEquals(viewModel.tabIndicatorColor.get(), COLOR_ACCENT)
+    }
+
+    @Test
+    fun changeTabPos0() {
+        val tab = mock(TabLayout.Tab::class.java)
+
+        `when`(tab.position).thenReturn(0)
+        viewModel.tabChangedCallback.get()?.onTabSelected(tab)
+
+        assertEquals(viewModel.tabIndicatorColor.get(), COLOR_ACCENT)
+    }
+
+    @Test
+    fun changeTabPos1() {
+        val tab = mock(TabLayout.Tab::class.java)
+
+        `when`(tab.position).thenReturn(1)
+        viewModel.tabChangedCallback.get()?.onTabSelected(tab)
+
+        assertEquals(viewModel.tabIndicatorColor.get(), COLOR_WHITE)
+    }
+
+    @Test
+    fun changeTabPos2() {
+        val tab = mock(TabLayout.Tab::class.java)
+
+        `when`(tab.position).thenReturn(2)
+        viewModel.tabChangedCallback.get()?.onTabSelected(tab)
+
+        assertEquals(viewModel.tabIndicatorColor.get(), COLOR_WHITE)
+    }
+
+    @Test
+    fun changeTabPos0_to_2() {
+        val tab = mock(TabLayout.Tab::class.java)
+
+        `when`(tab.position).thenReturn(0)
+        viewModel.tabChangedCallback.get()?.onTabSelected(tab)
+        assertEquals(viewModel.tabIndicatorColor.get(), COLOR_ACCENT)
+
+        `when`(tab.position).thenReturn(2)
+        viewModel.tabChangedCallback.get()?.onTabSelected(tab)
+        assertEquals(viewModel.tabIndicatorColor.get(), COLOR_WHITE)
+    }
+
+    @Test
+    fun changeTabPos2_to_0() {
+        val tab = mock(TabLayout.Tab::class.java)
+
+        `when`(tab.position).thenReturn(2)
+        viewModel.tabChangedCallback.get()?.onTabSelected(tab)
+        assertEquals(viewModel.tabIndicatorColor.get(), COLOR_WHITE)
+
+        `when`(tab.position).thenReturn(0)
+        viewModel.tabChangedCallback.get()?.onTabSelected(tab)
+        assertEquals(viewModel.tabIndicatorColor.get(), COLOR_ACCENT)
     }
 
     ////////////////////////////////////////////////////////////////////////////////////
@@ -71,22 +133,19 @@ class MainColorViewModelTest {
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
-    @Mock
-    lateinit var lifecycleOwner: LifecycleOwner
-    lateinit var lifecycle: LifecycleRegistry
-    private fun mockLifecycle() {
-        lifecycle = LifecycleRegistry(lifecycleOwner)
-        lifecycle.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
-        Mockito.`when`(lifecycleOwner.lifecycle).thenReturn(lifecycle)
-    }
-
     @Mock private lateinit var context: Application
     private fun mockContext() {
         `when`<Context>(context.applicationContext).thenReturn(context)
         `when`(context.resources).thenReturn(mock(Resources::class.java))
+
         `when`(context.getColor(R.color.colorPrimary)).thenReturn(COLOR_PRIMARY)
         `when`(context.getColor(R.color.colorPrimaryDark)).thenReturn(COLOR_PRIMARY_DARK)
+        `when`(context.getColor(R.color.colorAccent)).thenReturn(COLOR_ACCENT)
         `when`(context.getColor(android.R.color.white)).thenReturn(COLOR_WHITE)
-    }
 
+        `when`(context.resources.getColor(R.color.colorPrimary)).thenReturn(COLOR_PRIMARY)
+        `when`(context.resources.getColor(R.color.colorPrimaryDark)).thenReturn(COLOR_PRIMARY_DARK)
+        `when`(context.resources.getColor(R.color.colorAccent)).thenReturn(COLOR_ACCENT)
+        `when`(context.resources.getColor(android.R.color.white)).thenReturn(COLOR_WHITE)
+    }
 }
