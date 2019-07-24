@@ -35,9 +35,7 @@ class MainColorViewModelTest {
     @Before
     @Throws(Exception::class)
     fun setup() {
-        MockitoAnnotations.initMocks(this)
-
-        mockContext()
+        initMock()
 
         viewModel = MainColorViewModel(context)
     }
@@ -132,6 +130,11 @@ class MainColorViewModelTest {
 
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
+
+    private fun initMock() {
+        MockitoAnnotations.initMocks(this)
+        mockContext()
+    }
 
     @Mock private lateinit var context: Application
     private fun mockContext() {

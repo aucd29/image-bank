@@ -31,25 +31,24 @@ import java.util.*
  * 복기
  * - 일단 질문에서 의도하고자 하는 의미를 파악 못 한게 여럿 있는 듯
  *
- * - 왜 daum 을 clone 했냐는 질문을 받음 -> 네이버는 ui 바뀌고 어려워서 그런거라고 생각하면 되는 것이냐고 혼잣말 한분이 있는데
- *   물론 의도하지 않았겠지만 이분 남에게 상처주는 타입인듯 =_ =ㅋ 제일 질문도 많이 하는걸 보면 PL 인듯한 ?
+ * - 왜 daum 을 clone 했냐는 질문을 받음 -> just!! 하이브리드 앱 대상으로 제일 할만했었음
  *
  * - 자료구조... OTL...
  *  > hash code ??? 질문의 의도 파악 안됨
- *  > 질문자분은 gdg 에서 뵌듯한 느낌? 성격좋아보임 일단 다이아임!! 먼가 같은 팀 이되었다면 편히 물어볼수 있을 듯한 느낌이랄까?
  *
  * - test 에서 AndroidViewModel 을 이용 관련해서 질문을 받았는데 mock 을 질문하고 싶어서 그런건지?, 개인적으로 android 에서 pure 한 코드 이외는
- *   androidTest 로 동작 시키는게 나을듯 싶은데 +_+? 내가 생각하는것과 먼가 다른게 있는걸까?
- *   > 질문자분는 전형적인 학자 스타일로 보임 조용히 핵심을 찌르는 스타일
+ *   androidTest 로 동작 시켰는데 찾아보니 test 에서 하는게 빠르다고 해서 추가 함
  *
  * - diff util 의 경우 일반적으로 구현하는것과 다른거 같다고 해서 일단 찾아봤는데 diff util 이 알려지기 전 초기에 == 으로 비교해서 이를 참조
  * 하였지만 현재는 id 를 생성해서 이를 비교하는 형태가 주를 이루는거 같아서 리펙 함
  *
- * - single live event 를 쓰게 된 이유? 같은걸 질문 받았는데 딱히 이유가 안 떠올라 해당 클래스의 주석을 보여드렸다.. 마치 장금이가 홍시맛이 나서 홍시라고 이야기 한것 같은 심정으로
+ * - single live event 를 쓰게 된 이유? 같은걸 질문 받았는데 딱히 이유가 안 떠올라 해당 클래스의 주석을 보여드렸다..
+ * 마치 장금이가 홍시맛이 나서 홍시라고 이야기 한것 같은 심정으로
  *
  * - Rx 는 책을 사서 한번 보긴해야될듯 주먹 구구식으로 한듯 (일단 구매)
  *
- * - activity lifecycle 중 onStart 사용처? -> 개인적으로 사용하지 않았음 -> https://developer.android.com/guide/components/activities/activity-lifecycle
+ * - activity lifecycle 중 onStart 사용처? -> 개인적으로 사용하지 않았음 ->
+ * https://developer.android.com/guide/components/activities/activity-lifecycle
  * - save Instance State 관련 ? -> 개인적으로는 shared preference 를 이용한다고 함 -> http://egloos.zum.com/skyswim42/v/3925726
  *
  * - imageview 에 contentDescription 써봤는지 -> 아니요 -> 문자열 바인딩 하는건 알고 있었는데 찾아보니 정말 그게 다더라 마치 html 의 alt 느낌?
@@ -68,7 +67,6 @@ import java.util.*
  *
  * - camera api 1 을 써봄 camerax 나온걸 이야기 했다. camera2 를 했다고 하면 이외의 질문이 있었을까? 2 의 경우 몇몇 메소드가 min version 이 지나치게
  *   높아 꺼려지긴했지만 flashlight 의 경우 camera1 / 2 를  분기 처리 하긴 했다. 그걸로 camera2 를 써보았다라고 하긴 뭐해서...
- *  > 질문자 분이 "잘생김" + 차분함
  *
  * - rsa 관련 간단한 설명을 함,
  *  > 인증서 관련해서 알고 있는지 문의가 왔으나 해보지 않음을 이야기 함 - https://opentutorials.org/course/228/4894
@@ -79,7 +77,6 @@ import java.util.*
  * - ormlite 의 경우 암호화 디비가 없냐 라고 물었고 암호화 디비관련 검색 했을 땐 realm 만 검색되어 작업을 했기 때문에 답변으로
  *   ormlite 관련해서는 안 찾아봤다고 이야기 했다. 궁금해서 이번에 찾아보니 있음, 근데 ormlite 가 ios 에 없을 터이니
  *   realm 으로 진행했던게 더 나을듯 싶다.
- *
  *   https://stackoverflow.com/questions/10041131/android-encryption-decryption-with-ormlite-possible
  *   https://github.com/Andoctorey/ormlite-sqlcipher
  *
@@ -89,18 +86,21 @@ import java.util.*
  *  (chucked 와 일반 방식의 차이점이라던지 OTL..)
  *    https://developer.mozilla.org/ko/docs/Web/HTTP/Headers/Cache-Control
  *
- * - atomic 변수들에대한 질문 받음 -> sync 관련해서 사용은 해봤다고는 했는데 어디에 사용했는지는 기억안난다고 이야기 함... 나중에 생각해보니 single live event 도 atomic boolean !!
- * - 책 & 인터넷 중 어디에서 자료를 참고하냐라는 질문을 받음 -> 주로 인터넷 참고하고 최신기술을 찾아보기 위해서는 인터넷이 먼저라고 이야기 하고 구글블로그를 제일 많이 참고한다고 함
- * - 소스나 문서 쓰는걸로 보면 잘 적는데 자기 소개는 왜케 성의 없게 적었냐고 들음 -> 팀장님이였고 서글서글한 느낌? 이야길 많이 안하셔서 잘은 모름
+ * - atomic 변수들에대한 질문 받음 -> sync 관련해서 사용은 해봤다고는 했는데 어디에 사용했는지는 기억안난다고 이야기 함...
+ * 나중에 생각해보니 single live event 도 atomic boolean !!
+ * - 책 & 인터넷 중 어디에서 자료를 참고하냐라는 질문을 받음 -> 주로 인터넷 참고하고 최신기술을 찾아보기 위해서는 인터넷이 먼저라고 이야기 하고
+ * 구글블로그를 제일 많이 참고한다고 함
+ * - 소스나 문서 쓰는걸로 보면 잘 적는데 자기 소개는 왜케 성의 없게 적었냐고 들음 ->
  *  > 자기 소개 같은거 적는게 좀 어려워한다고 이야기 함.. 뭐랄까 내가 하고 싶다고해서 되는것도 아니니.. 흠.. 너무 현실적인건가?
  *
- * - 팀 코드룰 지킬꺼냐는 질문에 '당근입니다.' 이건 너무 당연한거라서 전 회사의 예를 들긴했지만 전 회사에서 몇몇은 이를 지키지 않아 한명이 전체 코드를 리펙하는 일이 있긴 했다.
- *   어쩌면 이건 피할수 없는 것일수도? 라는 생각이 들기도 한다.
+ * - 팀 코드룰 지킬꺼냐는 질문에 '당근입니다.' 이건 너무 당연한거라서 전 회사의 예를 들긴했지만 전 회사에서 몇몇은 이를 지키지 않아
+ * 한명이 전체 코드를 리펙하는 일이 있긴 했다. 어쩌면 이건 피할수 없는 것일수도? 라는 생각이 들기도 한다.
  *
  * - 어느게 가장 우수하냐 라는 질문을 잘못 받아드려 여기 있는 사람들 중에 어느게 가장 우수한가로 잘못 인식하여 (내가 미쳤지 =_ =)
  *   답변을 제대로 못했다. (그런 질문을 할일은 없었겠지... =_ =) 되세김질을 하자면
  *   개발자가 편하게 비즈니스 코드에 집중할 수 있도록 베이스 코드를 설계하고 공통 모듈을 설계하는걸 가장 오래 해왔고
- *   가장 잘하는 부분이라고 하고 싶다. (개인적으로는 js, cpp, kotlin, java 구분 없이 코딩 가능 하다. 물론 cpp 가 요즘 너무 많이 바뀌어서 최신 버전은 모르는게 함정!)
+ *   가장 잘하는 부분이라고 하고 싶다. (개인적으로는 js, cpp, kotlin, java 구분 없이 코딩 가능 하다.
+ *   물론 cpp 가 요즘 너무 많이 바뀌어서 최신 버전은 모름)
  *
  * - 팀에 와서 무얼 할수 있겠냐? - 거즘 추천으로만 회사를 옮겨다니다 보니 정말 오랬만에 받은 질문이라 머랄까?
  *   멀 할수 있을까? 라는 문제와 지금에 팀 구성원을 모르는 문제 때문에 제대로 답변을 못했다. 그냥 인터뷰에서는
@@ -118,10 +118,12 @@ import java.util.*
  * - 근데 왜 2차에서 OTL.... 뭐가 심기를 건드린걸까?
  *  > 회사 그만둔 이유 각각 이야기
  *  > 그 다음 부터는 CTO 분이 질문에 대한 답변으로 계속 꼬투리 잡는 식으로 질문을 이어 나감
- *  > 하이브리드+네이티브 방식 플랫폼을 만들었다 -> 왜 네이티브로 그냥하면 되는데 그리했나? -> 초기에는 하이브리드만 있었는데 반응성이 느려서 네이티브 추가함을 이야기함
+ *  > 하이브리드+네이티브 방식 플랫폼을 만들었다 -> 왜 네이티브로 그냥하면 되는데 그리했나? ->
+ *  초기에는 하이브리드만 있었는데 반응성이 느려서 네이티브 추가함을 이야기함
  *  > 주로 플랫폼을 작업해서 native ui 능력이 떨어져 보인다 -> 저도 그리 생각해서 개인 프로젝트를 좀 했다 -> 뭐했냐? -> daum clone -> 앱 시연 ->
  *    살짝 당황하시며 -> 아래 웹뷰죠 -> 네
- *  > 다른 한분이 다음 개발자도 많은데 왜 그걸 만들었냐 -> CTO 분이 '그게 아니라 .. ' 라고 이야기 하시며 대신 설명하심 -> 여기서 내가 살짝 당황 (왜 두분이 싸우세요..)
+ *  > 다른 한분이 다음 개발자도 많은데 왜 그걸 만들었냐 -> CTO 분이 '그게 아니라 .. ' 라고 이야기 하시며 대신 설명하심 ->
+ *  여기서 내가 살짝 당황 (왜 두분이 싸우세요..)
  *  > 중앙에 젤로 높으신분으로 보이는 분이 갑자기 커트하시고 -> 현재 연봉은? -> 그대로 알려드리니 -> 엥? 하시면서 그옆에 분이 원천이야기 하라고 ->
  *  > 원천을 생각해보지 않아서 근사치 이야기 드리고 끝
  *  > 나오는데 출구에 버튼 누르는걸 못보고 헤메다가 나옴
@@ -139,7 +141,6 @@ import java.util.*
  *   한번 더 생각하여 코드를 재활용성 있게 만들기 때문에 더 나은 효과를 낼수 있음을 이야기 해야할 것 같다. 이와 관련되어.
  *   recycler group 의 코드를 예로 들어봐야할 까?, 각각 구현하던걸 데이터에 인터페이스만 상속하면 그냥 됩니다! 라고
  * - 언제 다시 트라이를 해볼수 있을지는 모르겠지만...반성하자! 팀장님이 어제 주신 책상에 놓여있는 '코틀린 마이크로서비스 개발' 책을 보며 복잡/미묘한 감정이다.
- *
  */
 class SearchViewModel @Inject constructor(application: Application,
     private val api: KakaoRestSearchService,
@@ -152,8 +153,8 @@ class SearchViewModel @Inject constructor(application: Application,
         const val V_TAB_SPANCOUNT   = 2
 
         // TODO Unknown pattern character 'X' 오류나서 변경 [aucd29][2019-07-02]
-//        const val DATE_FORMAT       = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
-        const val DATE_FORMAT       = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+        const val DATE_FORMAT1       = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
+        const val DATE_FORMAT2       = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
 
         const val CMD_ANIM_STAR     = "cmd-anim-star"
         const val CMD_HIDE_KEYBOARD = "cmd-hide-keyboard"
@@ -170,7 +171,6 @@ class SearchViewModel @Inject constructor(application: Application,
 
     val editorAction     = ObservableField<(String?) -> Boolean>()   // editor 에서 done 버튼 선택 시
     val scrollListener   = ObservableField<ScrollChangeListener>()
-//    val gridCount        = ObservableInt(2)
 
     val visibleProgress  = ObservableInt(View.GONE)
     val visibleTopScroll = ObservableInt(View.GONE)
@@ -189,7 +189,7 @@ class SearchViewModel @Inject constructor(application: Application,
     // FIXME API 오류로 데이터의 첫번째가 동일하면 이를 중복 데이터로 본다.
     var mKakaoImageResult: KakaoImageResult? = null
 
-    lateinit var layoutManager:StaggeredGridLayoutManager
+    lateinit var layoutManager: StaggeredGridLayoutManager
 
     init {
         mDibsList.value = arrayListOf()
@@ -224,7 +224,21 @@ class SearchViewModel @Inject constructor(application: Application,
             // 이곳에서 처리
             if (isBottom && mPage <= 50 && !(mIsVclipApiEnd && mIsImageApiEnd)) {
                 val pos = layoutManager.findLastVisibleItemPosition()
-                if (isNextLoad(pos)) {
+
+                if (mLog.isDebugEnabled) {
+                    mLog.debug("FIND LAST VISIBLE ITEM POSITION $pos")
+                }
+
+                val next = isNextLoad(pos)
+                if (mLog.isDebugEnabled) {
+                    mLog.debug("IS NEXT : $next")
+                }
+
+                if (next) {
+                    if (mLog.isDebugEnabled) {
+                        mLog.debug("SEARCH NEXT")
+                    }
+
                     search(mPage.inc())
                 }
             }
@@ -248,6 +262,10 @@ class SearchViewModel @Inject constructor(application: Application,
         mDataLoading = true
         command(CMD_HIDE_KEYBOARD)
 
+        if (mLog.isDebugEnabled) {
+            mLog.debug("PAGE : $mPage")
+        }
+
         if (!app.isNetworkConntected()) {
             snackbar(R.string.network_invalid_connectivity)
             return
@@ -267,104 +285,103 @@ class SearchViewModel @Inject constructor(application: Application,
 
             var totalSearchedCount = 0
 
-//            ioThread {
-                // 검색은 키워드 하나에 이미지 검색과 동영상 검색을 동시에 사용,
-                mDp.add(Observable.zip(api.image(it, mPage.toString(), sortOption()),
-                    api.vclip(it, mPage.toString(), sortOption()),
-                    BiFunction { image: KakaoImageSearch, vclip: KakaoVClipSearch ->
-                        // 두 검색 결과를 합친 리스트를 사용합니다.
-                        val result = arrayListOf<KakaoSearchResult>()
+            // 검색은 키워드 하나에 이미지 검색과 동영상 검색을 동시에 사용,
+            mDp.add(Observable.zip(api.image(it, mPage.toString(), sortOption()),
+                api.vclip(it, mPage.toString(), sortOption()),
+                BiFunction { image: KakaoImageSearch, vclip: KakaoVClipSearch ->
+                    // 두 검색 결과를 합친 리스트를 사용합니다.
+                    val result = arrayListOf<KakaoSearchResult>()
 
-                        // FIXME 현재 kakao api 버그로 페이징에 문제가 존재 image 의 경우 항상 같은 데이터가 들어온다.
-                        // FIXME 데이터를 제외 해볼까 싶었는데 정력 낭비로 생각하고 1페이지만 데이터를 참조하고
-                        // FIXME 버그가 수정되면 살리는 형태로 하도록 수정
-                        if (image.message == null && !mIsImageApiEnd) {
-                            // FIXME 임시코드
-                            // FIXME 페이징 시 동일한 데이터가 들어오면 이를 무시하도록 처리 한다.
-                            if (mKakaoImageResult == null) {
-                                mKakaoImageResult = image.documents?.get(0)
-                            } else {
-                                val tmp = image.documents?.get(0)
-                                if (tmp != null && mKakaoImageResult!!.image_url == tmp.image_url) {
-                                    // API 오류로 1번만 호출하고 종료 시킨다.
-                                    mIsImageApiEnd = true
+                    // FIXME 현재 kakao api 버그로 페이징에 문제가 존재 image 의 경우 항상 같은 데이터가 들어온다.
+                    // FIXME 데이터를 제외 해볼까 싶었는데 정력 낭비로 생각하고 1페이지만 데이터를 참조하고
+                    // FIXME 버그가 수정되면 살리는 형태로 하도록 수정
+                    if (image.message == null && !mIsImageApiEnd) {
+                        // FIXME 임시코드
+                        // FIXME 페이징 시 동일한 데이터가 들어오면 이를 무시하도록 처리 한다.
+                        if (mKakaoImageResult == null) {
+                            mKakaoImageResult = image.documents?.get(0)
+                        } else {
+                            val tmp = image.documents?.get(0)
+                            if (tmp != null && mKakaoImageResult!!.image_url == tmp.image_url) {
+                                // API 오류로 1번만 호출하고 종료 시킨다.
+                                mIsImageApiEnd = true
+                            }
+                        }
+
+                        if (!mIsImageApiEnd) {
+                            // 2018-12-16T09:40:08.000+09:00
+                            image.documents?.forEach {
+                                it.image_url?.let { img -> mCachingList.add(img) }
+                                it.thumbnail_url?.let { thumbnail ->
+                                    result.add(KakaoSearchResult(thumbnail, it.datetime,
+                                        it.datetime.toUnixTime(DATE_FORMAT1, DATE_FORMAT2),
+                                        it.image_url, it.display_sitename
+                                    ))
                                 }
                             }
 
-                            if (!mIsImageApiEnd) {
-                                // 2018-12-16T09:40:08.000+09:00
-                                image.documents?.forEach {
-                                    it.image_url?.let { img -> mCachingList.add(img) }
-                                    it.thumbnail_url?.let { thumbnail ->
-                                        result.add(KakaoSearchResult(thumbnail, it.datetime,
-                                            it.datetime.toUnixTime(DATE_FORMAT),
-                                            it.image_url, it.display_sitename
-                                        ))
-                                    }
-                                }
-
-                                mIsImageApiEnd     = image.meta?.is_end ?: false    // 빠진 부분 추가
-                                totalSearchedCount = image.meta?.total_count ?: 0
-                            }
-                        } else {
-                            mLog.error("ERROR: ${image.message}")
+                            mIsImageApiEnd     = image.meta?.is_end ?: false    // 빠진 부분 추가
+                            totalSearchedCount = image.meta?.total_count ?: 0
                         }
-
-                        if (vclip.message == null) {
-                            vclip.documents?.forEach {
-                                result.add(KakaoSearchResult(it.thumbnail, it.datetime,
-                                    it.datetime.toUnixTime(DATE_FORMAT),
-                                    it.url, it.title,
-                                    KakaoSearchResult.T_VCLIP))
-                            }
-
-                            mIsVclipApiEnd = vclip.meta?.is_end ?: false
-                            totalSearchedCount += image.meta?.total_count ?: 0
-                        } else {
-                            mLog.error("ERROR: ${vclip.message}")
-                        }
-
-                        result
-                    })
-                    .subscribeOn(Schedulers.io())       // FIXME UI 가 버벅여서 ioThread 로 우회했었는데 먼가 빌드가 제대로 되지 않았던 상황이였었는지, 인터뷰때 이렇게 해도 잘 동작했다.
-                    .observeOn(Schedulers.io())         // FIXME map 에도 io 적용
-                    .map {
-                        // 두 검색 결과를 datetime 필드를 이용해 최신순으로 나열하여 출력합니다.
-                        it.sortWith(Comparator { o1, o2 ->
-                            when {
-                                o1.datetime > o2.datetime  -> -1
-                                o1.datetime == o2.datetime -> 0
-                                else                       -> 1
-                            }
-                        })
-
-                        if (mPage > 1) {
-                            it.addAll(0, items.get()!!)
-                        }
-
-                        // 찜에 넣어둔 경우 이를 검사해서 활성화 시켜준다.
-                        mDibsList.value?.forEach { dibs ->
-                            it.find { f -> dibs.thumbnail == f.thumbnail }?.fillStar()
-                        }
-
-                        it
+                    } else {
+                        mLog.error("ERROR: ${image.message}")
                     }
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({
-                        if (mLog.isDebugEnabled) {
-                            mLog.debug("SEARCHED DATA SET!! ${it.size}")
+
+                    if (vclip.message == null) {
+                        vclip.documents?.forEach {
+                            result.add(KakaoSearchResult(it.thumbnail, it.datetime,
+                                it.datetime.toUnixTime(DATE_FORMAT1, DATE_FORMAT2),
+                                it.url, it.title,
+                                KakaoSearchResult.T_VCLIP))
                         }
 
-                        totalCount.set(app.getString(R.string.search_total_searched_count,
-                            totalSearchedCount.numberFormat()))
+                        mIsVclipApiEnd = vclip.meta?.is_end ?: false
+                        totalSearchedCount += image.meta?.total_count ?: 0
+                    } else {
+                        mLog.error("ERROR: ${vclip.message}")
+                    }
 
-                        items.set(it)
-                        mDp.add(delay {
-                            mDataLoading = false
-                            visibleProgress.gone()
-                        })
+                    result
+                })
+                .subscribeOn(Schedulers.io())       // FIXME UI 가 버벅여서 ioThread 로 우회했었는데 먼가 빌드가 제대로 되지 않았던 상황이였었는지, 인터뷰때 이렇게 해도 잘 동작했다.
+                .observeOn(Schedulers.io())         // FIXME map 에도 io 적용
+                .map {
+                    // 두 검색 결과를 datetime 필드를 이용해 최신순으로 나열하여 출력합니다.
+                    it.sortWith(Comparator { o1, o2 ->
+                        when {
+                            o1.datetime > o2.datetime  -> -1
+                            o1.datetime == o2.datetime -> 0
+                            else                       -> 1
+                        }
+                    })
 
-                        // 의도한대로 되지 않음 ;; 삭제
+                    if (mPage > 1) {
+                        it.addAll(0, items.get()!!)
+                    }
+
+                    // 찜에 넣어둔 경우 이를 검사해서 활성화 시켜준다.
+                    mDibsList.value?.forEach { dibs ->
+                        it.find { f -> dibs.thumbnail == f.thumbnail }?.fillStar()
+                    }
+
+                    it
+                }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    if (mLog.isDebugEnabled) {
+                        mLog.debug("SEARCHED DATA SET!! ${it.size}")
+                    }
+
+                    totalCount.set(app.getString(R.string.search_total_searched_count,
+                        totalSearchedCount.numberFormat()))
+
+                    items.set(it)
+                    mDp.add(delay {
+                        mDataLoading = false
+                        visibleProgress.gone()
+                    })
+
+                    // 의도한대로 되지 않음 ;; 삭제
 //                        mDp.add(Flowable.fromIterable(mCachingList)
 //                            .subscribeOn(Schedulers.newThread())
 //                            .map(::preloadImage)
@@ -375,17 +392,16 @@ class SearchViewModel @Inject constructor(application: Application,
 //                                }
 //                            }))
 
-                    }, {
-                        if (mLog.isDebugEnabled) {
-                            it.printStackTrace()
-                        }
+                }, {
+                    if (mLog.isDebugEnabled) {
+                        it.printStackTrace()
+                    }
 
-                        visibleProgress.gone()
-                        mLog.error("ERROR: ${it.message}")
-                        it.message?.let(::snackbar)
-                    }))
-            }
-//        } ?: snackbar(R.string.search_pls_insert_keyword)
+                    visibleProgress.gone()
+                    mLog.error("ERROR: ${it.message}")
+                    it.message?.let(::snackbar)
+                }))
+        }
     }
 
     fun toggleSort() {
@@ -437,7 +453,7 @@ class SearchViewModel @Inject constructor(application: Application,
             vibrate(1)
         }
 
-        item.anim.set(ToLargeAlphaAnimParams(5f, endListener = { _, _ ->
+        item.anim.set(ToLargeAlphaAnimParams(5f, endListener = {
             mDibsList.value = toggleDibsItem(item)
             item.toggleDibs()
         }))

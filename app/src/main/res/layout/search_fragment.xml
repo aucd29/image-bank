@@ -100,7 +100,7 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recycler"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:descendantFocusability="blocksDescendants"
                         app:layout_constraintStart_toStartOf="parent"
@@ -111,6 +111,7 @@
                         app:bindItems="@{model.items}"
                         android:clipChildren="false"
                         android:clipToPadding="false"
+                        android:background="#efdedede"
                         android:nestedScrollingEnabled="false"
                 />
             </LinearLayout>

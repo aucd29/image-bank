@@ -17,7 +17,6 @@ import org.junit.runners.MethodSorters
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @LargeTest
 class VideoSearchTest {
-
     /*
     {
 	"documents": [
@@ -42,7 +41,6 @@ class VideoSearchTest {
             "total_count": 8406
         }
     }
-
      */
 
     @Rule

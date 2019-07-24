@@ -29,8 +29,7 @@ class SplashViewModelTest {
     @Before
     @Throws(Exception::class)
     fun setup() {
-        MockitoAnnotations.initMocks(this)
-//        mockLifecycle()
+        initMock()
 
         viewModel = SplashViewModel()
     }
@@ -50,15 +49,11 @@ class SplashViewModelTest {
     // MOCK
     //
     ////////////////////////////////////////////////////////////////////////////////////
+
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
-//    @Mock
-//    lateinit var lifecycleOwner: LifecycleOwner
-//    lateinit var lifecycle: LifecycleRegistry
-//    private fun mockLifecycle() {
-//        lifecycle = LifecycleRegistry(lifecycleOwner)
-//        lifecycle.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
-//        Mockito.`when`(lifecycleOwner.lifecycle).thenReturn(lifecycle)
-//    }
+    private fun initMock() {
+        MockitoAnnotations.initMocks(this)
+    }
 }

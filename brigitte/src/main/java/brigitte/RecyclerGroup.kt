@@ -468,7 +468,11 @@ open class RecyclerViewModel<T: IRecyclerDiff>(app: Application)
 
         return items.get()?.let {
             if (mLog.isDebugEnabled) {
-                mLog.debug("LAST VISIBLE POS ${lastVisiblePos}\nLAST ITEM POS ${it.size}")
+                mLog.debug("DataLoading : $mDataLoading")
+                mLog.debug("list.size : ${it.size}")
+                mLog.debug("lastVisiblePos : $lastVisiblePos")
+                mLog.debug("mThreshold : $mThreshold")
+                mLog.debug("${it.size - lastVisiblePos <= mThreshold}")
             }
 
             !mDataLoading && it.size - lastVisiblePos <= mThreshold

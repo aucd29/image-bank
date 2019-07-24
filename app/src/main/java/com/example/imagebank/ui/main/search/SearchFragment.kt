@@ -18,7 +18,7 @@ import javax.inject.Inject
     =_ = 음...
 
     curl -v -X GET "https://dapi.kakao.com/v2/search/image?page=81&size=1" \
-    --data-urlencode "query=아이유" \
+    --data-urlencode "query=설현" \
     -H "Authorization: KakaoAK e302331ef568c1a4af2053c77eef1b89"
 
     으로 요청 시 오류가 나옴 최대 50이니

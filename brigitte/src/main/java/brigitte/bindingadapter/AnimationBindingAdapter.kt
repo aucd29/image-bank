@@ -132,7 +132,7 @@ object AnimationBindingAdapter {
                 .scaleY(value)
                 .alpha(0f)
                 .withEndAction {
-                    endListener?.invoke(view, null)
+                    endListener?.invoke(null)
 
                     view.apply {
                         scaleX = 1f
@@ -203,7 +203,7 @@ data class ToLargeAlphaAnimParams(
     val transX : Float = 0f,
     val transY : Float = 0f,
     val duration: Long = 300,
-    val endListener : ((View, Animator?) -> Unit)? = null,
+    val endListener : ((Animator?) -> Unit)? = null,
     val interpolator : Interpolator? = null,
     val startDelay : Long? = null
 )
