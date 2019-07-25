@@ -34,21 +34,23 @@ import java.util.*
  * - 왜 daum 을 clone 했냐는 질문을 받음 -> just!! 하이브리드 앱 대상으로 제일 할만했었음
  *
  * - 자료구조... OTL...
- *  > hash code ??? 질문의 의도 파악 안됨
+ *  > hash code ??? 질문이 무엇인지 파악 안됨
  *
  * - test 에서 AndroidViewModel 을 이용 관련해서 질문을 받았는데 mock 을 질문하고 싶어서 그런건지?, 개인적으로 android 에서 pure 한 코드 이외는
- *   androidTest 로 동작 시켰는데 찾아보니 test 에서 하는게 빠르다고 해서 추가 함
+ *   androidTest 로 동작 시켰는데 찾아보니 test 에서 하는게 빠르다고 해서 추가 함, network mock 만하다가 일반 mock 하는데 이거 회사 코드도
+ *   다 바꿔야 되나 고민 중
  *
  * - diff util 의 경우 일반적으로 구현하는것과 다른거 같다고 해서 일단 찾아봤는데 diff util 이 알려지기 전 초기에 == 으로 비교해서 이를 참조
- * 하였지만 현재는 id 를 생성해서 이를 비교하는 형태가 주를 이루는거 같아서 리펙 함
+ *   하였지만 현재는 id 를 생성해서 이를 비교하는 형태가 주를 이루는거 같아서 리펙 함
  *
  * - single live event 를 쓰게 된 이유? 같은걸 질문 받았는데 딱히 이유가 안 떠올라 해당 클래스의 주석을 보여드렸다..
- * 마치 장금이가 홍시맛이 나서 홍시라고 이야기 한것 같은 심정으로
+ *   마치 장금이가 홍시맛이 나서 홍시라고 이야기 한것 같은 심정으로
  *
  * - Rx 는 책을 사서 한번 보긴해야될듯 주먹 구구식으로 한듯 (일단 구매)
  *
  * - activity lifecycle 중 onStart 사용처? -> 개인적으로 사용하지 않았음 ->
- * https://developer.android.com/guide/components/activities/activity-lifecycle
+ *   https://developer.android.com/guide/components/activities/activity-lifecycle
+ *
  * - save Instance State 관련 ? -> 개인적으로는 shared preference 를 이용한다고 함 -> http://egloos.zum.com/skyswim42/v/3925726
  *
  * - imageview 에 contentDescription 써봤는지 -> 아니요 -> 문자열 바인딩 하는건 알고 있었는데 찾아보니 정말 그게 다더라 마치 html 의 alt 느낌?
@@ -88,8 +90,10 @@ import java.util.*
  *
  * - atomic 변수들에대한 질문 받음 -> sync 관련해서 사용은 해봤다고는 했는데 어디에 사용했는지는 기억안난다고 이야기 함...
  * 나중에 생각해보니 single live event 도 atomic boolean !!
+ *
  * - 책 & 인터넷 중 어디에서 자료를 참고하냐라는 질문을 받음 -> 주로 인터넷 참고하고 최신기술을 찾아보기 위해서는 인터넷이 먼저라고 이야기 하고
  * 구글블로그를 제일 많이 참고한다고 함
+ *
  * - 소스나 문서 쓰는걸로 보면 잘 적는데 자기 소개는 왜케 성의 없게 적었냐고 들음 ->
  *  > 자기 소개 같은거 적는게 좀 어려워한다고 이야기 함.. 뭐랄까 내가 하고 싶다고해서 되는것도 아니니.. 흠.. 너무 현실적인건가?
  *
@@ -132,14 +136,19 @@ import java.util.*
  *
  * 복기 후 보이는 것들
  * - 자료구조 -_-;; php -> cpp -> java 로 넘어가서 그런지 기초가 없네?
+ *
  * - 지나지게 낮아진 자존감 (뭘 해도 잘할 수 있다!! 그리 이야기 못한 느낌?, 이 회사에 와서 자존감만 낮아진건가?, 예전엔 안그랬는데 흠;;)
+ *
  * - 다른곳에 가서 무얼 할 수 있는지?
  *   > 내가 잘하는건 베이스쪽 설계를 그려 그거 기반으로 공통적인 화면을 구성하게 할 수 있는 점 그걸로 인한 생산성 향상,
  *     이를 이용하는 개발자는 비즈니스 로직 개발에 집중해 좀더 좋은 코드를 생산해 내도록 해줄수 있다라고 이야기 하고 싶다.
+ *
  * - test case 를 하고는 있지만 표출하지 않는 점? 뭐 잘 모르긴 한다. 해봐야 espresso, network mock 정도
+ *
  * - platform / framework 위주로 개발하여 ui 가 약할 것 이라는 질문에 그렇게 생각하실수 있겠지만 작업해왔던것이 ui 와 동떨어져 있는게 아닌
  *   한번 더 생각하여 코드를 재활용성 있게 만들기 때문에 더 나은 효과를 낼수 있음을 이야기 해야할 것 같다. 이와 관련되어.
  *   recycler group 의 코드를 예로 들어봐야할 까?, 각각 구현하던걸 데이터에 인터페이스만 상속하면 그냥 됩니다! 라고
+ *
  * - 언제 다시 트라이를 해볼수 있을지는 모르겠지만...반성하자! 팀장님이 어제 주신 책상에 놓여있는 '코틀린 마이크로서비스 개발' 책을 보며 복잡/미묘한 감정이다.
  */
 class SearchViewModel @Inject constructor(application: Application,

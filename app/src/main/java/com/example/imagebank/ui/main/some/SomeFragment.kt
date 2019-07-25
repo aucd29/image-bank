@@ -89,7 +89,7 @@ class SomeFragment @Inject constructor(): BaseDaggerFragment<SomeFragmentBinding
     }
 
     override fun onPause() {
-        mBinding.someInfiniteBanner.stopAutoScroll()
+        mBinding.someInfiniteBanner.stopScroll()
 
         super.onPause()
     }
@@ -97,7 +97,7 @@ class SomeFragment @Inject constructor(): BaseDaggerFragment<SomeFragmentBinding
     override fun onResume() {
         super.onResume()
 
-        mBinding.someInfiniteBanner.runAutoScroll(4000)
+        mBinding.someInfiniteBanner.startScroll(2000)
     }
 
     ////////////////////////////////////////////////////////////////////////////////////
