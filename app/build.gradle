@@ -151,6 +151,8 @@ dependencies {
     // chip layout
     implementation 'com.beloo.widget:ChipsLayoutManager:0.3.7@aar'
 
+    // over scroll
+    implementation 'me.everything:overscroll-decor-android:1.0.4'
 
     // firebase
     implementation 'com.google.firebase:firebase-core:17.0.0'

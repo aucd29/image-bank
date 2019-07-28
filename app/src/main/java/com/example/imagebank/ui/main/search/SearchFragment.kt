@@ -1,12 +1,16 @@
 package com.example.imagebank.ui.main.search
 
 import brigitte.BaseDaggerFragment
+import brigitte.color
 import brigitte.di.dagger.module.injectOfActivity
 import brigitte.hideKeyboard
+import brigitte.widget.ITabFocus
+import brigitte.widget.observeTabFocus
+import com.example.imagebank.MainColorViewModel
+import com.example.imagebank.R
 import com.example.imagebank.databinding.SearchFragmentBinding
 import com.example.imagebank.model.remote.entity.KakaoSearchResult
 import com.example.imagebank.ui.ViewController
-import com.example.imagebank.ui.main.SectionsPagerAdapter
 import com.example.imagebank.ui.main.dibs.DibsViewModel
 import dagger.android.ContributesAndroidInjector
 import org.slf4j.LoggerFactory
@@ -26,19 +30,23 @@ import javax.inject.Inject
  *
  */
 
-class SearchFragment @Inject constructor() : BaseDaggerFragment<SearchFragmentBinding, SearchViewModel>() {
+class SearchFragment @Inject constructor()
+    : BaseDaggerFragment<SearchFragmentBinding, SearchViewModel>()
+    , ITabFocus {
     companion object {
         private val mLog = LoggerFactory.getLogger(SearchFragment::class.java)
     }
 
     @Inject lateinit var mViewController: ViewController
 
-    lateinit var mDibsViewModel: DibsViewModel
+    private lateinit var mDibsViewModel: DibsViewModel
+    private lateinit var mColorModel: MainColorViewModel
 
     override fun bindViewModel() {
         super.bindViewModel()
 
         mDibsViewModel = mViewModelFactory.injectOfActivity(this)
+        mColorModel    = mViewModelFactory.injectOfActivity(this)
 
         mViewModel.init()
     }
@@ -55,12 +63,28 @@ class SearchFragment @Inject constructor() : BaseDaggerFragment<SearchFragmentBi
     }
 
     override fun initViewModelEvents() {
+        observeTabFocus(mColorModel.focusedTabLiveData, this, R.string.tab_search)
+
         observe(mViewModel.mDibsList) {
             if (mLog.isDebugEnabled) {
                 mLog.debug("OBSERVE DIBS LIST : ${it.size}")
             }
             mDibsViewModel.items.set(it.toMutableList())
         }
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////
+    //
+    // TAB STATUS
+    //
+    ////////////////////////////////////////////////////////////////////////////////////
+
+    override fun onTabFocusIn() {
+        mColorModel.changeColor(color(R.color.colorPrimaryDark), color(R.color.colorPrimary))
+    }
+
+    override fun onTabFocusOut() {
+
     }
 
     ////////////////////////////////////////////////////////////////////////////////////
@@ -77,17 +101,19 @@ class SearchFragment @Inject constructor() : BaseDaggerFragment<SearchFragmentBi
                     hideKeyboard(mBinding.root)
                 }
                 CMD_TOP_SCROLL    -> scrollToTop()
-                CMD_SHOW_DETAIL   -> if (data is KakaoSearchResult) mViewController.detailFragment(data)
+                CMD_SHOW_DETAIL   -> showDetail(data)
             }
         }
     }
 
-    private fun showDetail(data: KakaoSearchResult) {
-        if (mLog.isDebugEnabled) {
-            mLog.debug("SHOW DETAIL ${data.title}")
-        }
+    private fun showDetail(data: Any) {
+        if (data is KakaoSearchResult) {
+            if (mLog.isDebugEnabled) {
+                mLog.debug("SHOW DETAIL ${data.title}")
+            }
 
-        mViewController.detailFragment(data)
+            mViewController.detailFragment(data)
+        }
     }
 
     private fun clearFocusKeyword() {
@@ -103,7 +129,6 @@ class SearchFragment @Inject constructor() : BaseDaggerFragment<SearchFragmentBi
         }
 
         mBinding.apply {
-//            recycler.postDelayed({ recycler.smoothScrollToPosition(0) }, 200)
             scrollview.apply {
                 postDelayed({
                     scrollview.smoothScrollTo(0,0)

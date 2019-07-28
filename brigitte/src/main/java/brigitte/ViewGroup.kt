@@ -4,10 +4,11 @@ package brigitte
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
-import android.os.Build
+import android.graphics.Rect
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
@@ -64,12 +65,26 @@ inline fun View.layoutWidth(width: Int) {
     layoutParams = lp
 }
 
-
 inline fun View.layoutWidth(width: Float) {
     val lp = layoutParams
     lp.width = width.toInt()
 
     layoutParams = lp
+}
+
+inline fun View.rawXY(root: ViewGroup): Rect {
+    val rect = Rect()
+    getDrawingRect(rect)
+    root.offsetDescendantRectToMyCoords(this, rect)
+
+    return rect
+}
+
+inline fun View.displayXY(): IntArray {
+    val raw = IntArray(2)
+    getLocationInWindow(raw)
+
+    return raw
 }
 
 inline fun TextView.gravityCenter() {

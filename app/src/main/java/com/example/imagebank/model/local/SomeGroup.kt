@@ -8,14 +8,14 @@ import brigitte.IRecyclerExpandable
  * Created by <a href="mailto:aucd29@hanwha.com">Burke Choi</a> on 2019-07-16 <p/>
  */
 
-data class IconLinkItem(val id: Int, val title: String, val link: String) : IRecyclerDiff {
+data class LinkItem(val id: Int, val title: String, val link: String) : IRecyclerDiff {
     override fun itemSame(item: IRecyclerDiff): Boolean {
-        val newItem = item as IconLinkItem
+        val newItem = item as LinkItem
         return id == newItem.id
     }
 
     override fun contentsSame(item: IRecyclerDiff): Boolean {
-        val newItem = item as IconLinkItem
+        val newItem = item as LinkItem
         return title == newItem.title && link == newItem.link
     }
 }
@@ -36,7 +36,7 @@ data class ChipItem(
     }
 }
 
-open class QnaItem(val id: String, val title: String, override var type: Int = T_PARENT,
+class QnaItem(val id: String, val title: String, override var type: Int = T_PARENT,
                    override var childList: List<QnaItem> = emptyList())
     : IRecyclerExpandable<QnaItem> {
 
@@ -55,5 +55,18 @@ open class QnaItem(val id: String, val title: String, override var type: Int = T
     override fun contentsSame(item: IRecyclerDiff): Boolean {
         val newItem = item as QnaItem
         return title == newItem.title
+    }
+}
+
+class HorizontalItem(val id: Int, val title: String, val icon: Int, val link: String)
+    : IRecyclerDiff {
+    override fun itemSame(item: IRecyclerDiff): Boolean {
+        val newItem = item as HorizontalItem
+        return id == newItem.id
+    }
+
+    override fun contentsSame(item: IRecyclerDiff): Boolean {
+        val newItem = item as HorizontalItem
+        return title == newItem.title && link == newItem.link
     }
 }

@@ -28,14 +28,14 @@ class ViewPagerScroller @JvmOverloads constructor(
     interpolator: Interpolator? = null,
     flywheel: Boolean = context.applicationInfo.targetSdkVersion >= Build.VERSION_CODES.HONEYCOMB
 ) : Scroller(context, interpolator, flywheel) {
-    var myDuration = 1500
+    var mDuration = 1500
 
     override fun startScroll(startX: Int, startY: Int, dx: Int, dy: Int) {
-        super.startScroll(startX, startY, dx, dy, myDuration)
+        super.startScroll(startX, startY, dx, dy, mDuration)
     }
 
     override fun startScroll(startX: Int, startY: Int, dx: Int, dy: Int, duration: Int) {
-        super.startScroll(startX, startY, dx, dy, myDuration)
+        super.startScroll(startX, startY, dx, dy, mDuration)
     }
 }
 
@@ -66,11 +66,12 @@ class InfiniteViewPager @JvmOverloads constructor(
     private var mScrollDelay: Long = 0L
     private var mPageChangeListener: SimpleOnPageChangeListener? = null
     private var mScroller = ViewPagerScroller(context)
+    private var mIsScroll = false
 
     var duration: Int
-        get() = mScroller.myDuration
+        get() = mScroller.mDuration
         set(value) {
-            mScroller = ViewPagerScroller(context).apply { myDuration = value }
+            mScroller = ViewPagerScroller(context).apply { mDuration = value }
             setViewPagerScroller(mScroller)
         }
 
@@ -91,7 +92,9 @@ class InfiniteViewPager @JvmOverloads constructor(
     private inner class ProcessHandler : Handler.Callback {
         override fun handleMessage(msg: Message): Boolean {
             when (msg.what) {
-                H_START_SCROLL -> if (direction == DIRECTION_START) showNextView() else showPreviewView()
+                H_START_SCROLL -> {
+                    if (direction == DIRECTION_START) showNextView() else showPreviewView()
+                }
                 else -> {}
             }
 
@@ -105,6 +108,8 @@ class InfiniteViewPager @JvmOverloads constructor(
             obj  = any
         }, delay)
     }
+
+    private fun removeMessages(type: Int) = mHandler.removeMessages(type)
 
     // HANDLER END
 
@@ -126,6 +131,19 @@ class InfiniteViewPager @JvmOverloads constructor(
         arrowScroll(View.FOCUS_LEFT)
     }
 
+    fun startScroll(delay: Long) {
+        removeMessages(H_START_SCROLL)
+
+        mIsScroll    = true
+        mScrollDelay = delay
+        sendMessage(H_START_SCROLL, delay)
+    }
+
+    fun stopScroll() {
+        mIsScroll = false
+        removeMessages(H_START_SCROLL)
+    }
+
     override fun setCurrentItem(item: Int, smoothScroll: Boolean) {
         adapter?.let {
             if (it.count == 0) {
@@ -139,8 +157,8 @@ class InfiniteViewPager @JvmOverloads constructor(
                 item % it.count
             }
 
-            if (mLog.isDebugEnabled) {
-                mLog.debug("NEW ITEM : $newItem")
+            if (mLog.isTraceEnabled) {
+                mLog.trace("NEW ITEM : $newItem")
             }
 
             super.setCurrentItem(newItem, smoothScroll)
@@ -157,22 +175,24 @@ class InfiniteViewPager @JvmOverloads constructor(
         } ?: 0
     }
 
-    fun startScroll(delay: Long) {
-        stopScroll()
-        mScrollDelay = delay
-        sendMessage(H_START_SCROLL, delay)
-    }
-
-    fun stopScroll() {
-        mHandler.removeMessages(H_START_SCROLL)
-    }
-
     private fun initPageChangeListener() {
         if (mPageChangeListener == null) {
             mPageChangeListener = object: SimpleOnPageChangeListener() {
                 override fun onPageSelected(position: Int) {
+                    if (mLog.isTraceEnabled) {
+                        mLog.trace("PAGE SELECTED : $position")
+                    }
+
+                    if (!mIsScroll) {
+                        return
+                    }
+
                     startScroll(mScrollDelay)
                 }
+            }
+
+            if (mLog.isDebugEnabled) {
+                mLog.debug("ADD PAGE LISTENER $mPageChangeListener")
             }
 
             mPageChangeListener?.let { addOnPageChangeListener(it) }

@@ -1,0 +1,105 @@
+<layout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable name="model" type="com.example.imagebank.ui.main.some.SomeViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/some_animate_oval_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="@dimen/dp30"
+                android:layout_marginStart="@dimen/dp15"
+                android:text="@string/some_animation_title"
+                android:textSize="@dimen/sp25"
+        />
+
+        <TextView
+                android:id="@+id/content"
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/title"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginStart="@dimen/dp15"
+                android:layout_marginEnd="@dimen/dp15"
+                android:layout_marginTop="@dimen/dp10"
+                android:text="@string/some_animation_lorem"
+                android:textSize="@dimen/sp14"
+        />
+
+        <View
+                android:id="@+id/oval"
+                android:layout_width="@dimen/dp120" android:layout_height="@dimen/dp120"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias=".5"
+                android:background="@drawable/shape_dot_gray"
+                app:bindAnimatorSet="@{model.ovalAniSetParams}"
+        />
+
+        <View
+                android:id="@+id/rand_oval"
+                android:layout_width="@dimen/dp120" android:layout_height="@dimen/dp120"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias=".5"
+                android:background="@drawable/shape_dot_gray"
+                app:bindAnimatorSet="@{model.ovalRandAnimSetParams}"
+        />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/oval_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/content"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:paddingBottom="@dimen/dp80">
+
+            <TextView
+                    android:id="@+id/principal"
+                    android:layout_width="@dimen/dp120" android:layout_height="@dimen/dp120"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias=".28"
+                    android:layout_margin="@dimen/dp20"
+                    android:gravity="center_vertical|center"
+                    android:text="@string/some_animation_principal"
+                    android:textColor="@android:color/white"
+                    android:background="@drawable/shape_dot_navy"
+                    android:translationX="-20dp"
+                    app:bindTranslateX="@{model.ovalToRight}"
+            />
+
+            <TextView
+                    android:id="@+id/interest"
+                    android:layout_width="@dimen/dp80" android:layout_height="@dimen/dp80"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/principal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@+id/principal"
+                    app:layout_constraintHorizontal_bias=".7"
+                    android:gravity="center_vertical|center"
+                    android:text="@string/some_animation_interest"
+                    android:textColor="@android:color/white"
+                    android:background="@drawable/shape_dot_green"
+                    android:translationX="20dp"
+                    app:bindTranslateX="@{model.ovalToLeft}"
+            />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

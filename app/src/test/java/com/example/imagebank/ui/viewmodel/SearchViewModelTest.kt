@@ -33,6 +33,7 @@ import org.junit.runners.JUnit4
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 import junit.framework.Assert.assertTrue
+import org.junit.After
 import org.mockito.Mockito.*
 import org.slf4j.LoggerFactory
 
@@ -50,6 +51,12 @@ class SearchViewModelTest {
     fun setup() {
         initMock()
         viewModel = SearchViewModel(context, api, config)
+    }
+
+    @After
+    fun after() {
+        RxAndroidPlugins.reset()
+        RxJavaPlugins.reset()
     }
 
     @Test
@@ -103,6 +110,7 @@ class SearchViewModelTest {
 
     @Test
     fun invalidAllSearch() {
+        mockReactive()
         mockEnableNetwork()
         mockApi(RESPONSE_ERROR, RESPONSE_ERROR)
 
@@ -252,10 +260,10 @@ class SearchViewModelTest {
 
     private fun initMock() {
         MockitoAnnotations.initMocks(this)
+        mockReactive()
         mockContext()
         mockConfig()
         mockConnectivityManager()
-        mockReactive()
         mockApi()
     }
 
@@ -295,8 +303,10 @@ class SearchViewModelTest {
     private fun mockReactive() {
         RxAndroidPlugins.reset()
         RxJavaPlugins.reset()
+
         RxJavaPlugins.setIoSchedulerHandler { Schedulers.trampoline() }
         RxAndroidPlugins.setInitMainThreadSchedulerHandler { Schedulers.trampoline() }
+        RxAndroidPlugins.setMainThreadSchedulerHandler { Schedulers.trampoline() }
     }
 
     @Mock private lateinit var api: KakaoRestSearchService

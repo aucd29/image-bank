@@ -26,7 +26,7 @@ class ChipModule {
 //                position == 6 || position == 11 || position == 2
 //            }
             .setOrientation(ChipsLayoutManager.HORIZONTAL)
-            .setRowStrategy(ChipsLayoutManager.STRATEGY_CENTER)
+            .setRowStrategy(ChipsLayoutManager.STRATEGY_CENTER_DENSE)
             .withLastRow(true)
             .build())
     }

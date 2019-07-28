@@ -1,0 +1,32 @@
+<layout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable name="model" type="com.example.imagebank.ui.main.some.SomeGridViewModel" />
+        <variable name="item" type="com.example.imagebank.model.local.LinkItem"/>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/link_item_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> model.command(model.CMD_CLICK, item.id)}"
+            android:background="?selectableItemBackground"
+    >
+
+        <TextView
+                android:id="@+id/label_link_kakao"
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:text="@{item.title}"
+                android:gravity="center"
+                android:paddingTop="@dimen/dp10"
+                android:paddingBottom="@dimen/dp10"
+        />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

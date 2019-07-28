@@ -1,13 +1,20 @@
 package com.example.imagebank.ui.main.some
 
-import android.content.Intent
-import brigitte.BaseDaggerFragment
+import android.view.View
+import androidx.recyclerview.widget.LinearLayoutManager
+import brigitte.*
 import brigitte.di.dagger.module.injectOf
 import brigitte.di.dagger.module.injectOfActivity
-import brigitte.toColor
+import brigitte.widget.ITabFocus
+import brigitte.widget.observeTabFocus
 import com.example.imagebank.MainColorViewModel
+import com.example.imagebank.R
+import com.example.imagebank.common.Config
 import com.example.imagebank.databinding.SomeFragmentBinding
 import dagger.android.ContributesAndroidInjector
+import me.everything.android.ui.overscroll.HorizontalOverScrollBounceEffectDecorator
+import me.everything.android.ui.overscroll.OverScrollDecoratorHelper
+import me.everything.android.ui.overscroll.adapters.RecyclerViewOverScrollDecorAdapter
 import org.slf4j.LoggerFactory
 import javax.inject.Inject
 
@@ -15,18 +22,27 @@ import javax.inject.Inject
  * Created by <a href="mailto:aucd29@hanwha.com">Burke Choi</a> on 2019-07-16 <p/>
  */
 
-class SomeFragment @Inject constructor(): BaseDaggerFragment<SomeFragmentBinding, SomeViewModel>() {
+class SomeFragment @Inject constructor()
+    : BaseDaggerFragment<SomeFragmentBinding, SomeViewModel>()
+    , ITabFocus {
+
     companion object {
         private val mLog = LoggerFactory.getLogger(SomeFragment::class.java)
+
+        private const val BANNER_DELAY = 4000L
     }
 
-    lateinit var mColorModel: MainColorViewModel
 
-    lateinit var mBannerViewModel: SomeBannerViewModel
-    lateinit var mChipViewModel: SomeChipViewModel
-    lateinit var mLinkModel: SomeLinkViewModel
-    lateinit var mQnaModel: SomeQnaViewModel
-    lateinit var mInfiniteBannerViewModel: SomeInfiniteBannerViewModel
+    @Inject lateinit var mConfig: Config
+    private lateinit var mColorModel: MainColorViewModel
+
+    private lateinit var mBannerViewModel: SomeBannerViewModel
+    private lateinit var mChipViewModel: SomeChipViewModel
+    private lateinit var mLinkModel: SomeLinkViewModel
+    private lateinit var mQnaModel: SomeQnaViewModel
+    private lateinit var mInfiniteBannerViewModel: SomeInfiniteBannerViewModel
+    private lateinit var mGridModel: SomeGridViewModel
+    private lateinit var mHorizontalModel: SomeHorizontalViewModel
 
     override fun bindViewModel() {
         super.bindViewModel()
@@ -39,6 +55,8 @@ class SomeFragment @Inject constructor(): BaseDaggerFragment<SomeFragmentBinding
             mLinkModel               = injectOf(this@SomeFragment)
             mQnaModel                = injectOf(this@SomeFragment)
             mInfiniteBannerViewModel = injectOf(this@SomeFragment)
+            mGridModel               = injectOf(this@SomeFragment)
+            mHorizontalModel         = injectOf(this@SomeFragment)
         }
 
         with(mBinding) {
@@ -47,26 +65,26 @@ class SomeFragment @Inject constructor(): BaseDaggerFragment<SomeFragmentBinding
             linkModel           = mLinkModel
             qnaModel            = mQnaModel
             infiniteBannerModel = mInfiniteBannerViewModel
+            gridModel           = mGridModel
+            horModel            = mHorizontalModel
         }
+
+        addCommandEventModel(mLinkModel)
+        addCommandEventModel(mInfiniteBannerViewModel)
+        addCommandEventModel(mGridModel)
+        addCommandEventModel(mHorizontalModel)
     }
 
     override fun initViewBinding() {
-
+        mBinding.someHorizontalRecycler.apply {
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            OverScrollDecoratorHelper.setUpOverScroll(this@apply,
+            OverScrollDecoratorHelper.ORIENTATION_HORIZONTAL)
+        }
     }
 
     override fun initViewModelEvents() {
-        mColorModel.focusSomeFragment = {
-            val it = mBinding.someBanner.currentItem
-
-            // 이상하게 indicator 가 이걸 저장 못하네 ?
-            mBinding.someBannerIndicator.selection = it
-
-            if (mLog.isDebugEnabled) {
-                mLog.debug("SOME FRAGMENT FOCUS ($it)")
-            }
-
-            changeStatusColor(it)
-        }
+        observeTabFocus(mColorModel.focusedTabLiveData, this, R.string.tab_some)
 
         mBannerViewModel.pageChangeCallback.set {
             mBinding.someBannerIndicator.selection = it
@@ -97,7 +115,46 @@ class SomeFragment @Inject constructor(): BaseDaggerFragment<SomeFragmentBinding
     override fun onResume() {
         super.onResume()
 
-        mBinding.someInfiniteBanner.startScroll(2000)
+        mColorModel.focusedTabLiveData.value?.let {
+            if (it.text != string(R.string.tab_some)) {
+                return@let
+            }
+
+            mBinding.someInfiniteBanner.startScroll(BANNER_DELAY)
+        }
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////
+    //
+    // TAB STATUS
+    //
+    ////////////////////////////////////////////////////////////////////////////////////
+
+    override fun onTabFocusIn() {
+        // 현재 탭일 경우만 베너를 활성화
+        mBinding.apply {
+            someAnimateOval.apply {
+                val displayXy = displayXY()
+                val top = displayXy[1] - mConfig.SCREEN.y / 2
+
+                if (mLog.isDebugEnabled) {
+                    mLog.debug("ANIMATE OVAL TOP 1 : ${displayXy[1]}, $top")
+                }
+
+                mViewModel.someAnimateOvalLayoutTop = top
+            }
+
+            someInfiniteBanner.startScroll(BANNER_DELAY)
+            someBanner.currentItem.let { item ->
+                someBannerIndicator.selection = item
+                changeStatusColor(item)
+            }
+        }
+    }
+
+    override fun onTabFocusOut() {
+        // 탭을 벗어날 경우 stop
+        mBinding.someInfiniteBanner.stopScroll()
     }
 
     ////////////////////////////////////////////////////////////////////////////////////
@@ -113,18 +170,22 @@ class SomeFragment @Inject constructor(): BaseDaggerFragment<SomeFragmentBinding
     }
 
     private fun openLink(id: Int) {
-        startActivity(when (id) {
-            1 -> Intent(Intent.ACTION_CALL)
-            2 -> Intent(Intent.ACTION_SEND).apply {
-                type = "text/plain"
-                setPackage("com.kakao.talk")
-            }
-            else -> Intent(Intent.ACTION_CALL).apply {
-                type = "text/plain"
-                setPackage("com.kakao.talk")
-                // 1:1
-            }
-        })
+        if (mLog.isDebugEnabled) {
+            mLog.debug("OPEN LINK ID : $id")
+        }
+
+//        startActivity(when (id) {
+//            1 -> Intent(Intent.ACTION_CALL)
+//            2 -> Intent(Intent.ACTION_SEND).apply {
+//                type = "text/plain"
+//                setPackage("com.kakao.talk")
+//            }
+//            else -> Intent(Intent.ACTION_CALL).apply {
+//                type = "text/plain"
+//                setPackage("com.kakao.talk")
+//                // 1:1
+//            }
+//        })
     }
 
     ////////////////////////////////////////////////////////////////////////////////////

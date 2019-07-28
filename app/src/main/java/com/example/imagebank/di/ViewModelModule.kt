@@ -109,6 +109,17 @@ abstract class ViewModelModule {
     @ViewModelKey(SomeQnaViewModel::class)
     abstract fun bindSomeQnaViewModel(vm: SomeQnaViewModel): ViewModel
 
+    @Binds
+    @IntoMap
+    @ViewModelKey(SomeGridViewModel::class)
+    abstract fun bindSomeGridViewModel(vm: SomeGridViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SomeHorizontalViewModel::class)
+    abstract fun bindSomeHorizontalViewModel(vm: SomeHorizontalViewModel): ViewModel
+
+
     ////////////////////////////////////////////////////////////////////////////////////
     //
     // DETAIL

@@ -107,7 +107,7 @@ abstract class BaseActivity<T : ViewDataBinding, M: ViewModel>
         initBackPressed()
         bindViewModel()
 
-        mCommandEventModels.add(mViewModel)
+        addCommandEventModel(mViewModel)
         dialogAware()
         commandEventAware()
 
@@ -130,6 +130,22 @@ abstract class BaseActivity<T : ViewDataBinding, M: ViewModel>
         if (mBackPressed.onBackPressed()) {
             super.onBackPressed()
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        mCommandEventModels.forEach {
+            if (it is ILifeCycle) it.onPause()
+        }
+    }
+
+    override fun onResume() {
+        mCommandEventModels.forEach {
+            if (it is ILifeCycle) it.onResume()
+        }
+
+        super.onResume()
     }
 
     /**
@@ -171,12 +187,11 @@ abstract class BaseActivity<T : ViewDataBinding, M: ViewModel>
     //
     ////////////////////////////////////////////////////////////////////////////////////
 
-    override val mCommandEventModels: ArrayList<ViewModel> = arrayListOf()
+    override val mCommandEventModels: ArrayList<ICommandEventAware> = arrayListOf()
     override fun disposable() = mDisposable
     override fun activity() = this
     override fun rootView() = mBinding.root
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////////
 //
@@ -220,12 +235,28 @@ abstract class BaseFragment<T: ViewDataBinding, M: ViewModel>
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        mCommandEventModels.add(mViewModel)
+        addCommandEventModel(mViewModel)
         dialogAware()
         commandEventAware()
 
         initViewBinding()
         initViewModelEvents()
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        mCommandEventModels.forEach {
+            if (it is ILifeCycle) it.onPause()
+        }
+    }
+
+    override fun onResume() {
+        mCommandEventModels.forEach {
+            if (it is ILifeCycle) it.onResume()
+        }
+
+        super.onResume()
     }
 
     override fun onDestroyView() {
@@ -257,7 +288,7 @@ abstract class BaseFragment<T: ViewDataBinding, M: ViewModel>
     //
     ////////////////////////////////////////////////////////////////////////////////////
 
-    override val mCommandEventModels: ArrayList<ViewModel> = arrayListOf()
+    override val mCommandEventModels: ArrayList<ICommandEventAware> = arrayListOf()
     override fun disposable() = mDisposable
     override fun activity() = requireActivity()
     override fun rootView() = mBinding.root
@@ -302,7 +333,7 @@ abstract class BaseDialogFragment<T: ViewDataBinding, M: ViewModel>
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        mCommandEventModels.add(mViewModel)
+        addCommandEventModel(mViewModel)
         commandEventAware()
 
         initViewBinding()
@@ -338,7 +369,7 @@ abstract class BaseDialogFragment<T: ViewDataBinding, M: ViewModel>
     //
     ////////////////////////////////////////////////////////////////////////////////////
 
-    override val mCommandEventModels: ArrayList<ViewModel> = arrayListOf()
+    override val mCommandEventModels: ArrayList<ICommandEventAware> = arrayListOf()
     override fun disposable() = mDisposable
     override fun activity() = requireActivity()
     override fun rootView() = mBinding.root
@@ -386,7 +417,7 @@ abstract class BaseBottomSheetDialogFragment<T: ViewDataBinding, M: ViewModel>
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        mCommandEventModels.add(mViewModel)
+        addCommandEventModel(mViewModel)
         commandEventAware()
 
         initViewBinding()
@@ -471,7 +502,7 @@ abstract class BaseBottomSheetDialogFragment<T: ViewDataBinding, M: ViewModel>
     //
     ////////////////////////////////////////////////////////////////////////////////////
 
-    override val mCommandEventModels: ArrayList<ViewModel> = arrayListOf()
+    override val mCommandEventModels: ArrayList<ICommandEventAware> = arrayListOf()
     override fun disposable() = mDisposable
     override fun activity() = requireActivity()
     override fun rootView() = mBinding.root
@@ -481,7 +512,7 @@ abstract class BaseBottomSheetDialogFragment<T: ViewDataBinding, M: ViewModel>
  * 공통 부분이 많아 인터페이스로 빼고 이를 이용하도록 수정
  */
 interface BaseEventAware {
-    val mCommandEventModels: ArrayList<ViewModel>
+    val mCommandEventModels: ArrayList<ICommandEventAware>
 
     fun disposable(): CompositeDisposable
     fun activity(): FragmentActivity
@@ -519,6 +550,14 @@ interface BaseEventAware {
                 }
             }
         }
+    }
+
+    fun addCommandEventModel(viewmodel: ViewModel) {
+        if (viewmodel is ICommandEventAware) { mCommandEventModels.add(viewmodel) }
+    }
+
+    fun removeCommandEventModel(viewmodel: ViewModel) {
+        if (viewmodel is ICommandEventAware) { mCommandEventModels.remove(viewmodel) }
     }
 
     fun onCommandEvent(cmd: String, data: Any) { }

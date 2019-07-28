@@ -12,12 +12,15 @@
         <variable name="linkModel" type="com.example.imagebank.ui.main.some.SomeLinkViewModel"/>
         <variable name="qnaModel" type="com.example.imagebank.ui.main.some.SomeQnaViewModel"/>
         <variable name="infiniteBannerModel" type="com.example.imagebank.ui.main.some.SomeInfiniteBannerViewModel"/>
+        <variable name="gridModel" type="com.example.imagebank.ui.main.some.SomeGridViewModel"/>
+        <variable name="horModel" type="com.example.imagebank.ui.main.some.SomeHorizontalViewModel"/>
     </data>
 
     <androidx.core.widget.NestedScrollView
             android:id="@+id/some_scrollview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            app:bindScrollChangeListener="@{model.scrollListener}">
 
         <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/some_container"
@@ -40,12 +43,12 @@
                     android:id="@+id/some_banner_indicator"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     android:layout_marginTop="@dimen/dp20"
                     android:layout_marginEnd="@dimen/dp20"
                     attrs:piv_padding="6dp"
                     attrs:piv_radius="2dp"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:piv_animationType="worm"
                     app:piv_dynamicCount="true"
                     app:piv_interactiveAnimation="true"
@@ -83,7 +86,7 @@
 
             <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/some_chip_recycler"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp20"
                     app:layout_constraintStart_toStartOf="parent"
@@ -94,21 +97,44 @@
                     app:bindItems="@{chipModel.items}"
                     app:bindAdapter="@{chipModel.adapter}"
                     app:bindLayoutManager="@{chipModel.chipLayoutManager}"
+                    app:bindItemDecoration="@{chipModel.itemDecoration}"
             />
 
             <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/some_qna_recycler"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp20"
-                    android:descendantFocusability="blocksDescendants"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/some_chip_recycler"
                     app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="@dimen/dp20"
+                    android:descendantFocusability="blocksDescendants"
+                    android:nestedScrollingEnabled="false"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:bindItems="@{qnaModel.items}"
                     app:bindAdapter="@{qnaModel.adapter}"
+                    app:bindHorDecoration="@{qnaModel.horDecoration}"
+                    app:bindVerDecoration="@{qnaModel.verDecoration}"
+            />
+
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/some_grid_recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/some_qna_recycler"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="@dimen/dp20"
+                    android:layout_marginStart="@dimen/dp25"
+                    android:layout_marginEnd="@dimen/dp25"
+                    android:descendantFocusability="blocksDescendants"
                     android:nestedScrollingEnabled="false"
+                    android:background="@drawable/shape_rectangle_gray_stroke_background"
+                    app:bindItems="@{gridModel.items}"
+                    app:bindAdapter="@{gridModel.adapter}"
+                    app:bindLockedGridLayoutManager="@{gridModel.gridCount}"
+                    app:bindHorDecoration="@{gridModel.horDecoration}"
+                    app:bindVerDecoration="@{gridModel.verDecoration}"
             />
 
             <brigitte.widget.viewpager.InfiniteViewPager
@@ -116,8 +142,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/some_qna_recycler"
+                    app:layout_constraintTop_toBottomOf="@+id/some_grid_recycler"
                     app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="@dimen/dp20"
                     app:bindBannerAdapter="@{infiniteBannerModel.adapter}"
                     app:bindBannerItems="@{infiniteBannerModel.items}"
                     app:bindPageChangeCallback="@{infiniteBannerModel.pageChangeCallback}"
@@ -138,6 +165,37 @@
                     app:piv_interactiveAnimation="true"
                     app:piv_selectedColor="@color/gray_50"
                     app:piv_unselectedColor="@color/gray_300"
+            />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/some_animate_oval"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/some_infinite_banner"
+            >
+                <include
+                        android:id="@+id/some_animate_oval_include"
+                        layout="@layout/some_animate_oval_layout"
+                        app:model="@{model}"
+                />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/some_horizontal_recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/some_animate_oval"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="@dimen/dp20"
+                    android:layout_marginStart="@dimen/dp5"
+                    android:descendantFocusability="blocksDescendants"
+                    android:nestedScrollingEnabled="false"
+                    app:bindItems="@{horModel.items}"
+                    app:bindAdapter="@{horModel.adapter}"
+                    app:bindItemDecoration="@{horModel.itemDecoration}"
             />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

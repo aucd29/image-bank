@@ -28,4 +28,5 @@
     <string name="cd_some_banner_image">베너이미지</string>
     <string name="cd_some_link_icon">링크 아이콘</string>
     <string name="cd_some_parent_detail_icon">세부로 들어가기 아이콘</string>
+    <string name="cd_some_horizontal_background">배경</string>
 </resources>
