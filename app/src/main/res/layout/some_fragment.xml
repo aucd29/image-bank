@@ -129,7 +129,7 @@
                     android:layout_marginEnd="@dimen/dp25"
                     android:descendantFocusability="blocksDescendants"
                     android:nestedScrollingEnabled="false"
-                    android:background="@drawable/shape_rectangle_gray_stroke_background"
+                    android:background="@drawable/shape_rectangle_gray_stroke"
                     app:bindItems="@{gridModel.items}"
                     app:bindAdapter="@{gridModel.adapter}"
                     app:bindLockedGridLayoutManager="@{gridModel.gridCount}"

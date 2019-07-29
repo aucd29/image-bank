@@ -16,7 +16,6 @@ import com.example.imagebank.ui.main.SectionsPagerAdapter
 import com.example.imagebank.ui.main.SplashViewModel
 import com.example.imagebank.ui.main.navigation.NaviGridViewModel
 import com.example.imagebank.ui.main.navigation.NaviMenuViewModel
-import okhttp3.OkHttpClient
 import org.slf4j.LoggerFactory
 import javax.inject.Inject
 
@@ -29,7 +28,6 @@ class MainActivity : BaseDaggerActivity<MainActivityBinding, MainViewModel>() {
 
     @Inject lateinit var mConfig: Config
     @Inject lateinit var mAdapter: SectionsPagerAdapter
-    @Inject lateinit var okhttp: OkHttpClient
 
     lateinit var mSplashModel: SplashViewModel
     lateinit var mNavGridModel: NaviGridViewModel

@@ -12,7 +12,7 @@
             android:id="@+id/search_item_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/shape_rectangle_gray_stroke_background"
+            android:background="@drawable/shape_rectangle_gray_stroke_white_background"
             android:layout_margin="@dimen/dp5"
             android:onClick="@{() -> model.command(model.CMD_SHOW_DETAIL, item)}"
             android:clipChildren="false"
