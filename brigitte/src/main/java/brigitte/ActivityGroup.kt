@@ -217,7 +217,7 @@ fun Activity.chromeInspector(log: ((String) -> Unit)? = null) {
 /**
  * 다이얼로그를 띄우기 위한 속성을 관리하는 데이터 클래스
  */
-data class DialogParam (
+data class DialogParam @JvmOverloads constructor (
     var message: String? = null,        // 다이얼로그에 출력할 메시지
     var title: String? = null,          // 다이얼로그 타이틀
     var positiveStr: String? = null,    // positive 버튼에 출력할 문구
@@ -286,7 +286,9 @@ inline fun Activity.dialog(params: DialogParam, disposable: CompositeDisposable?
 /**
  * 앱 종료를 위해 다시 한번 backkey 를 선택하라는 문구를 동작 시키기 위한 클래스
  */
-open class BackPressedManager(private var mActivity: AppCompatActivity, var view: View? = null) {
+open class BackPressedManager @JvmOverloads constructor (
+    private var mActivity: AppCompatActivity, var view: View? = null
+) {
     companion object {
         const val DELAY = 2000
     }

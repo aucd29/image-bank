@@ -84,7 +84,7 @@ interface OnBackPressedListener {
 //
 ////////////////////////////////////////////////////////////////////////////////////
 
-abstract class BaseActivity<T : ViewDataBinding, M: ViewModel>
+abstract class BaseActivity<T : ViewDataBinding, M: ViewModel> @JvmOverloads constructor()
     : AppCompatActivity(), BaseEventAware {
     companion object {
         const val SCOPE_ACTIVITY = 0
@@ -199,8 +199,7 @@ abstract class BaseActivity<T : ViewDataBinding, M: ViewModel>
 //
 ////////////////////////////////////////////////////////////////////////////////////
 
-
-abstract class BaseFragment<T: ViewDataBinding, M: ViewModel>
+abstract class BaseFragment<T: ViewDataBinding, M: ViewModel> @JvmOverloads constructor()
     : Fragment(), BaseEventAware {
     companion object {
         const val SCOPE_ACTIVITY = 0
@@ -302,7 +301,7 @@ abstract class BaseFragment<T: ViewDataBinding, M: ViewModel>
 ////////////////////////////////////////////////////////////////////////////////////
 
 
-abstract class BaseDialogFragment<T: ViewDataBinding, M: ViewModel>
+abstract class BaseDialogFragment<T: ViewDataBinding, M: ViewModel> @JvmOverloads constructor()
     : AppCompatDialogFragment(), BaseEventAware {
     private var mLayoutName = generateLayoutName()
 
@@ -381,7 +380,7 @@ abstract class BaseDialogFragment<T: ViewDataBinding, M: ViewModel>
 //
 ////////////////////////////////////////////////////////////////////////////////////
 
-abstract class BaseBottomSheetDialogFragment<T: ViewDataBinding, M: ViewModel>
+abstract class BaseBottomSheetDialogFragment<T: ViewDataBinding, M: ViewModel> @JvmOverloads constructor()
     : BottomSheetDialogFragment(), BaseEventAware {
 
     companion object {
@@ -552,12 +551,24 @@ interface BaseEventAware {
         }
     }
 
-    fun addCommandEventModel(viewmodel: ViewModel) {
-        if (viewmodel is ICommandEventAware) { mCommandEventModels.add(viewmodel) }
+    fun addCommandEventModel(viewModel: ViewModel) {
+        if (viewModel is ICommandEventAware) { mCommandEventModels.add(viewModel) }
     }
 
-    fun removeCommandEventModel(viewmodel: ViewModel) {
-        if (viewmodel is ICommandEventAware) { mCommandEventModels.remove(viewmodel) }
+    fun addCommandEventModels(vararg viewModels: ViewModel) {
+        for (viewModel in viewModels) {
+            addCommandEventModel(viewModel)
+        }
+    }
+
+    fun removeCommandEventModel(viewModel: ViewModel) {
+        if (viewModel is ICommandEventAware) { mCommandEventModels.remove(viewModel) }
+    }
+
+    fun removeCommandEventModels(vararg viewModels: ViewModel) {
+        for (viewModel in viewModels) {
+            removeCommandEventModel(viewModel)
+        }
     }
 
     fun onCommandEvent(cmd: String, data: Any) { }

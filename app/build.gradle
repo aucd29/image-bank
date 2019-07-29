@@ -50,7 +50,7 @@ android {
     }
 
     testOptions {
-        unitTests.returnDefaultValues = true
+        unitTests.returnDefaultValues = false
     }
 }
 
@@ -62,18 +62,27 @@ dependencies {
     testImplementation 'ch.qos.logback:logback-classic:1.2.3'
     testImplementation 'org.hamcrest:hamcrest-library:1.3'
     testImplementation "androidx.arch.core:core-testing:2.0.1"
-    testImplementation "org.robolectric:robolectric:3.8"
-    testImplementation "com.google.dagger:dagger:$dagger2"
-    testImplementation "com.google.dagger:dagger-compiler:$dagger2"
 
+    testImplementation "org.robolectric:robolectric:4.1"
+    testImplementation "org.robolectric:shadows-supportv4:4.1"
+//    testImplementation "com.github.nimbl3:robolectric.shadows-supportv4:4.1"
 
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     androidTestImplementation 'androidx.test:rules:1.2.0'
-    androidTestImplementation "com.github.gmazzo:okhttp-mock:1.3.1"
-    androidTestImplementation 'com.google.dexmaker:dexmaker:1.2'
-    androidTestImplementation 'com.google.dexmaker:dexmaker-mockito:1.2'
+    androidTestImplementation 'com.jakewharton.espresso:okhttp3-idling-resource:1.0.0'
+
+//    https://developer.android.com/training/basics/fragments/testing
+    debugImplementation ('androidx.fragment:fragment-testing:1.2.0-alpha01') {
+        exclude group: "androidx.test", module: "core"
+    }
+    implementation 'androidx.test.espresso:espresso-idling-resource:3.2.0'
+
+//    androidTestImplementation "androidx.lifecycle:lifecycle-runtime:$lifecycle"
+//    androidTestImplementation "com.github.gmazzo:okhttp-mock:1.3.1"
+//    androidTestImplementation 'com.google.dexmaker:dexmaker:1.2'
+//    androidTestImplementation 'com.google.dexmaker:dexmaker-mockito:1.2'
 //    androidTestImplementation 'ch.qos.logback:logback-classic:1.2.3'
 
 

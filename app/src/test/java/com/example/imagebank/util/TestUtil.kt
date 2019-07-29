@@ -1,12 +1,26 @@
 @file:Suppress("NOTHING_TO_INLINE", "unused")
 package com.example.imagebank.util
 
+import android.os.Handler
+import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import brigitte.CommandEventViewModel
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.verify
+import io.reactivex.android.plugins.RxAndroidPlugins
+import io.reactivex.exceptions.UndeliverableException
+import io.reactivex.plugins.RxJavaPlugins
+import io.reactivex.schedulers.Schedulers
+import org.mockito.AdditionalAnswers.answer
+import org.mockito.Mockito.*
+import org.mockito.invocation.InvocationOnMock
+import org.mockito.stubbing.Answer
+import java.io.IOException
+import java.lang.reflect.Field
+import java.lang.reflect.Modifier
+import java.net.SocketException
 import java.util.concurrent.CountDownLatch
+import java.util.concurrent.Executor
+import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
 /**
@@ -45,4 +59,89 @@ inline fun CommandEventViewModel.testCommand(changedValues: Array<Pair<String, A
     }
 
     commandEvent.removeObserver(observer)
+}
+
+inline fun mockReactiveX() {
+    RxAndroidPlugins.reset()
+    RxJavaPlugins.reset()
+
+    RxJavaPlugins.setIoSchedulerHandler { Schedulers.trampoline() }
+    RxAndroidPlugins.setInitMainThreadSchedulerHandler { Schedulers.trampoline() }
+    RxAndroidPlugins.setMainThreadSchedulerHandler { Schedulers.trampoline() }
+
+    // https://thdev.tech/android/2019/03/04/RxJava2-Error-handling/
+    RxJavaPlugins.setErrorHandler { e ->
+        var error = e
+        if (error is UndeliverableException) {
+            error = e.cause
+        }
+        if (error is IOException || error is SocketException) {
+            // fine, irrelevant network problem or API that throws on cancellation
+            return@setErrorHandler
+        }
+        if (error is InterruptedException) {
+            // fine, some blocking code was interrupted by a dispose call
+            return@setErrorHandler
+        }
+        if (error is NullPointerException || error is IllegalArgumentException) {
+            // that's likely a bug in the application
+            Thread.currentThread().uncaughtExceptionHandler
+                .uncaughtException(Thread.currentThread(), error)
+            return@setErrorHandler
+        }
+        if (error is IllegalStateException) {
+            // that's a bug in RxJava or in a custom operator
+            Thread.currentThread().uncaughtExceptionHandler
+                .uncaughtException(Thread.currentThread(), error)
+            return@setErrorHandler
+        }
+
+//        Log.w("Undeliverable exception received, not sure what to do", error)
+    }
+
+}
+
+// https://stackoverflow.com/questions/40300469/mock-build-version-with-mockito
+@Throws(Exception::class)
+inline fun setFinalStatic(field: Field, newValue: Any) {
+    field.isAccessible = true
+
+    val modifiersField = Field::class.java.getDeclaredField("modifiers");
+    modifiersField.isAccessible = true;
+    modifiersField.setInt(field, field.getModifiers() and Modifier.FINAL.inv())
+
+    field.set(null, newValue);
+}
+
+//https://gist.github.com/dpmedeiros/7f7724fdf13fc5390bb05958448cdcad
+object AndroidMockUtil {
+    private val mMainThread = Executors.newSingleThreadScheduledExecutor()
+
+    @Throws(Exception::class)
+    fun mockMainThreadHandler() {
+        val mainThreadLooper = mock(Looper::class.java)
+        val mainThreadHandler = mock(Handler::class.java)
+
+        `when`(Looper.getMainLooper()).thenReturn(mainThreadLooper)
+
+        val handlerPostAnswer = Answer {
+            val runnable = it.getArgument<Runnable>(0)
+            var delay: Long = 0L
+
+            if (it.arguments.size > 1) {
+                delay = it.getArgument(1)
+            }
+
+            if (runnable != null) {
+                mMainThread.schedule(runnable, delay, TimeUnit.MILLISECONDS)
+            }
+
+            true
+        }
+
+        doAnswer(handlerPostAnswer).`when`(mainThreadHandler)
+            .post(any(Runnable::class.java))
+        doAnswer(handlerPostAnswer).`when`(mainThreadHandler)
+            .postDelayed(any(Runnable::class.java), anyLong())
+    }
 }

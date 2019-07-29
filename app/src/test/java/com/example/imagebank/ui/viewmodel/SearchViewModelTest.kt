@@ -19,6 +19,7 @@ import com.example.imagebank.model.remote.KakaoRestSearchService
 import com.example.imagebank.model.remote.entity.KakaoImageSearch
 import com.example.imagebank.model.remote.entity.KakaoVClipSearch
 import com.example.imagebank.ui.main.search.SearchViewModel
+import com.example.imagebank.util.mockReactiveX
 import com.example.imagebank.util.testCommand
 import io.reactivex.Observable
 import io.reactivex.android.plugins.RxAndroidPlugins
@@ -110,7 +111,7 @@ class SearchViewModelTest {
 
     @Test
     fun invalidAllSearch() {
-        mockReactive()
+        mockReactiveX()
         mockEnableNetwork()
         mockApi(RESPONSE_ERROR, RESPONSE_ERROR)
 
@@ -260,7 +261,7 @@ class SearchViewModelTest {
 
     private fun initMock() {
         MockitoAnnotations.initMocks(this)
-        mockReactive()
+        mockReactiveX()
         mockContext()
         mockConfig()
         mockConnectivityManager()
@@ -298,15 +299,6 @@ class SearchViewModelTest {
 
     private fun mockDisableNetwork() {
         `when`(networkInfo.state).thenReturn(NetworkInfo.State.DISCONNECTED)
-    }
-
-    private fun mockReactive() {
-        RxAndroidPlugins.reset()
-        RxJavaPlugins.reset()
-
-        RxJavaPlugins.setIoSchedulerHandler { Schedulers.trampoline() }
-        RxAndroidPlugins.setInitMainThreadSchedulerHandler { Schedulers.trampoline() }
-        RxAndroidPlugins.setMainThreadSchedulerHandler { Schedulers.trampoline() }
     }
 
     @Mock private lateinit var api: KakaoRestSearchService

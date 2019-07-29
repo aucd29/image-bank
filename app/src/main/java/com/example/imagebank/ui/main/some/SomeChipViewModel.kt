@@ -27,15 +27,12 @@ class SomeChipViewModel @Inject constructor(application: Application,
         const val CMD_CHIP_EVENT = "cmd-chip-event"
     }
 
-    val itemDecoration: ObservableField<SpaceItemDecoration>
+    val itemDecoration = ObservableField(SpaceItemDecoration(Rect().apply {
+        right  = 10.dpToPx(app)
+        bottom = right
+    }))
 
     init {
-        val rect = Rect()
-
-        rect.right = 10.dpToPx(app)
-        rect.bottom = rect.right
-        itemDecoration = ObservableField(SpaceItemDecoration(rect))
-
         var i = 0
         initAdapter(R.layout.some_chip_item)
         items.set(arrayListOf(

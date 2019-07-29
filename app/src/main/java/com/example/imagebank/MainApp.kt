@@ -6,6 +6,7 @@ import com.example.imagebank.di.DaggerAppComponent
 import com.squareup.leakcanary.LeakCanary
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
+import okhttp3.OkHttpClient
 import org.slf4j.LoggerFactory
 import javax.inject.Inject
 

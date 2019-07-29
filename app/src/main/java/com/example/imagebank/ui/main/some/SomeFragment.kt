@@ -69,10 +69,7 @@ class SomeFragment @Inject constructor()
             horModel            = mHorizontalModel
         }
 
-        addCommandEventModel(mLinkModel)
-        addCommandEventModel(mInfiniteBannerViewModel)
-        addCommandEventModel(mGridModel)
-        addCommandEventModel(mHorizontalModel)
+        addCommandEventModels(mLinkModel, mInfiniteBannerViewModel, mGridModel, mHorizontalModel)
     }
 
     override fun initViewBinding() {

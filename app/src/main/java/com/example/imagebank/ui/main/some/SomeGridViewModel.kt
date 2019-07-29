@@ -28,7 +28,6 @@ class SomeGridViewModel @Inject constructor(application: Application
 
     init {
         var i = 0
-//        ++i 이 없었는데? 생긴건가???
         initAdapter(R.layout.some_grid_item)
         items.set(arrayListOf(
             LinkItem(++i, "예/적금", ""),

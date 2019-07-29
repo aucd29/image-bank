@@ -27,7 +27,6 @@ class SomeHorizontalViewModel @Inject constructor(
         private val mLog = LoggerFactory.getLogger(SomeHorizontalViewModel::class.java)
     }
 
-    lateinit var layoutManager: LinearLayoutManager
     val itemDecoration = ObservableField(SpaceItemDecoration(Rect().apply {
         left   = 10.dpToPx(app)
         bottom = left
@@ -43,9 +42,5 @@ class SomeHorizontalViewModel @Inject constructor(
             HorizontalItem(++i, "마이너스 통장대출", 0, "link"),
             HorizontalItem(++i, "신용대출", 0, "link")
         ))
-    }
-
-    fun initLayoutManager() {
-        layoutManager = LinearLayoutManager(app, LinearLayoutManager.HORIZONTAL, false)
     }
 }

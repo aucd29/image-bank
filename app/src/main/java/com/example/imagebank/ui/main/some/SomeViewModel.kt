@@ -24,12 +24,16 @@ import javax.inject.Inject
 
 typealias AnimOption = AnimationBindingAdapter
 
-class SomeViewModel @Inject constructor(application: Application
-
+class SomeViewModel @Inject constructor(
+    application: Application
 ) : CommandEventViewModel(application), ILifeCycle {
 
     companion object {
         private val mLog = LoggerFactory.getLogger(SomeViewModel::class.java)
+
+        const val TO_RIGHT_TRANSITION = 20f
+        const val TO_LEFT_TRANSITION = TO_RIGHT_TRANSITION * -1
+        const val TRANSITION_DURATION = 500L
     }
 
     val ovalAniSetParams      = ObservableField<AnimatorSetParams>()
@@ -59,8 +63,8 @@ class SomeViewModel @Inject constructor(application: Application
     }
 
     fun initOvalTransition() {
-        ovalToRight.set(AnimParams(20f, duration = 500))
-        ovalToLeft.set(AnimParams(-20f, duration = 500))
+        ovalToRight.set(AnimParams(TO_RIGHT_TRANSITION, duration = TRANSITION_DURATION))
+        ovalToLeft.set(AnimParams(TO_LEFT_TRANSITION, duration = TRANSITION_DURATION))
     }
 
     fun initOvalAnimation() {
