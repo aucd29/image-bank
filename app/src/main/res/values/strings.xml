@@ -62,6 +62,10 @@
 
     <!--SOME-->
     <string name="some_kakaotalk">카카오톡</string>
+    <string name="some_animation_title">자동연장으로 복리효과를</string>
+    <string name="some_animation_lorem">Lorem ipsum dolor sit amet, pulvinar natoque volutpat, metus quisque amet lectus id ultrices, gravida tellus malesuada velit, duis sed tempor nulla vitae. Cras vel curabitur, sapien tempor consequat, dictum aliquam, tortor urna nulla. Quis turpis pharetra eget eu odio, fringilla felis mauris viverra scelerisque in ac, maecenas lorem ante molestie morbi, a erat ac ultricies sit velit, in lectus neque posuere aliquam. Sit integer nibh, vehicula et gravida purus nibh, vivamus quam mollis. Accumsan pharetra ultricies eu enim nullam lorem, facilisis vel, eget magnis elit, aliquam pharetra.</string>
+    <string name="some_animation_principal">원금</string>
+    <string name="some_animation_interest">이자%</string>
 
     <!--DETAIL-->
     <string name="detail_money_unit">원</string>

@@ -31,9 +31,6 @@ abstract class ActivityBindingModule {
     @Singleton
     @Binds
     abstract fun bindSectionsPagerAdapter(adapter: SectionsPagerAdapter): FragmentPagerAdapter
-
-//    @Binds
-//    abstract fun bindDibsPagerAdapter(adapter: DibsPagerAdapter): PagerAdapter
 }
 
 // https://stackoverflow.com/questions/48533899/how-to-inject-members-in-baseactivity-using-dagger-android

@@ -1,4 +1,4 @@
-package brigitte.widget.statusbar
+package brigitte.widget
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel

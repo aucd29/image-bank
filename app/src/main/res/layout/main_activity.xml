@@ -57,6 +57,7 @@
                                 android:background="?selectableItemBackground"
                                 android:paddingStart="@dimen/dp15"
                                 android:paddingEnd="@dimen/dp15"
+                                android:contentDescription="@string/cd_main_menu"
                                 android:onClick="@{() -> model.command(model.CMD_SHOW_NAVIGATION)}"
                         />
 

@@ -84,7 +84,7 @@ interface OnBackPressedListener {
 //
 ////////////////////////////////////////////////////////////////////////////////////
 
-abstract class BaseActivity<T : ViewDataBinding, M: ViewModel>
+abstract class BaseActivity<T : ViewDataBinding, M: ViewModel> @JvmOverloads constructor()
     : AppCompatActivity(), BaseEventAware {
     companion object {
         const val SCOPE_ACTIVITY = 0
@@ -102,12 +102,12 @@ abstract class BaseActivity<T : ViewDataBinding, M: ViewModel>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mBinding = dataBindingView(resources.getIdentifier(mLayoutName, LAYOUT, packageName))
+        mBinding = dataBindingView(layoutId())
 
         initBackPressed()
         bindViewModel()
 
-        mCommandEventModels.add(mViewModel)
+        addCommandEventModel(mViewModel)
         dialogAware()
         commandEventAware()
 
@@ -115,17 +115,37 @@ abstract class BaseActivity<T : ViewDataBinding, M: ViewModel>
         initViewModelEvents()
     }
 
+    // 기본 값은 파일 명으로 얻을 수 있지만 직접 레이아웃 아이디를 지정할 수도 있다.
+    @LayoutRes
+    open fun layoutId() = resources.getIdentifier(mLayoutName, LAYOUT, packageName)
+
     override fun onBackPressed() {
         // 현재 fragment 가 OnBackPressedListener 를 상속 받고 return true 를 하면 인터페이스에서
         // h/w backkey 를 처리한 것으로 본다.
-        val frgmt = supportFragmentManager.current
-        if (frgmt != null && frgmt is OnBackPressedListener && frgmt.onBackPressed()) {
+        val fragment = supportFragmentManager.current
+        if (fragment != null && fragment is OnBackPressedListener && fragment.onBackPressed()) {
             return
         }
 
         if (mBackPressed.onBackPressed()) {
             super.onBackPressed()
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        mCommandEventModels.forEach {
+            if (it is ILifeCycle) it.onPause()
+        }
+    }
+
+    override fun onResume() {
+        mCommandEventModels.forEach {
+            if (it is ILifeCycle) it.onResume()
+        }
+
+        super.onResume()
     }
 
     /**
@@ -167,12 +187,11 @@ abstract class BaseActivity<T : ViewDataBinding, M: ViewModel>
     //
     ////////////////////////////////////////////////////////////////////////////////////
 
-    override val mCommandEventModels: ArrayList<ViewModel> = arrayListOf()
+    override val mCommandEventModels: ArrayList<ICommandEventAware> = arrayListOf()
     override fun disposable() = mDisposable
     override fun activity() = this
     override fun rootView() = mBinding.root
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////////
 //
@@ -180,8 +199,7 @@ abstract class BaseActivity<T : ViewDataBinding, M: ViewModel>
 //
 ////////////////////////////////////////////////////////////////////////////////////
 
-
-abstract class BaseFragment<T: ViewDataBinding, M: ViewModel>
+abstract class BaseFragment<T: ViewDataBinding, M: ViewModel> @JvmOverloads constructor()
     : Fragment(), BaseEventAware {
     companion object {
         const val SCOPE_ACTIVITY = 0
@@ -196,7 +214,7 @@ abstract class BaseFragment<T: ViewDataBinding, M: ViewModel>
     protected var mViewModelScope = SCOPE_FRAGMENT
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val layoutId = resources.getIdentifier(mLayoutName, LAYOUT, activity?.packageName)
+        val layoutId = layoutId()
         if (layoutId == 0) {
             return generateEmptyLayout(mLayoutName)
         }
@@ -209,15 +227,35 @@ abstract class BaseFragment<T: ViewDataBinding, M: ViewModel>
         return mBinding.root
     }
 
+    // 기본 값은 파일 명으로 얻을 수 있지만 직접 레이아웃 아이디를 지정할 수도 있다.
+    @LayoutRes
+    open fun layoutId() = resources.getIdentifier(mLayoutName, LAYOUT, requireActivity().packageName)
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        mCommandEventModels.add(mViewModel)
+        addCommandEventModel(mViewModel)
         dialogAware()
         commandEventAware()
 
         initViewBinding()
         initViewModelEvents()
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        mCommandEventModels.forEach {
+            if (it is ILifeCycle) it.onPause()
+        }
+    }
+
+    override fun onResume() {
+        mCommandEventModels.forEach {
+            if (it is ILifeCycle) it.onResume()
+        }
+
+        super.onResume()
     }
 
     override fun onDestroyView() {
@@ -249,7 +287,7 @@ abstract class BaseFragment<T: ViewDataBinding, M: ViewModel>
     //
     ////////////////////////////////////////////////////////////////////////////////////
 
-    override val mCommandEventModels: ArrayList<ViewModel> = arrayListOf()
+    override val mCommandEventModels: ArrayList<ICommandEventAware> = arrayListOf()
     override fun disposable() = mDisposable
     override fun activity() = requireActivity()
     override fun rootView() = mBinding.root
@@ -263,7 +301,7 @@ abstract class BaseFragment<T: ViewDataBinding, M: ViewModel>
 ////////////////////////////////////////////////////////////////////////////////////
 
 
-abstract class BaseDialogFragment<T: ViewDataBinding, M: ViewModel>
+abstract class BaseDialogFragment<T: ViewDataBinding, M: ViewModel> @JvmOverloads constructor()
     : AppCompatDialogFragment(), BaseEventAware {
     private var mLayoutName = generateLayoutName()
 
@@ -274,7 +312,7 @@ abstract class BaseDialogFragment<T: ViewDataBinding, M: ViewModel>
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val layoutId = resources.getIdentifier(mLayoutName, LAYOUT, activity?.packageName)
+        val layoutId = layoutId()
         if (layoutId == 0) {
             return generateEmptyLayout(mLayoutName)
         }
@@ -287,10 +325,14 @@ abstract class BaseDialogFragment<T: ViewDataBinding, M: ViewModel>
         return mBinding.root
     }
 
+    // 기본 값은 파일 명으로 얻을 수 있지만 직접 레이아웃 아이디를 지정할 수도 있다.
+    @LayoutRes
+    open fun layoutId() = resources.getIdentifier(mLayoutName, LAYOUT, requireActivity().packageName)
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        mCommandEventModels.add(mViewModel)
+        addCommandEventModel(mViewModel)
         commandEventAware()
 
         initViewBinding()
@@ -326,7 +368,7 @@ abstract class BaseDialogFragment<T: ViewDataBinding, M: ViewModel>
     //
     ////////////////////////////////////////////////////////////////////////////////////
 
-    override val mCommandEventModels: ArrayList<ViewModel> = arrayListOf()
+    override val mCommandEventModels: ArrayList<ICommandEventAware> = arrayListOf()
     override fun disposable() = mDisposable
     override fun activity() = requireActivity()
     override fun rootView() = mBinding.root
@@ -338,7 +380,7 @@ abstract class BaseDialogFragment<T: ViewDataBinding, M: ViewModel>
 //
 ////////////////////////////////////////////////////////////////////////////////////
 
-abstract class BaseBottomSheetDialogFragment<T: ViewDataBinding, M: ViewModel>
+abstract class BaseBottomSheetDialogFragment<T: ViewDataBinding, M: ViewModel> @JvmOverloads constructor()
     : BottomSheetDialogFragment(), BaseEventAware {
 
     companion object {
@@ -353,7 +395,7 @@ abstract class BaseBottomSheetDialogFragment<T: ViewDataBinding, M: ViewModel>
     protected var mViewModelScope = BaseFragment.SCOPE_FRAGMENT
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val layoutId = resources.getIdentifier(mLayoutName, LAYOUT, activity?.packageName)
+        val layoutId = layoutId()
         if (layoutId == 0) {
             return generateEmptyLayout(mLayoutName)
         }
@@ -367,10 +409,14 @@ abstract class BaseBottomSheetDialogFragment<T: ViewDataBinding, M: ViewModel>
         return mBinding.root
     }
 
+    // 기본 값은 파일 명으로 얻을 수 있지만 직접 레이아웃 아이디를 지정할 수도 있다.
+    @LayoutRes
+    open fun layoutId() = resources.getIdentifier(mLayoutName, LAYOUT, requireActivity().packageName)
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        mCommandEventModels.add(mViewModel)
+        addCommandEventModel(mViewModel)
         commandEventAware()
 
         initViewBinding()
@@ -455,7 +501,7 @@ abstract class BaseBottomSheetDialogFragment<T: ViewDataBinding, M: ViewModel>
     //
     ////////////////////////////////////////////////////////////////////////////////////
 
-    override val mCommandEventModels: ArrayList<ViewModel> = arrayListOf()
+    override val mCommandEventModels: ArrayList<ICommandEventAware> = arrayListOf()
     override fun disposable() = mDisposable
     override fun activity() = requireActivity()
     override fun rootView() = mBinding.root
@@ -465,7 +511,7 @@ abstract class BaseBottomSheetDialogFragment<T: ViewDataBinding, M: ViewModel>
  * 공통 부분이 많아 인터페이스로 빼고 이를 이용하도록 수정
  */
 interface BaseEventAware {
-    val mCommandEventModels: ArrayList<ViewModel>
+    val mCommandEventModels: ArrayList<ICommandEventAware>
 
     fun disposable(): CompositeDisposable
     fun activity(): FragmentActivity
@@ -502,6 +548,26 @@ interface BaseEventAware {
                     }
                 }
             }
+        }
+    }
+
+    fun addCommandEventModel(viewModel: ViewModel) {
+        if (viewModel is ICommandEventAware) { mCommandEventModels.add(viewModel) }
+    }
+
+    fun addCommandEventModels(vararg viewModels: ViewModel) {
+        for (viewModel in viewModels) {
+            addCommandEventModel(viewModel)
+        }
+    }
+
+    fun removeCommandEventModel(viewModel: ViewModel) {
+        if (viewModel is ICommandEventAware) { mCommandEventModels.remove(viewModel) }
+    }
+
+    fun removeCommandEventModels(vararg viewModels: ViewModel) {
+        for (viewModel in viewModels) {
+            removeCommandEventModel(viewModel)
         }
     }
 

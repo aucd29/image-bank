@@ -8,20 +8,20 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/container"
+            android:id="@+id/dibs_item_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:ignore="ContentDescription"
-            android:background="@drawable/shape_rectangle_gray_stroke_background"
+            android:background="@drawable/shape_rectangle_gray_stroke_white_background"
             android:layout_margin="@dimen/dp5"
     >
 
         <ImageView
-                android:id="@+id/image"
+                android:id="@+id/dibs_item_image"
                 android:layout_width="match_parent" android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                android:contentDescription="@string/cd_dips_image_thumbnail"
                 app:bindImage="@{item.thumbnail}"
                 />
 

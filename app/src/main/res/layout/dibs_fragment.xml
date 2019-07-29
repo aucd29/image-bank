@@ -32,7 +32,7 @@
                     android:layout_height="wrap_content"
                     android:descendantFocusability="blocksDescendants">
 
-                <com.example.imagebank.common.widget.BkViewPager
+                <brigitte.widget.viewpager.WrapContentViewPager
                         android:id="@+id/dibs_viewpager"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -45,7 +45,7 @@
                 />
 
                 <com.rd.PageIndicatorView
-                        android:id="@+id/pageIndicatorView"
+                        android:id="@+id/dibs_banner_indicator"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp20"
@@ -63,7 +63,7 @@
                 />
 
                 <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recycler"
+                        android:id="@+id/dibs_recycler"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:minHeight="300dp"
@@ -79,9 +79,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/recycler"
+                        app:layout_constraintTop_toTopOf="@+id/dibs_recycler"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintBottom_toBottomOf="@+id/recycler"
+                        app:layout_constraintBottom_toBottomOf="@+id/dibs_recycler"
                         android:visibility="@{model.items.size > 0 ? View.GONE : View.VISIBLE}"
                 >
                     <ImageView
@@ -90,6 +90,7 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
+                            android:contentDescription="@string/cd_dips_empty_list_icon"
                             android:src="@drawable/bg_await"
                     />
 

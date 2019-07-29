@@ -10,8 +10,10 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.ArrayRes
+import androidx.annotation.ColorRes
 import androidx.annotation.IdRes
 import androidx.annotation.StringRes
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -37,6 +39,8 @@ inline fun Fragment.pxToDp(v: Int) = pxToDp(v.toFloat()).toInt()
 inline fun Fragment.string(@StringRes resid: Int): String = requireContext().string(resid)
 inline fun Fragment.stringArray(@ArrayRes resid: Int) = requireContext().stringArray(resid)
 inline fun Fragment.intArray(@ArrayRes resid: Int) = requireContext().intArray(resid)
+inline fun Fragment.color(@ColorRes resid: Int) =
+    ContextCompat.getColor(requireContext(), resid)
 
 /** 현재 화면에 위치하는 Fragment 를 반환 */
 inline val FragmentManager.current: Fragment?
@@ -50,6 +54,8 @@ inline val FragmentManager.count: Int
 inline fun <reified T: Fragment> FragmentManager.find() =
     findFragmentByTag(T::class.java.name) as T?
 
+inline fun <reified F: Fragment> Fragment.find() =
+    fragmentManager?.find<F>()
 
 /**
  * 다이얼로그를 띄우기 위한 옵저버 로 view model 에 선언되어 있는 single live event 의 값의 변화를 인지 하여 dialog 을 띄운다.
@@ -184,31 +190,31 @@ object FragmentCommit {
 }
 
 inline fun FragmentManager.showBy(params: FragmentParams) {
-    val frgmt = params.fragment
-    if (frgmt != null && frgmt.isVisible) {
+    val fragment = params.fragment
+    if (fragment != null && fragment.isVisible) {
         // manager 내에 해당 fragment 가 이미 존재하면 해당 fragment 를 반환 한다
         return
     }
 
-    frgmt?.let { internalShow(it, params) }
+    fragment?.let { internalShow(it, params) }
 }
 
 inline fun <reified T: Fragment> FragmentManager.show(params: FragmentParams) {
-    val existFrgmt = findFragmentByTag(T::class.java.name)
-    if (existFrgmt != null && existFrgmt.isVisible) {
+    val existFragment = findFragmentByTag(T::class.java.name)
+    if (existFragment != null && existFragment.isVisible) {
         // manager 내에 해당 fragment 가 이미 존재하면 해당 fragment 를 반환 한다
         return
     }
 
-    val frgmt =  T::class.java.newInstance() as Fragment
-    internalShow(frgmt, params)
+    val fragment =  T::class.java.newInstance() as Fragment
+    internalShow(fragment, params)
 }
 
-inline fun FragmentManager.internalShow(frgmt: Fragment, params: FragmentParams) {
+inline fun FragmentManager.internalShow(fragment: Fragment, params: FragmentParams) {
     val transaction = beginTransaction()
 
     params.apply {
-        bundle?.let { frgmt.arguments = it }
+        bundle?.let { fragment.arguments = it }
 
         transaction.apply {
             anim?.let {
@@ -227,15 +233,15 @@ inline fun FragmentManager.internalShow(frgmt: Fragment, params: FragmentParams)
                 }
             }
 
-            // findFragmentByTag 를 위해 frgmt.javaClass.name 를 등록
+            // findFragmentByTag 를 위해 fragment.javaClass.name 를 등록
             if (add) {
-                add(containerId, frgmt, frgmt.javaClass.name)
+                add(containerId, fragment, fragment.javaClass.name)
             } else {
-                replace(containerId, frgmt, frgmt.javaClass.name)
+                replace(containerId, fragment, fragment.javaClass.name)
             }
 
             if (backStack) {
-                addToBackStack(frgmt.javaClass.name)
+                addToBackStack(fragment.javaClass.name)
             }
 
             commit?.let {

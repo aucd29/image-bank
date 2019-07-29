@@ -72,7 +72,7 @@ inline fun AndroidViewModel.pxToDp(v: Float) = v / app.displayDensity()
 //
 ////////////////////////////////////////////////////////////////////////////////////
 
-open class CommandEventViewModel(application: Application)
+open class CommandEventViewModel @JvmOverloads constructor (application: Application)
     : AndroidViewModel(application)
     , ICommandEventAware {
 

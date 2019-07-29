@@ -55,6 +55,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         android:padding="@dimen/dp25"
+                        android:contentDescription="@string/cd_navigation_user_icon"
                         android:src="@drawable/ic_android_black_24dp"
                 />
 

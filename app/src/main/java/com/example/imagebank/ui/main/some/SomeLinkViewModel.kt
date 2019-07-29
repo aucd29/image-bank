@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.databinding.ObservableInt
 import brigitte.RecyclerViewModel
 import com.example.imagebank.R
-import com.example.imagebank.model.local.IconLinkItem
+import com.example.imagebank.model.local.LinkItem
 import org.slf4j.LoggerFactory
 import javax.inject.Inject
 
@@ -13,7 +13,7 @@ import javax.inject.Inject
  */
 
 class SomeLinkViewModel @Inject constructor(application: Application
-) : RecyclerViewModel<IconLinkItem>(application) {
+) : RecyclerViewModel<LinkItem>(application) {
 
     companion object {
         private val mLog = LoggerFactory.getLogger(SomeLinkViewModel::class.java)
@@ -24,11 +24,12 @@ class SomeLinkViewModel @Inject constructor(application: Application
     val gridCount = ObservableInt(3)
 
     init {
+        var i = 0
         initAdapter(R.layout.some_link_item)
         items.set(arrayListOf(
-            IconLinkItem(1, "전화", ""),
-            IconLinkItem(2, "카카", ""),
-            IconLinkItem(3, "문의", "")
+            LinkItem(++i, "전화", ""),
+            LinkItem(++i, "카카", ""),
+            LinkItem(++i, "문의", "")
         ))
     }
 }

@@ -5,14 +5,15 @@
 
     <data>
         <variable name="model" type="com.example.imagebank.ui.main.some.SomeLinkViewModel" />
-        <variable name="item" type="com.example.imagebank.model.local.IconLinkItem"/>
+        <variable name="item" type="com.example.imagebank.model.local.LinkItem"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/link_item_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="@{() -> model.command(model.CMD_CLICK)}"
+            android:onClick="@{() -> model.command(model.CMD_CLICK, item.id)}"
+            android:background="?selectableItemBackgroundBorderless"
     >
 
         <ImageView
@@ -21,9 +22,10 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:src="@drawable/ic_android_gray_24dp"
+                android:src="@drawable/ic_android_black_24dp"
                 android:padding="@dimen/dp20"
-                android:background="@drawable/selector_chip_background"
+                android:background="@drawable/shape_circle_gray_background"
+                android:contentDescription="@string/cd_some_link_icon"
         />
 
         <TextView

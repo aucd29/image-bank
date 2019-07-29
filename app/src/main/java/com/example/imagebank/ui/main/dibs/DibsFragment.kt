@@ -4,19 +4,22 @@ import brigitte.BaseDaggerFragment
 import brigitte.di.dagger.module.injectOf
 import brigitte.di.dagger.module.injectOfActivity
 import brigitte.toColor
+import brigitte.widget.ITabFocus
+import brigitte.widget.observeTabFocus
 import com.example.imagebank.MainColorViewModel
-import com.example.imagebank.common.PreloadConfig
+import com.example.imagebank.R
 import com.example.imagebank.databinding.DibsFragmentBinding
 import dagger.android.ContributesAndroidInjector
 import org.slf4j.LoggerFactory
 import javax.inject.Inject
-import kotlin.math.log
 
 /**
  * Created by <a href="mailto:aucd29@hanwha.com">Burke Choi</a> on 2019-06-29 <p/>
  */
 
-class DibsFragment @Inject constructor() : BaseDaggerFragment<DibsFragmentBinding, DibsViewModel>() {
+class DibsFragment @Inject constructor()
+    : BaseDaggerFragment<DibsFragmentBinding, DibsViewModel>()
+    , ITabFocus {
     companion object {
         private val mLog = LoggerFactory.getLogger(DibsFragment::class.java)
     }
@@ -25,8 +28,8 @@ class DibsFragment @Inject constructor() : BaseDaggerFragment<DibsFragmentBindin
         mViewModelScope = SCOPE_ACTIVITY
     }
 
-    @Inject lateinit var mBannerViewModel: DibsBannerViewModel
-    @Inject lateinit var mColorModel: MainColorViewModel
+    private lateinit var mBannerViewModel: DibsBannerViewModel
+    private lateinit var mColorModel: MainColorViewModel
 
     override fun bindViewModel() {
         super.bindViewModel()
@@ -37,23 +40,15 @@ class DibsFragment @Inject constructor() : BaseDaggerFragment<DibsFragmentBindin
         mBinding.bannerModel = mBannerViewModel
     }
 
-    override fun initViewBinding() = mBinding.run {
-        pageIndicatorView.selection = dibsViewpager.currentItem
+    override fun initViewBinding() {
+
     }
 
     override fun initViewModelEvents() {
-        mColorModel.dibsFragmentFocus = {
-            val it = mBinding.dibsViewpager.currentItem
-
-            if (mLog.isDebugEnabled) {
-                mLog.debug("DIBS FRAGMENT FOCUS $it")
-            }
-
-            changeStatusColor(it)
-        }
+        observeTabFocus(mColorModel.focusedTabLiveData, this, R.string.tab_dibs)
 
         mBannerViewModel.pageChangeCallback.set {
-            mBinding.pageIndicatorView.selection = it
+            mBinding.dibsBannerIndicator.selection = it
             changeStatusColor(it)
         }
     }
@@ -64,6 +59,23 @@ class DibsFragment @Inject constructor() : BaseDaggerFragment<DibsFragmentBindin
             mColorModel.changeColor(current.statusColor.toColor(),
                 current.bgcolor.toColor())
         }
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////
+    //
+    // TAB STATUS
+    //
+    ////////////////////////////////////////////////////////////////////////////////////
+
+    override fun onTabFocusIn() {
+        mBinding.dibsViewpager.currentItem.let { item ->
+            mBinding.dibsBannerIndicator.selection = item
+            changeStatusColor(item)
+        }
+    }
+
+    override fun onTabFocusOut() {
+
     }
 
     ////////////////////////////////////////////////////////////////////////////////////

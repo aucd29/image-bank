@@ -21,7 +21,7 @@ import java.lang.Exception
 inline fun WebView.defaultSetting(params: WebViewSettingParams) = params.run {
     settings.apply {
         textZoom                         = 100
-        cacheMode                        = WebSettings.LOAD_NO_CACHE
+//        cacheMode                        = WebSettings.LOAD_NO_CACHE
         javaScriptEnabled                = true
         domStorageEnabled                = true
         allowFileAccessFromFileURLs      = true
@@ -145,7 +145,7 @@ inline fun WebView.free() {
     }
 }
 
-data class WebViewSettingParams (
+data class WebViewSettingParams @JvmOverloads constructor (
     val urlLoading      : ((WebView?, String?) -> Unit)? = null,
     val pageFinished    : ((String?) -> Unit)? = null,
     val pageStarted     : ((String?) -> Unit)? = null,

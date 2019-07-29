@@ -2,10 +2,13 @@ package com.example.imagebank
 
 import android.os.Bundle
 import android.view.View
+import androidx.annotation.VisibleForTesting
 import androidx.core.view.GravityCompat
+import androidx.test.espresso.IdlingResource
 import brigitte.*
 import brigitte.di.dagger.module.injectOfActivity
 import com.example.imagebank.common.Config
+import com.example.imagebank.common.SimpleIdlingResource
 import com.example.imagebank.databinding.MainActivityBinding
 import com.example.imagebank.model.local.NavigationGridItem
 import com.example.imagebank.model.local.NavigationItem
@@ -24,11 +27,14 @@ class MainActivity : BaseDaggerActivity<MainActivityBinding, MainViewModel>() {
     }
 
     @Inject lateinit var mConfig: Config
-    @Inject lateinit var mSplashModel: SplashViewModel
-    @Inject lateinit var mNavGridModel: NaviGridViewModel
-    @Inject lateinit var mNavMenuModel: NaviMenuViewModel
     @Inject lateinit var mAdapter: SectionsPagerAdapter
-    @Inject lateinit var mColorModel: MainColorViewModel
+
+    lateinit var mSplashModel: SplashViewModel
+    lateinit var mNavGridModel: NaviGridViewModel
+    lateinit var mNavMenuModel: NaviMenuViewModel
+    lateinit var mColorModel: MainColorViewModel
+
+    private var mIdlingResource: SimpleIdlingResource? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         exceptionCatcher { mLog.error("ERROR: $it") }
@@ -105,5 +111,17 @@ class MainActivity : BaseDaggerActivity<MainActivityBinding, MainViewModel>() {
                 mLog.debug("CLICKED NAVIGATION MENU ${menu.name}")
             }
         }
+    }
+
+    /**
+     * Only called from test, creates and returns a new [SimpleIdlingResource].
+     */
+    @VisibleForTesting
+    fun getIdlingResource(): IdlingResource {
+        if (mIdlingResource == null) {
+            mIdlingResource = SimpleIdlingResource()
+        }
+
+        return mIdlingResource!!
     }
 }
