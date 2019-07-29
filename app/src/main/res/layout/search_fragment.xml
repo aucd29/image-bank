@@ -110,7 +110,6 @@
                         app:bindItems="@{model.items}"
                         android:clipChildren="false"
                         android:clipToPadding="false"
-                        android:background="#efdedede"
                         android:nestedScrollingEnabled="false"
                 />
             </LinearLayout>
