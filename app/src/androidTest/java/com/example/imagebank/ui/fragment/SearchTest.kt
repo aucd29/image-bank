@@ -18,42 +18,30 @@ import org.junit.runner.RunWith
 import androidx.test.core.app.ActivityScenario
 import org.junit.Before
 import androidx.test.espresso.IdlingRegistry
-import org.junit.After
+import com.jakewharton.espresso.OkHttp3IdlingResource
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
 class SearchTest {
-//    @Rule
-//    @JvmField
-//    var mActivityTestRule = ActivityTestRule(MainActivity::class.java)
-
     private var mIdlingResource: IdlingResource? = null
-    private var mActivity: MainActivity? = null
 
     @Before
     fun registerIdlingResource() {
         val activityScenario = ActivityScenario.launch(MainActivity::class.java)
         activityScenario.onActivity { activity ->
-            mIdlingResource = activity.getIdlingResource()
-            // To prove that the test fails, omit this call:
-            IdlingRegistry.getInstance().register(mIdlingResource)
+            mIdlingResource = OkHttp3IdlingResource.create("okhttp", activity.okhttp)
         }
-    }
-
-    @After
-    fun unregisterIdlingResource() {
-        mIdlingResource?.let { IdlingRegistry.getInstance().unregister(it) }
     }
 
     @Test
     fun searchFragmentTest() {
+        mIdlingResource?.let { IdlingRegistry.getInstance().register(it) }
         searchIcon().perform(click())
-
-        // 요건 좀더 찾아봐야함
-        Thread.sleep(3000)
 
         dibsIcon(0).perform(click())
         dibsIcon(1).perform(click())
+
+        mIdlingResource?.let { IdlingRegistry.getInstance().unregister(it) }
 
         tab(1, R.string.tab_dibs).perform(click())
 

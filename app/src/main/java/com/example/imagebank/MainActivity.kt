@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.annotation.VisibleForTesting
 import androidx.core.view.GravityCompat
+import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.IdlingResource
 import brigitte.*
 import brigitte.di.dagger.module.injectOfActivity
@@ -16,6 +17,7 @@ import com.example.imagebank.ui.main.SectionsPagerAdapter
 import com.example.imagebank.ui.main.SplashViewModel
 import com.example.imagebank.ui.main.navigation.NaviGridViewModel
 import com.example.imagebank.ui.main.navigation.NaviMenuViewModel
+import okhttp3.OkHttpClient
 import org.slf4j.LoggerFactory
 import javax.inject.Inject
 
@@ -33,8 +35,6 @@ class MainActivity : BaseDaggerActivity<MainActivityBinding, MainViewModel>() {
     lateinit var mNavGridModel: NaviGridViewModel
     lateinit var mNavMenuModel: NaviMenuViewModel
     lateinit var mColorModel: MainColorViewModel
-
-    private var mIdlingResource: SimpleIdlingResource? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         exceptionCatcher { mLog.error("ERROR: $it") }
@@ -97,7 +97,6 @@ class MainActivity : BaseDaggerActivity<MainActivityBinding, MainViewModel>() {
 
     override fun onCommandEvent(cmd: String, data: Any) {
         when(cmd) {
-//            MainViewModel.CMD_STATUS_BAR_COLOR -> changeStatusBarColor(data as Int)
             MainViewModel.CMD_SHOW_NAVIGATION  -> {
                 hideKeyboard(mBinding.root)
                 mBinding.drawerLayout.openDrawer(NAVI_GRAVITY)
@@ -113,15 +112,13 @@ class MainActivity : BaseDaggerActivity<MainActivityBinding, MainViewModel>() {
         }
     }
 
-    /**
-     * Only called from test, creates and returns a new [SimpleIdlingResource].
-     */
-    @VisibleForTesting
-    fun getIdlingResource(): IdlingResource {
-        if (mIdlingResource == null) {
-            mIdlingResource = SimpleIdlingResource()
-        }
+    ////////////////////////////////////////////////////////////////////////////////////
+    //
+    // TEST
+    //
+    ////////////////////////////////////////////////////////////////////////////////////
 
-        return mIdlingResource!!
-    }
+    // https://github.com/chiuki/espresso-samples/tree/master/idling-resource-okhttp
+    @VisibleForTesting
+    @Inject lateinit var okhttp: OkHttpClient
 }
