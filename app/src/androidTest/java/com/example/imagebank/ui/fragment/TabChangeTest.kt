@@ -26,21 +26,11 @@ import org.junit.runner.RunWith
 @LargeTest
 @RunWith(AndroidJUnit4::class)
 class TabChangeTest {
-    private var mIdlingResource: IdlingResource? = null
-
     @Before
     fun registerIdlingResource() {
         val activityScenario = ActivityScenario.launch(MainActivity::class.java)
         activityScenario.onActivity { activity ->
-            mIdlingResource = activity.getIdlingResource()
-            // To prove that the test fails, omit this call:
-            IdlingRegistry.getInstance().register(mIdlingResource)
         }
-    }
-
-    @After
-    fun unregisterIdlingResource() {
-        mIdlingResource?.let { IdlingRegistry.getInstance().unregister(it) }
     }
 
     @Test
