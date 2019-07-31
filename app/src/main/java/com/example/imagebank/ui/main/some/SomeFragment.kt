@@ -32,7 +32,6 @@ class SomeFragment @Inject constructor()
         private const val BANNER_DELAY = 4000L
     }
 
-
     @Inject lateinit var mConfig: Config
     private lateinit var mColorModel: MainColorViewModel
 
@@ -43,6 +42,8 @@ class SomeFragment @Inject constructor()
     private lateinit var mInfiniteBannerViewModel: SomeInfiniteBannerViewModel
     private lateinit var mGridModel: SomeGridViewModel
     private lateinit var mHorizontalModel: SomeHorizontalViewModel
+
+    override fun layoutId() = R.layout.some_fragment
 
     override fun bindViewModel() {
         super.bindViewModel()

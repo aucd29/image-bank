@@ -31,6 +31,8 @@ class DibsFragment @Inject constructor()
     private lateinit var mBannerViewModel: DibsBannerViewModel
     private lateinit var mColorModel: MainColorViewModel
 
+    override fun layoutId() = R.layout.dibs_fragment
+
     override fun bindViewModel() {
         super.bindViewModel()
 

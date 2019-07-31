@@ -42,6 +42,10 @@ class MainActivity : BaseDaggerActivity<MainActivityBinding, MainViewModel>() {
         super.onCreate(savedInstanceState)
     }
 
+    // 내부적으로 클래스 명을 참조해 알아서 id 를 얻긴 하지만
+    // 리소스가 사용되고 있는지 확인이 필요하다라는 의견
+    override fun layoutId() = R.layout.main_activity
+
     override fun onBackPressed() {
         if (mBinding.drawerLayout.isDrawerOpen(NAVI_GRAVITY)) {
             mBinding.drawerLayout.closeDrawer(NAVI_GRAVITY)

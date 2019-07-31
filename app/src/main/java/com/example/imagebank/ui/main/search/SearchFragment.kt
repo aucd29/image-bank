@@ -42,6 +42,8 @@ class SearchFragment @Inject constructor()
     private lateinit var mDibsViewModel: DibsViewModel
     private lateinit var mColorModel: MainColorViewModel
 
+    override fun layoutId() = R.layout.search_fragment
+
     override fun bindViewModel() {
         super.bindViewModel()
 
