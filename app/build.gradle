@@ -163,6 +163,9 @@ dependencies {
     // over scroll
     implementation 'me.everything:overscroll-decor-android:1.0.4'
 
+    // recycler animator
+    implementation 'jp.wasabeef:recyclerview-animators:3.0.0'
+
     // firebase
     implementation 'com.google.firebase:firebase-core:17.0.0'
     implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'

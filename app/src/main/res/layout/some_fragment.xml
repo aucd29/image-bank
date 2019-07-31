@@ -115,6 +115,7 @@
                     app:bindAdapter="@{qnaModel.adapter}"
                     app:bindHorDecoration="@{qnaModel.horDecoration}"
                     app:bindVerDecoration="@{qnaModel.verDecoration}"
+                    app:bindItemAnimator="@{qnaModel.itemAnimator}"
             />
 
             <androidx.recyclerview.widget.RecyclerView
