@@ -1,6 +1,7 @@
 package com.example.imagebank.ui.detail
 
 import brigitte.BaseDaggerFragment
+import com.example.imagebank.R
 import com.example.imagebank.databinding.DetailFragmentBinding
 import com.example.imagebank.model.remote.entity.KakaoSearchResult
 import dagger.Module
@@ -18,6 +19,8 @@ class DetailFragment @Inject constructor() : BaseDaggerFragment<DetailFragmentBi
 
         const val K_ITEM = "item"
     }
+
+    override fun layoutId() = R.layout.detail_fragment
 
     override fun initViewBinding() {
         arguments?.getSerializable(K_ITEM)?.let {
