@@ -353,7 +353,7 @@ class SearchViewModel @Inject constructor(application: Application,
                     result
                 })
                 .subscribeOn(Schedulers.io())       // FIXME UI 가 버벅여서 ioThread 로 우회했었는데 먼가 빌드가 제대로 되지 않았던 상황이였었는지, 인터뷰때 이렇게 해도 잘 동작했다.
-                .observeOn(Schedulers.io())         // FIXME map 에도 io 적용
+                //원래 알던대로 없어도 되었네 ㅋ 낚였....observeOn(Schedulers.io())         // FIXME map 에도 io 적용
                 .map {
                     // 두 검색 결과를 datetime 필드를 이용해 최신순으로 나열하여 출력합니다.
                     it.sortWith(Comparator { o1, o2 ->
