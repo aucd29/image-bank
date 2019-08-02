@@ -36,7 +36,7 @@ inline fun Fragment.observeTabFocus(livedata: LiveData<TabLayout.Tab?>,
 }
 
 inline fun Fragment.observeTabPosition(livedata: LiveData<TabLayout.Tab?>,
-                                    listener: ITabPosition) {
+                                       listener: ITabPosition) {
     livedata.observe(this, Observer {
         listener.onTabPosition(it?.position ?: -1)
     })
