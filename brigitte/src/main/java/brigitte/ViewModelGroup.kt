@@ -45,11 +45,6 @@ inline fun AndroidViewModel.drawable(str: String): Drawable? {
     return ContextCompat.getDrawable(app, id)
 }
 
-inline fun AndroidViewModel.delay(dealy: Long = 1000, noinline callback: () -> Unit) =
-    Single.just("")
-        .delay(dealy, TimeUnit.MILLISECONDS)
-        .subscribe { d -> callback.invoke() }
-
 /**
  * android view model 에서 쉽게 문자열을 가져올 수 있도록 wrapping 함
  */
@@ -65,6 +60,10 @@ inline fun AndroidViewModel.pxToDp(v: Int) = pxToDp(v.toFloat()).toInt()
 inline fun AndroidViewModel.dpToPx(v: Float) = v * app.displayDensity()
 inline fun AndroidViewModel.pxToDp(v: Float) = v / app.displayDensity()
 
+inline fun AndroidViewModel.delay(dealy: Long = 1000, noinline callback: () -> Unit) =
+    Single.just("")
+        .delay(dealy, TimeUnit.MILLISECONDS)
+        .subscribe { d -> callback.invoke() }
 
 ////////////////////////////////////////////////////////////////////////////////////
 //

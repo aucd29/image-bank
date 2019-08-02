@@ -24,6 +24,14 @@ import java.util.concurrent.Executors
  * Created by <a href="mailto:aucd29@gmail.com">Burke Choi</a> on 2018. 1. 24.. <p/>
  */
 
+inline fun Context.actionBarSize(): Float {
+    val ta = theme.obtainStyledAttributes(intArrayOf(android.R.attr.actionBarSize))
+    val size = ta.getDimension(0, 0f)
+    ta.recycle()
+
+    return size
+}
+
 /**
  * pkgName 에 해당하는 앱이 foreground 인지 확인
  */

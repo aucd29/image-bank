@@ -47,8 +47,8 @@ class SearchFragment @Inject constructor()
     override fun bindViewModel() {
         super.bindViewModel()
 
-        mDibsViewModel = mViewModelFactory.injectOfActivity(this)
-        mColorModel    = mViewModelFactory.injectOfActivity(this)
+        mDibsViewModel = inject()
+        mColorModel    = inject()
 
         mViewModel.init()
     }

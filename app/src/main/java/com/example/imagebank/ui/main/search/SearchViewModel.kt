@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory
 import javax.inject.Inject
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.delay
 import java.util.*
 
 
@@ -353,7 +354,7 @@ class SearchViewModel @Inject constructor(application: Application,
                     result
                 })
                 .subscribeOn(Schedulers.io())       // FIXME UI 가 버벅여서 ioThread 로 우회했었는데 먼가 빌드가 제대로 되지 않았던 상황이였었는지, 인터뷰때 이렇게 해도 잘 동작했다.
-                .observeOn(Schedulers.io())         // FIXME map 에도 io 적용
+                // FIXME 낚임... 원래 알던대로 그냥 subscribe on 이 io 면 하위도 그냥 io 스레드에서 돔 .observeOn(Schedulers.io())
                 .map {
                     // 두 검색 결과를 datetime 필드를 이용해 최신순으로 나열하여 출력합니다.
                     it.sortWith(Comparator { o1, o2 ->
