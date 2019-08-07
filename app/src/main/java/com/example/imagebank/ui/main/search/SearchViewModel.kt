@@ -258,6 +258,8 @@ class SearchViewModel @Inject constructor(application: Application,
             StaggeredGridLayoutManager.VERTICAL)
     }
 
+    fun isNetworkConnected() = app.isNetworkConntected()
+
     @SuppressLint("StringFormatMatches")
     fun search(p: Int) {
         if (p == 1) {
@@ -274,7 +276,7 @@ class SearchViewModel @Inject constructor(application: Application,
             mLog.debug("PAGE : $mPage")
         }
 
-        if (!app.isNetworkConntected()) {
+        if (!isNetworkConnected()) {
             snackbar(R.string.network_invalid_connectivity)
             return
         }

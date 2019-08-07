@@ -1,22 +1,15 @@
 package com.example.imagebank.ui.viewmodel
 
-import android.app.Application
-import android.content.Context
-import android.content.res.Resources
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.Observer
+import brigitte.color
 import com.example.imagebank.MainColorViewModel
 import com.example.imagebank.R
+import com.example.imagebank.util.*
 import com.google.android.material.tabs.TabLayout
-import junit.framework.Assert.assertEquals
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
-import org.mockito.Mock
 import org.mockito.Mockito.*
-import org.mockito.MockitoAnnotations
+import org.robolectric.RobolectricTestRunner
 
 /**
  * Created by <a href="mailto:aucd29@hanwha.com">Burke Choi</a> on 2019-07-23 <p/>
@@ -28,127 +21,99 @@ import org.mockito.MockitoAnnotations
  * https://github.com/adibfara/Lives/blob/master/lives/src/test/java/com/snakydesign/livedataextensions/TransformingTest.kt
  */
 
-@RunWith(JUnit4::class)
-class MainColorViewModelTest {
-    lateinit var viewModel: MainColorViewModel
-
+@RunWith(RobolectricTestRunner::class)
+class MainColorViewModelTest: BaseRoboViewModelTest<MainColorViewModel>() {
     @Before
     @Throws(Exception::class)
     fun setup() {
         initMock()
 
-        viewModel = MainColorViewModel(context)
+        viewmodel = MainColorViewModel(app)
     }
 
     @Test
     fun defaultStatusColor() {
-        val observer = mock(Observer::class.java) as Observer<Int>
-
-        viewModel.statusColor.observeForever(observer)
-        verify(observer).onChanged(COLOR_PRIMARY_DARK)
-        verifyNoMoreInteractions(observer)
+        viewmodel.apply {
+            mockObserver<Int>(statusColor).apply {
+                verifyChanged(color(R.color.colorPrimaryDark))
+            }
+        }
     }
 
     @Test
     fun defaultViewColor() {
-        assertEquals(viewModel.viewColor.get(), COLOR_PRIMARY)
+        viewmodel.viewColor.get().assertEquals(color(R.color.colorPrimary))
     }
 
     @Test
     fun defaultTabIndicatorColor() {
-        assertEquals(viewModel.tabIndicatorColor.get(), COLOR_ACCENT)
+        viewmodel.tabIndicatorColor.get().assertEquals(color(R.color.colorAccent))
     }
 
     @Test
     fun changeTabPos0() {
         val tab = mock(TabLayout.Tab::class.java)
+        tab.position.mockReturn(0)
 
-        `when`(tab.position).thenReturn(0)
-        viewModel.tabChangedCallback.get()?.onTabSelected(tab)
-
-        assertEquals(viewModel.tabIndicatorColor.get(), COLOR_ACCENT)
+        viewmodel.apply {
+            tabChangedCallback.get()?.onTabSelected(tab)
+            tabIndicatorColor.get().assertEquals(color(R.color.colorAccent))
+        }
     }
 
     @Test
     fun changeTabPos1() {
         val tab = mock(TabLayout.Tab::class.java)
+        tab.position.mockReturn(1)
 
-        `when`(tab.position).thenReturn(1)
-        viewModel.tabChangedCallback.get()?.onTabSelected(tab)
-
-        assertEquals(viewModel.tabIndicatorColor.get(), COLOR_WHITE)
+        viewmodel.apply {
+            tabChangedCallback.get()?.onTabSelected(tab)
+            tabIndicatorColor.get().assertEquals(color(android.R.color.white))
+        }
     }
 
     @Test
     fun changeTabPos2() {
         val tab = mock(TabLayout.Tab::class.java)
+        tab.position.mockReturn(2)
 
-        `when`(tab.position).thenReturn(2)
-        viewModel.tabChangedCallback.get()?.onTabSelected(tab)
-
-        assertEquals(viewModel.tabIndicatorColor.get(), COLOR_WHITE)
+        viewmodel.apply {
+            tabChangedCallback.get()?.onTabSelected(tab)
+            tabIndicatorColor.get().assertEquals(color(android.R.color.white))
+        }
     }
 
     @Test
     fun changeTabPos0_to_2() {
         val tab = mock(TabLayout.Tab::class.java)
 
-        `when`(tab.position).thenReturn(0)
-        viewModel.tabChangedCallback.get()?.onTabSelected(tab)
-        assertEquals(viewModel.tabIndicatorColor.get(), COLOR_ACCENT)
+        tab.position.mockReturn(0)
+        viewmodel.apply {
+            tabChangedCallback.get()?.onTabSelected(tab)
+            tabIndicatorColor.get().assertEquals(color(R.color.colorAccent))
+        }
 
-        `when`(tab.position).thenReturn(2)
-        viewModel.tabChangedCallback.get()?.onTabSelected(tab)
-        assertEquals(viewModel.tabIndicatorColor.get(), COLOR_WHITE)
+        tab.position.mockReturn(2)
+        viewmodel.apply {
+            tabChangedCallback.get()?.onTabSelected(tab)
+            tabIndicatorColor.get().assertEquals(color(android.R.color.white))
+        }
     }
 
     @Test
     fun changeTabPos2_to_0() {
         val tab = mock(TabLayout.Tab::class.java)
 
-        `when`(tab.position).thenReturn(2)
-        viewModel.tabChangedCallback.get()?.onTabSelected(tab)
-        assertEquals(viewModel.tabIndicatorColor.get(), COLOR_WHITE)
+        tab.position.mockReturn(2)
+        viewmodel.apply {
+            tabChangedCallback.get()?.onTabSelected(tab)
+            tabIndicatorColor.get().assertEquals(color(android.R.color.white))
+        }
 
-        `when`(tab.position).thenReturn(0)
-        viewModel.tabChangedCallback.get()?.onTabSelected(tab)
-        assertEquals(viewModel.tabIndicatorColor.get(), COLOR_ACCENT)
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////////
-    //
-    // MOCK
-    //
-    ////////////////////////////////////////////////////////////////////////////////////
-
-    companion object {
-        const val COLOR_PRIMARY      = 11
-        const val COLOR_PRIMARY_DARK = COLOR_PRIMARY + 1
-        const val COLOR_ACCENT       = COLOR_PRIMARY_DARK + 1
-        const val COLOR_WHITE        = COLOR_ACCENT + 1
-    }
-
-    @get:Rule
-    var instantExecutorRule = InstantTaskExecutorRule()
-
-    private fun initMock() {
-        MockitoAnnotations.initMocks(this)
-        mockContext()
-    }
-
-    @Mock private lateinit var context: Application
-    private fun mockContext() {
-        `when`<Context>(context.applicationContext).thenReturn(context)
-        `when`(context.resources).thenReturn(mock(Resources::class.java))
-
-        `when`(context.getColor(R.color.colorPrimary)).thenReturn(COLOR_PRIMARY)
-        `when`(context.getColor(R.color.colorPrimaryDark)).thenReturn(COLOR_PRIMARY_DARK)
-        `when`(context.getColor(R.color.colorAccent)).thenReturn(COLOR_ACCENT)
-        `when`(context.getColor(android.R.color.white)).thenReturn(COLOR_WHITE)
-
-        `when`(context.resources.getColor(R.color.colorPrimary)).thenReturn(COLOR_PRIMARY)
-        `when`(context.resources.getColor(R.color.colorPrimaryDark)).thenReturn(COLOR_PRIMARY_DARK)
-        `when`(context.resources.getColor(R.color.colorAccent)).thenReturn(COLOR_ACCENT)
-        `when`(context.resources.getColor(android.R.color.white)).thenReturn(COLOR_WHITE)
+        tab.position.mockReturn(0)
+        viewmodel.apply {
+            tabChangedCallback.get()?.onTabSelected(tab)
+            tabIndicatorColor.get().assertEquals(color(R.color.colorAccent))
+        }
     }
 }
