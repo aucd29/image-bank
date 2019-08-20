@@ -152,8 +152,13 @@ abstract class BaseActivity<T : ViewDataBinding, M: ViewModel> @JvmOverloads con
      * 앱 종료 시 CompositeDisposable 를 clear 한다.
      */
     override fun onDestroy() {
+        mCommandEventModels.forEach {
+            if (it is ILifeCycle) it.onDestroy()
+        }
+
         // https://stackoverflow.com/questions/47057885/when-to-call-dispose-and-clear-on-compositedisposable
         mDisposable.dispose()
+        mCommandEventModels.clear()
 
         super.onDestroy()
     }
@@ -259,8 +264,13 @@ abstract class BaseFragment<T: ViewDataBinding, M: ViewModel> @JvmOverloads cons
     }
 
     override fun onDestroyView() {
+        mCommandEventModels.forEach {
+            if (it is ILifeCycle) it.onDestroy()
+        }
+
         // https://stackoverflow.com/questions/47057885/when-to-call-dispose-and-clear-on-compositedisposable
         mDisposable.dispose()
+        mCommandEventModels.clear()
 
         super.onDestroyView()
     }
