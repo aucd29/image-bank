@@ -38,6 +38,10 @@ class SearchTest {
         mIdlingResource?.let { IdlingRegistry.getInstance().register(it) }
         searchIcon().perform(click())
 
+        // 이상하다? 단독으로 실행할 땐 문제 없는데 =_ =
+        // 일단 sleep 추가
+        Thread.sleep(1000)
+
         dibsIcon(0).perform(click())
         dibsIcon(1).perform(click())
 
