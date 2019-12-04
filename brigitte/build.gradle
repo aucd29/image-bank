@@ -50,7 +50,7 @@ dependencies {
 
     implementation "androidx.appcompat:appcompat:$appcompat"
     implementation "androidx.core:core-ktx:$core_ktx"
-    implementation "androidx.recyclerview:recyclerview:$androidx"
+    implementation "androidx.recyclerview:recyclerview:$recycler"
     implementation "androidx.lifecycle:lifecycle-runtime:$lifecycle"
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle"
     implementation "androidx.constraintlayout:constraintlayout:$constraint"
@@ -58,7 +58,7 @@ dependencies {
 //    implementation "androidx.navigation:navigation-ui:$nav_version" // For Kotlin use navigation-ui-ktx
 
     // material
-    implementation "com.google.android.material:material:$androidx"
+    implementation "com.google.android.material:material:$material"
 
     // dagger2
     implementation "com.google.dagger:dagger:$dagger2"
@@ -79,7 +79,7 @@ dependencies {
     //
 
     implementation "com.squareup.okhttp3:okhttp:$okhttp"
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.13.1'
     implementation "com.squareup.retrofit2:retrofit:$retrofit"
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
     implementation 'com.squareup.retrofit2:converter-jackson:2.4.0'
