@@ -15,14 +15,14 @@
   },
   {
     "title": "혜택이 보이는 은행",
-    "description": "카카오뱅크를 쓰는 고객중 저는\n개발자로 취업할 수 있습니다?",
+    "description": "카카오뱅크를 쓰면\n혜택이 보이는 은행",
     "img": "banner_airline_seat_recline_extra_black_150dp",
     "bgcolor": "#FF497B97",
     "statusColor": "#FF3A6276"
   },
   {
     "title": "전월세보증금 대출",
-    "description": "중도상환해약금 0원\n직원은 대출이 3억 무이자라는게 사실인가요?",
+    "description": "중도상환해약금 0원",
     "img": "banner_monetization_on_black_150dp",
     "bgcolor": "#FF485265",
     "statusColor": "#FF3A444F"
