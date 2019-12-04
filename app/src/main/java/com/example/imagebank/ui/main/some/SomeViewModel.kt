@@ -27,7 +27,6 @@ typealias AnimOption = AnimationBindingAdapter
 class SomeViewModel @Inject constructor(
     application: Application
 ) : CommandEventViewModel(application), ILifeCycle {
-
     companion object {
         private val mLog = LoggerFactory.getLogger(SomeViewModel::class.java)
 
@@ -114,5 +113,8 @@ class SomeViewModel @Inject constructor(
     override fun onResume() {
         ovalAniSet?.resume()
         ovalRandAniSet?.resume()
+    }
+
+    override fun onDestroy() {
     }
 }

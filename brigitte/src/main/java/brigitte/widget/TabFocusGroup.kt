@@ -1,3 +1,4 @@
+@file:Suppress("NOTHING_TO_INLINE", "unused")
 package brigitte.widget
 
 import androidx.annotation.StringRes
@@ -16,6 +17,10 @@ interface ITabFocus {
     fun onTabFocusOut()
 }
 
+interface ITabPosition {
+    fun onTabPosition(position: Int)
+}
+
 inline fun Fragment.observeTabFocus(livedata: LiveData<TabLayout.Tab?>,
                                     listener: ITabFocus,
                                     @StringRes resid: Int) {
@@ -28,5 +33,12 @@ inline fun Fragment.observeTabFocus(livedata: LiveData<TabLayout.Tab?>,
 
             listener.onTabFocusIn()
         }
+    })
+}
+
+inline fun Fragment.observeTabPosition(livedata: LiveData<TabLayout.Tab?>,
+                                       noinline listener: (Int) -> Unit) {
+    livedata.observe(this, Observer {
+        listener.invoke(it?.position ?: -1)
     })
 }

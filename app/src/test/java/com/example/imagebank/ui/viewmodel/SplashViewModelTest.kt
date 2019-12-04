@@ -1,18 +1,14 @@
 package com.example.imagebank.ui.viewmodel
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.Observer
 import com.example.imagebank.ui.main.SplashViewModel
+import com.example.imagebank.util.BaseJUnitViewModelTest
+import com.example.imagebank.util.mockObserver
+import com.example.imagebank.util.verifyChanged
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
-import org.mockito.Mockito
-import org.mockito.Mockito.verify
-import org.mockito.MockitoAnnotations
-import org.mockito.Mockito.verifyNoMoreInteractions
-
+import org.mockito.Mockito.*
 
 /**
  * Created by <a href="mailto:aucd29@hanwha.com">Burke Choi</a> on 2019-07-23 <p/>
@@ -23,37 +19,24 @@ import org.mockito.Mockito.verifyNoMoreInteractions
  */
 
 @RunWith(JUnit4::class)
-class SplashViewModelTest {
-    lateinit var viewModel: SplashViewModel
+class SplashViewModelTest: BaseJUnitViewModelTest<SplashViewModel>() {
 
     @Before
     @Throws(Exception::class)
     fun setup() {
         initMock()
 
-        viewModel = SplashViewModel()
+        viewmodel = SplashViewModel()
     }
 
     @Test
     fun closeTest() {
-        val observer = Mockito.mock(Observer::class.java) as Observer<Void>
-        viewModel.closeSplashEvent.observeForever(observer)
-        viewModel.closeSplash()
+        viewmodel.apply {
+            mockObserver(closeSplashEvent).apply {
+                closeSplash()
 
-        verify(observer).onChanged(null)
-        verifyNoMoreInteractions(observer)
-    }
-    
-    ////////////////////////////////////////////////////////////////////////////////////
-    //
-    // MOCK
-    //
-    ////////////////////////////////////////////////////////////////////////////////////
-
-    @get:Rule
-    var instantExecutorRule = InstantTaskExecutorRule()
-
-    private fun initMock() {
-        MockitoAnnotations.initMocks(this)
+                verifyChanged(null)
+            }
+        }
     }
 }

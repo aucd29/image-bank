@@ -36,8 +36,8 @@ class DibsFragment @Inject constructor()
     override fun bindViewModel() {
         super.bindViewModel()
 
-        mBannerViewModel = mViewModelFactory.injectOf(this)
-        mColorModel      = mViewModelFactory.injectOfActivity(this)
+        mColorModel      = inject(requireActivity())
+        mBannerViewModel = inject()
 
         mBinding.bannerModel = mBannerViewModel
     }

@@ -10,6 +10,7 @@ import brigitte.app
 import brigitte.dpToPx
 import brigitte.widget.viewpager.SpaceItemDecoration
 import com.example.imagebank.R
+import com.example.imagebank.common.Config
 import com.example.imagebank.model.local.HorizontalItem
 import com.example.imagebank.model.local.LinkItem
 import org.slf4j.LoggerFactory
@@ -21,6 +22,7 @@ import javax.inject.Inject
 
 class SomeHorizontalViewModel @Inject constructor(
     application: Application
+    , config: Config
 ) : RecyclerViewModel<HorizontalItem>(application) {
 
     companion object {
@@ -30,6 +32,11 @@ class SomeHorizontalViewModel @Inject constructor(
     val itemDecoration = ObservableField(SpaceItemDecoration(Rect().apply {
         left   = 10.dpToPx(app)
         bottom = left
+    }, Rect().apply {
+        // LAST ITEM PADDING
+        left   = 10.dpToPx(app)
+        bottom = left
+        right = config.SCREEN.x / 2
     }))
 
     init {

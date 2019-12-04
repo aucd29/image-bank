@@ -49,19 +49,6 @@ inline fun <T> awaitObserveValue(livedata: LiveData<T>, timeout: Long = 1): T? {
     return data
 }
 
-inline fun CommandEventViewModel.testCommand(changedValues: Array<Pair<String, Any>>, process: () -> Unit) {
-    val observer = mock(Observer::class.java) as Observer<Pair<String, Any>>
-    commandEvent.observeForever(observer)
-
-    process.invoke()
-
-    changedValues.forEach {
-        verify(observer).onChanged(it)
-    }
-
-    commandEvent.removeObserver(observer)
-}
-
 inline fun mockReactiveX() {
     RxAndroidPlugins.reset()
     RxJavaPlugins.reset()
@@ -96,10 +83,8 @@ inline fun mockReactiveX() {
                 .uncaughtException(Thread.currentThread(), error)
             return@setErrorHandler
         }
-
 //        Log.w("Undeliverable exception received, not sure what to do", error)
     }
-
 }
 
 // https://stackoverflow.com/questions/40300469/mock-build-version-with-mockito

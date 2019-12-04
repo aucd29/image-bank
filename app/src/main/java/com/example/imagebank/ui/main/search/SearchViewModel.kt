@@ -21,9 +21,8 @@ import org.slf4j.LoggerFactory
 import javax.inject.Inject
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.delay
 import java.util.*
-
-
 
 /**
  * Created by <a href="mailto:aucd29@hanwha.com">Burke Choi</a> on 2019-06-29 <p/>
@@ -259,6 +258,8 @@ class SearchViewModel @Inject constructor(application: Application,
             StaggeredGridLayoutManager.VERTICAL)
     }
 
+    fun isNetworkConnected() = app.isNetworkConntected()
+
     @SuppressLint("StringFormatMatches")
     fun search(p: Int) {
         if (p == 1) {
@@ -275,7 +276,7 @@ class SearchViewModel @Inject constructor(application: Application,
             mLog.debug("PAGE : $mPage")
         }
 
-        if (!app.isNetworkConntected()) {
+        if (!isNetworkConnected()) {
             snackbar(R.string.network_invalid_connectivity)
             return
         }
@@ -352,8 +353,11 @@ class SearchViewModel @Inject constructor(application: Application,
 
                     result
                 })
-                .subscribeOn(Schedulers.io())       // FIXME UI 가 버벅여서 ioThread 로 우회했었는데 먼가 빌드가 제대로 되지 않았던 상황이였었는지, 인터뷰때 이렇게 해도 잘 동작했다.
-                //원래 알던대로 없어도 되었네 ㅋ 낚였....observeOn(Schedulers.io())         // FIXME map 에도 io 적용
+                .subscribeOn(Schedulers.io())       
+                // FIXME UI 가 버벅여서 ioThread 로 우회했었는데 먼가 빌드가 제대로 되지 않았던 상황이였었는지, 인터뷰때 이렇게 해도 잘 동작했다.
+                // FIXME 낚임... 원래 알던대로 그냥 subscribe on 이 io 면 하위도 그냥 io 스레드에서 돔 흑;;; .observeOn(Schedulers.io())
+                // 원래 알던대로 없어도 되었네 ㅋ 낚였....observeOn(Schedulers.io())         
+                // FIXME map 에도 io 적용
                 .map {
                     // 두 검색 결과를 datetime 필드를 이용해 최신순으로 나열하여 출력합니다.
                     it.sortWith(Comparator { o1, o2 ->

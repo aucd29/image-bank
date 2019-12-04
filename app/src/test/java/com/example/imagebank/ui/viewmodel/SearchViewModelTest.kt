@@ -1,88 +1,66 @@
 package com.example.imagebank.ui.viewmodel
 
-import android.app.Application
-import android.content.Context
-import android.content.res.Resources
 import android.graphics.Point
-import android.net.ConnectivityManager
-import android.net.Network
-import android.net.NetworkInfo
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import brigitte.ICommandEventAware
-import brigitte.findLastVisibleItemPosition
-import brigitte.jsonParse
-import brigitte.systemService
-import com.example.imagebank.R
+import brigitte.*
 import com.example.imagebank.common.Config
 import com.example.imagebank.model.remote.KakaoRestSearchService
 import com.example.imagebank.model.remote.entity.KakaoImageSearch
 import com.example.imagebank.model.remote.entity.KakaoVClipSearch
 import com.example.imagebank.ui.main.search.SearchViewModel
-import com.example.imagebank.util.mockReactiveX
-import com.example.imagebank.util.testCommand
+import com.example.imagebank.util.*
 import io.reactivex.Observable
-import io.reactivex.android.plugins.RxAndroidPlugins
-import io.reactivex.plugins.RxJavaPlugins
-import io.reactivex.schedulers.Schedulers
-import junit.framework.Assert.assertEquals
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
 import org.mockito.Mock
-import org.mockito.MockitoAnnotations
-import junit.framework.Assert.assertTrue
-import org.junit.After
 import org.mockito.Mockito.*
-import org.slf4j.LoggerFactory
-
+import org.robolectric.RobolectricTestRunner
+import com.example.imagebank.R
 
 /**
  * Created by <a href="mailto:aucd29@hanwha.com">Burke Choi</a> on 2019-07-24 <p/>
  */
 
-@RunWith(JUnit4::class)
-class SearchViewModelTest {
-    lateinit var viewModel: SearchViewModel
-
+@RunWith(RobolectricTestRunner::class)
+class SearchViewModelTest: BaseRoboViewModelTest<SearchViewModel>() {
     @Before
     @Throws(Exception::class)
     fun setup() {
         initMock()
-        viewModel = SearchViewModel(context, api, config)
-    }
 
-    @After
-    fun after() {
-        RxAndroidPlugins.reset()
-        RxJavaPlugins.reset()
+        viewmodel = SearchViewModel(app, api, config)
     }
 
     @Test
-    fun networkError() {
+    fun networkErrorTest() {
         mockDisableNetwork()
 
-        val events = arrayOf<Pair<String, Any>>(
-            SearchViewModel.CMD_HIDE_KEYBOARD to -1,
-            ICommandEventAware.CMD_SNACKBAR to INVALID_CONNECTIVITY)
+        viewmodel.apply {
+            mockObserver<Pair<String, Any>>(commandEvent).apply {
+                search(1)
 
-        viewModel.apply { testCommand(events) { search(1) } }
+                verifyChanged(
+                    SearchViewModel.CMD_HIDE_KEYBOARD to -1,
+                    ICommandEventAware.CMD_SNACKBAR to app.string(R.string.network_invalid_connectivity))
+            }
+        }
     }
 
     @Test
     fun emptyKeywordError() {
         mockEnableNetwork()
 
-        val events = arrayOf<Pair<String, Any>>(
-            SearchViewModel.CMD_HIDE_KEYBOARD to -1,
-            ICommandEventAware.CMD_SNACKBAR to SEARCH_PLS_INSERT_KEYWORD)
+        viewmodel.apply {
+            mockObserver<Pair<String, Any>>(commandEvent).apply {
+                keyword.set("")
+                search(1)
 
-        viewModel.apply { testCommand(events) {
-            keyword.set("")
-            search(1)
-        } }
+                verifyChanged(
+                    SearchViewModel.CMD_HIDE_KEYBOARD to -1,
+                    ICommandEventAware.CMD_SNACKBAR to app.string(R.string.search_pls_insert_keyword))
+            }
+        }
     }
 
     @Test
@@ -90,10 +68,11 @@ class SearchViewModelTest {
         mockEnableNetwork()
         mockApi(RESPONSE_ERROR)
 
-        viewModel.apply {
+        viewmodel.apply {
             keyword.set(SEARCH_KEYWORD)
             search(1)
-            assertEquals(items.get()?.size ?: 0, 3)
+
+            items.get()?.size.assertEquals(3)
         }
     }
 
@@ -102,23 +81,24 @@ class SearchViewModelTest {
         mockEnableNetwork()
         mockApi(responseVclip = RESPONSE_ERROR)
 
-        viewModel.apply {
+        viewmodel.apply {
             keyword.set(SEARCH_KEYWORD)
             search(1)
-            assertEquals(items.get()?.size ?: 0, 3)
+
+            items.get()?.size.assertEquals(3)
         }
     }
 
     @Test
     fun invalidAllSearch() {
-        mockReactiveX()
         mockEnableNetwork()
         mockApi(RESPONSE_ERROR, RESPONSE_ERROR)
 
-        viewModel.apply {
+        viewmodel.apply {
             keyword.set(SEARCH_KEYWORD)
             search(1)
-            assertEquals(items.get()?.size ?: 0, 0)
+
+            items.get()?.size.assertEquals(0)
         }
     }
 
@@ -127,11 +107,12 @@ class SearchViewModelTest {
         mockEnableNetwork()
         mockApi(RESPONSE_IMAGE.replace(""""is_end":false""", """"is_end":true"""))
 
-        viewModel.apply {
+        viewmodel.apply {
             keyword.set(SEARCH_KEYWORD)
             search(1)
-            assertEquals(mIsImageApiEnd, true)
-            assertEquals(mIsVclipApiEnd, false)
+
+            mIsImageApiEnd.assertTrue()
+            mIsVclipApiEnd.assertFalse()
         }
     }
 
@@ -140,11 +121,12 @@ class SearchViewModelTest {
         mockEnableNetwork()
         mockApi(responseVclip = RESPONSE_VCLIP.replace(""""is_end":false""", """"is_end":true"""))
 
-        viewModel.apply {
+        viewmodel.apply {
             keyword.set(SEARCH_KEYWORD)
             search(1)
-            assertEquals(mIsImageApiEnd, false)
-            assertEquals(mIsVclipApiEnd, true)
+
+            mIsImageApiEnd.assertFalse()
+            mIsVclipApiEnd.assertTrue()
         }
     }
 
@@ -154,11 +136,12 @@ class SearchViewModelTest {
         mockApi(RESPONSE_IMAGE.replace(""""is_end":false""", """"is_end":true"""),
             RESPONSE_VCLIP.replace(""""is_end":false""", """"is_end":true"""))
 
-        viewModel.apply {
+        viewmodel.apply {
             keyword.set(SEARCH_KEYWORD)
             search(1)
-            assertEquals(mIsImageApiEnd, true)
-            assertEquals(mIsVclipApiEnd, true)
+
+            mIsImageApiEnd.assertTrue()
+            mIsVclipApiEnd.assertTrue()
         }
     }
 
@@ -167,29 +150,29 @@ class SearchViewModelTest {
         mockEnableNetwork()
         mockApi()
 
-        viewModel.apply {
+        viewmodel.apply {
             keyword.set(SEARCH_KEYWORD)
             search(1)
-            assertEquals(items.get()?.size ?: 0, 6)
+
+            items.get()?.size.assertEquals(6)
 
             val item = items.get()!!
             val firstItem = item[0]
             val endItem   = item[item.size - 1]
-
-            assertTrue(firstItem.unixtime >= endItem.unixtime)
+            (firstItem.unixtime >= endItem.unixtime).assertTrue()
 
             // dibs check
             command(SearchViewModel.CMD_ANIM_STAR, firstItem)
             firstItem.anim.get()?.endListener?.invoke(null)
-            assertTrue(mDibsList.value?.size == 1)
+            mDibsList.value?.size.assertEquals(1)
 
             command(SearchViewModel.CMD_ANIM_STAR, endItem)
             endItem.anim.get()?.endListener?.invoke(null)
-            assertTrue(mDibsList.value?.size == 2)
+            mDibsList.value?.size.assertEquals(2)
 
             command(SearchViewModel.CMD_ANIM_STAR, firstItem)
             firstItem.anim.get()?.endListener?.invoke(null)
-            assertTrue(mDibsList.value?.size == 1)
+            mDibsList.value?.size.assertEquals(1)
         }
     }
 
@@ -198,11 +181,11 @@ class SearchViewModelTest {
         mockEnableNetwork()
         mockApi()
 
-        viewModel.apply {
+        viewmodel.apply {
             keyword.set(SEARCH_KEYWORD)
             editorAction.get()?.invoke(SEARCH_KEYWORD)
 
-            assertEquals(items.get()?.size ?: 0, 6)
+            items.get()?.size.assertEquals(6)
         }
     }
 
@@ -215,28 +198,30 @@ class SearchViewModelTest {
             SearchViewModel.V_TAB_SPANCOUNT,
             StaggeredGridLayoutManager.VERTICAL))
 
-        `when`(mockLayoutManager.findLastVisibleItemPositions(null)).thenReturn(arrayOf(5,6).toIntArray())
+        mockLayoutManager.findLastVisibleItemPositions(null)
+            .mockReturn(arrayOf(5,6).toIntArray())
 
-        viewModel.apply {
+
+        viewmodel.apply {
             keyword.set(SEARCH_KEYWORD)
             layoutManager = mockLayoutManager
             search(1)
-            assertEquals(items.get()?.size ?: 0, 6)
-            assertEquals(mPage, 1)
+
+            items.get()?.size.assertEquals(6)
 
             Thread.sleep(1500)  // 로딩 완료 후 스크롤
             mockApi(RESPONSE_IMAGE.replace(""""is_end":false""", """"is_end":true"""),
                 RESPONSE_VCLIP.replace(""""is_end":false""", """"is_end":true"""), page = "2")
 
             scrollListener.get()?.callback?.invoke(0, 4000, true)
-            assertEquals(mPage, 2)
-            assertEquals(mIsImageApiEnd, true)
-            assertEquals(mIsVclipApiEnd, true)
+            mPage.assertEquals(2)
+            mIsImageApiEnd.assertTrue()
+            mIsVclipApiEnd.assertTrue()
 
             // mIsImageApiEnd, mIsVclipApiEnd 이 true 면 더 검색이 안됨
             Thread.sleep(1500)
             scrollListener.get()?.callback?.invoke(0, 6000, true)
-            assertEquals(mPage, 2)
+            mPage.assertEquals(2)
         }
     }
 
@@ -252,63 +237,29 @@ class SearchViewModelTest {
         const val RESPONSE_ERROR = """{"errorType":"InvalidArgument","message":"page is more than max"}"""
 
         const val SEARCH_KEYWORD = "설현"
-
-        const val INVALID_CONNECTIVITY       = "invalid_connectivity"
-        const val SEARCH_PLS_INSERT_KEYWORD  = "search_pls_insert_keyword"
     }
 
-    @get:Rule var instantExecutorRule = InstantTaskExecutorRule()
+    override fun initMock() {
+        super.initMock()
 
-    private fun initMock() {
-        MockitoAnnotations.initMocks(this)
         mockReactiveX()
-        mockContext()
         mockConfig()
-        mockConnectivityManager()
+        mockNetwork()
         mockApi()
     }
 
-    @Mock private lateinit var context: Application
-    private fun mockContext() {
-        `when`<Context>(context.applicationContext).thenReturn(context)
-        `when`(context.resources).thenReturn(mock(Resources::class.java))
-        `when`(context.getString(R.string.network_invalid_connectivity)).thenReturn(INVALID_CONNECTIVITY)
-        `when`(context.getString(R.string.search_pls_insert_keyword)).thenReturn(SEARCH_PLS_INSERT_KEYWORD)
-    }
+    @Mock lateinit var config: Config
 
-    lateinit var config: Config
     private fun mockConfig() {
-        config = Config(context)
-        `when`(config.SCREEN).thenReturn(Point(1080, 1920))
-    }
-
-    @Mock private lateinit var connectivityManager: ConnectivityManager
-    @Mock private lateinit var network: Network
-    @Mock private lateinit var networkInfo: NetworkInfo
-    private fun mockConnectivityManager() {
-        `when`<ConnectivityManager>(context.systemService()).thenReturn(connectivityManager)
-        `when`(connectivityManager.allNetworks).thenReturn(arrayOf(network))
-        `when`(connectivityManager.getNetworkInfo(network)).thenReturn(networkInfo)
-        `when`(networkInfo.state).thenReturn(NetworkInfo.State.CONNECTED)
-        `when`(connectivityManager.allNetworkInfo).thenReturn(arrayOf(networkInfo))
-    }
-
-    private fun mockEnableNetwork() {
-        `when`(networkInfo.state).thenReturn(NetworkInfo.State.CONNECTED)
-    }
-
-    private fun mockDisableNetwork() {
-        `when`(networkInfo.state).thenReturn(NetworkInfo.State.DISCONNECTED)
+        config.SCREEN.mockReturn(Point(1080, 1920))
     }
 
     @Mock private lateinit var api: KakaoRestSearchService
     private fun mockApi(responseImage: String = RESPONSE_IMAGE, responseVclip: String = RESPONSE_VCLIP, page: String = "1") {
         val image = Observable.just(responseImage.jsonParse<KakaoImageSearch>())
-            .subscribeOn(Schedulers.io())
         val vclip = Observable.just(responseVclip.jsonParse<KakaoVClipSearch>())
-            .subscribeOn(Schedulers.io())
 
-        `when`(api.image(SEARCH_KEYWORD, page)).thenReturn(image)
-        `when`(api.vclip(SEARCH_KEYWORD, page)).thenReturn(vclip)
+        api.image(SEARCH_KEYWORD, page).mockReturn(image)
+        api.vclip(SEARCH_KEYWORD, page).mockReturn(vclip)
     }
 }

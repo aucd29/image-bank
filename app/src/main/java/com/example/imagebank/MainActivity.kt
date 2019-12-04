@@ -58,12 +58,10 @@ class MainActivity : BaseDaggerActivity<MainActivityBinding, MainViewModel>() {
     override fun bindViewModel() {
         super.bindViewModel()
 
-        mViewModelFactory.apply {
-            mSplashModel    = injectOfActivity(this@MainActivity)
-            mNavGridModel   = injectOfActivity(this@MainActivity)
-            mNavMenuModel   = injectOfActivity(this@MainActivity)
-            mColorModel     = injectOfActivity(this@MainActivity)
-        }
+        mSplashModel    = inject()
+        mNavGridModel   = inject()
+        mNavMenuModel   = inject()
+        mColorModel     = inject()
 
         mBinding.apply {
             splashModel  = mSplashModel
@@ -72,8 +70,7 @@ class MainActivity : BaseDaggerActivity<MainActivityBinding, MainViewModel>() {
             colorModel   = mColorModel
         }
 
-        mCommandEventModels.add(mNavGridModel)
-        mCommandEventModels.add(mNavMenuModel)
+        addCommandEventModels(mNavGridModel, mNavMenuModel)
     }
 
     override fun initViewBinding() = mBinding.run {

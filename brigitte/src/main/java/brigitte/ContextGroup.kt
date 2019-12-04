@@ -4,10 +4,7 @@ package brigitte
 import android.app.ActivityManager
 import android.content.*
 import android.content.pm.PackageManager
-import android.net.ConnectivityManager
-import android.net.NetworkInfo
 import android.net.Uri
-import android.os.Build
 import android.os.Environment
 import android.view.View
 import android.view.Window
@@ -15,14 +12,24 @@ import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.annotation.ArrayRes
+import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import java.io.File
-import java.util.concurrent.Executors
 
 /**
  * Created by <a href="mailto:aucd29@gmail.com">Burke Choi</a> on 2018. 1. 24.. <p/>
  */
+
+inline fun Context.actionBarSize(): Float {
+    val ta = theme.obtainStyledAttributes(intArrayOf(android.R.attr.actionBarSize))
+    val size = ta.getDimension(0, 0f)
+    ta.recycle()
+
+    return size
+}
+
+inline fun Context.color(@ColorRes resid: Int) = ContextCompat.getColor(this, resid)
 
 /**
  * pkgName 에 해당하는 앱이 foreground 인지 확인

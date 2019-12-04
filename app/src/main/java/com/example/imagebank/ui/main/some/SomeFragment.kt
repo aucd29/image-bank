@@ -48,17 +48,14 @@ class SomeFragment @Inject constructor()
     override fun bindViewModel() {
         super.bindViewModel()
 
-        with (mViewModelFactory) {
-            mColorModel = injectOfActivity(this@SomeFragment)
-
-            mBannerViewModel         = injectOf(this@SomeFragment)
-            mChipViewModel           = injectOf(this@SomeFragment)
-            mLinkModel               = injectOf(this@SomeFragment)
-            mQnaModel                = injectOf(this@SomeFragment)
-            mInfiniteBannerViewModel = injectOf(this@SomeFragment)
-            mGridModel               = injectOf(this@SomeFragment)
-            mHorizontalModel         = injectOf(this@SomeFragment)
-        }
+        mColorModel              = inject(requireActivity())
+        mBannerViewModel         = inject()
+        mChipViewModel           = inject()
+        mLinkModel               = inject()
+        mQnaModel                = inject()
+        mInfiniteBannerViewModel = inject()
+        mGridModel               = inject()
+        mHorizontalModel         = inject()
 
         with(mBinding) {
             bannerModel         = mBannerViewModel
